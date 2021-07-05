@@ -4,7 +4,7 @@
 
 Trabajo Práctico número 2 de la materia Algoritmos y Programación III de FIUBA
 
-## Grupo {N}
+## Grupo {9}
 
 * **Camila Stahl** - [CammSt](https://github.com/CammSt)
 * **Nahuel Gomez** - [NahuelNGomez](https://github.com/NahuelNGomez)
