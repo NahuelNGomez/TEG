@@ -1,0 +1,44 @@
+@startuml
+
+title "Main Diagram"
+class Game{
+
+
+}
+class Player{
+
+}
+
+class Map{
+
+}
+
+class Country{
+
+
+}
+
+class Card{
+
+}
+
+class Dice{
+
+}
+class Army{
+}
+
+
+Game "1"--> "2..6" Player
+Game "1"--> Card
+Game "1"--> "    1..3" Dice
+Game "1  "--> "1" Map
+Player --> Army
+Army -- Country
+Map --> "50" Country
+
+Player --> Card
+Player --> Country
+Country -- Card
+@enduml
+
