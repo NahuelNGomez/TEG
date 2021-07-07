@@ -15,7 +15,7 @@ loop numberOfDice
 battlefield -> player1: rollDice()
 player1 --> battlefield : diceResult
 
-battlefield ->player2: lanzarDados()
+battlefield ->player2: rollDice()
 player2 --> battlefield : diceResult
 
 battlefield -> comparator: compare(diceResult, diceResult)
