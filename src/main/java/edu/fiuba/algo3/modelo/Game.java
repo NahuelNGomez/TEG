@@ -43,7 +43,7 @@ public class Game {
         for (i = 0; i < (this.countriesNames.length - leftCountries); i++) {
             Player player = players.get(rand.nextInt(players.size()));
 
-            if(player.cantidadPaises() < numberOfCountriesPerPlayer) {
+            if(player.countryAmount() < numberOfCountriesPerPlayer) {
                 player.addCountry(new Country(countriesNames[i]));
             } else {
                 i--;
@@ -64,14 +64,23 @@ public class Game {
         }
         return owner;
     }
+/*
+    public void playersSetArmies(int amount){
+        for( Player player : players ){
+           player.setArmy(amount);
+        }
+
+    }
+*/
+
 
     public boolean attack(Country pais1, Country pais2){
         //this.validarLimitrofes(pais1,pais2);
         Player owner1 = this.searchCountryOwner(pais1);
         Player owner2 = this.searchCountryOwner(pais2);
-
         return ((owner1 != null) && (owner2 != null) && (owner1 != owner1));
 
     }
+
 
 }

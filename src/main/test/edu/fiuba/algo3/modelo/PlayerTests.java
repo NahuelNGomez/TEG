@@ -16,4 +16,17 @@ public class PlayerTests {
     public void paisNoDominadoPorJugador(){
         assertNull(player.dominatedCountry(country));
     }
+/*
+    @Test
+    public void eachPlayerStartsWithOneArmyInTheirAssignedCountry(){
+
+        Player player = new Player("077bb");
+        Country country = new Country("Argentina");
+        player.addCountry(country);
+        player.setArmy(2);
+
+        assertEquals(3,  player.amountOfArmyIn("Argentina"));
+    }
+
+ */
 }
