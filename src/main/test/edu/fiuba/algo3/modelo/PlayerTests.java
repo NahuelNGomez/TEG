@@ -24,4 +24,11 @@ public class PlayerTests {
         player.setArmy(3, "Argentina");
         assertEquals(4, country.getArmyAmount());
     }
+
+    @Test
+    public void countryRemovedIsNotOnTheListAnyMore(){
+        player.addCountry(country);
+        player.removeCountry(country);
+        assertEquals(null, player.dominatedCountry(country) );
+    }
 }

@@ -93,6 +93,15 @@ public class Game {
 
     }
 
+/*
+    public void reorganize(Player attacker, Player defender){
+
+        Country attackerCountry = attacker.verifyOwnCountries();
+        Country defenderCountry = defender.verifyOwnCountries();
+
+
+    }
+*/
     private boolean validateBorderingCountry(String attackingCountry, String defendingCountry) {
         return map.validateBorderingCountry(attackingCountry, defendingCountry);
     }

@@ -37,4 +37,6 @@ public class GameTests {
         assertEquals(true, (newYork.getArmyAmount() < 2 || canada.getArmyAmount() < 6));
     }
 
+
+
 }
