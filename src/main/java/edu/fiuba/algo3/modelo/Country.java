@@ -1,4 +1,5 @@
 package edu.fiuba.algo3.modelo;
+import java.util.ArrayList;
 
 public class Country {
     private String name;
@@ -19,5 +20,16 @@ public class Country {
     }
     public void addArmy(int amount){
         armyAmount = armyAmount + amount;
+    }
+
+    public Integer diceAmount() {
+        if(armyAmount < 3){
+            return armyAmount;
+        }
+        return 3;
+    }
+
+    public void removeArmy(Integer lostArmy) {
+        armyAmount = armyAmount - lostArmy;
     }
 }

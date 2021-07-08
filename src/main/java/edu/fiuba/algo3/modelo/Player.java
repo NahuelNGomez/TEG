@@ -12,6 +12,11 @@ public class Player {
         this.color = color;
         //this.name = name;
     }
+
+    public String getColor(){
+        return color;
+    }
+
     public int countryAmount(){
         return dominatedCountries.size();
     }
@@ -30,25 +35,19 @@ public class Player {
     public int amountOfArmyIn(String name){
        return (getCountry(name).getArmyAmount());
     }
-    /* Última modificación. Pide un input de cada pais al que el jugador desea colocar un ejercito.
 
-    public void setArmy(int amount){
-        for(int i = 0; i < amount; i++){
-            Scanner myObj = new Scanner(System.in);
+    public void setArmy(int amount, String countryName){
 
-            System.out.println("Country you want to add an army:");
-
-            String name = myObj.nextLine();
-
-            Country country = getCountry(name);
-            country.addArmy(1);
-
+        Country country = getCountry(countryName);
+        if(country == null){
+            System.out.println("Break");
         }
+        country.addArmy(amount);
 
 
     }
-*/
-    private Country getCountry(String name){
+
+    public Country getCountry(String name){
 
         for( Country eachCountry: dominatedCountries){
 
@@ -57,5 +56,9 @@ public class Player {
             }
         }
         return null;
+    }
+
+    public void removeArmy(Integer lostArmy, Country country) {
+        country.removeArmy(lostArmy);
     }
 }

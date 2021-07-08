@@ -6,27 +6,22 @@ import static org.junit.jupiter.api.Assertions.*;
 public class PlayerTests {
     Player player = new Player("077bb");
     Country country = new Country("Argentina");
+
     @Test
-    public void paisDominadoPorJugador(){
+    public void dominatedCountryByPlayer(){
         player.addCountry(country);
         assertEquals(player, player.dominatedCountry(country));
     }
 
     @Test
-    public void paisNoDominadoPorJugador(){
+    public void notDominatedCountryByPlayer(){
         assertNull(player.dominatedCountry(country));
     }
-/*
+
     @Test
-    public void eachPlayerStartsWithOneArmyInTheirAssignedCountry(){
-
-        Player player = new Player("077bb");
-        Country country = new Country("Argentina");
+    public void theAssignAmountOfArmiesPerPlayerIsCorrect(){
         player.addCountry(country);
-        player.setArmy(2);
-
-        assertEquals(3,  player.amountOfArmyIn("Argentina"));
+        player.setArmy(3, "Argentina");
+        assertEquals(4, country.getArmyAmount());
     }
-
- */
 }
