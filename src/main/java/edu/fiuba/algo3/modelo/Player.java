@@ -62,6 +62,7 @@ public class Player {
 
     public boolean removeArmy(Integer lostArmy, Country country) {
         country.removeArmy(lostArmy);
+
         if(country.getArmyAmount() <= 0){
             removeCountry(country);
             return true;
@@ -73,12 +74,12 @@ public class Player {
         Country country = getCountry(countryName);
         if(country != null){
             if(country.getArmyAmount() > amountDice){
-                return true;
+                    return true;
             }
         }
         return false;
-
     }
+
     public boolean canBeInvaded(String countryName){
 
         Country country = getCountry(countryName);

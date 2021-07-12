@@ -102,6 +102,7 @@ public class Game {
 
     }
 
+
     private boolean validateBorderingCountry(String attackingCountry, String defendingCountry) {
         return map.validateBorderingCountry(attackingCountry, defendingCountry);
     }
