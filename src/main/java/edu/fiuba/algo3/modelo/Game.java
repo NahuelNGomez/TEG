@@ -78,30 +78,30 @@ public class Game {
         player.setArmy(amount, countryName);
     }
 
+    private void invade(Player attacker, Country countryDefender, String countryAttacker){
+        Country country = attacker.getCountry(countryAttacker);
+        attacker.removeArmy(1, country);
+        attacker.addCountry(countryDefender);
+    }
+
 
     public void attack(String attackingCountry, int amountDice, String defendingCountry){
         boolean isBordering = this.validateBorderingCountry(attackingCountry, defendingCountry);
-        if(isBordering) {
-            Player attacker = this.searchCountryOwner(attackingCountry);
-            Player defender = this.searchCountryOwner(defendingCountry);
+        Player attacker = this.searchCountryOwner(attackingCountry);
+        Player defender = this.searchCountryOwner(defendingCountry);
+        if(isBordering && attacker.canInvade(attackingCountry, amountDice)) {
             Country countryAttacker = attacker.getCountry(attackingCountry);
             Country countryDefender = defender.getCountry(defendingCountry);
             Integer[] result = battlefield.battle(countryAttacker, amountDice, countryDefender);
             attacker.removeArmy(result[0], countryAttacker);
-            defender.removeArmy(result[1], countryDefender);
+
+            if(defender.removeArmy(result[1], countryDefender)){
+                 this.invade(attacker, countryDefender, attackingCountry);
+            };
         }
 
     }
 
-/*
-    public void reorganize(Player attacker, Player defender){
-
-        Country attackerCountry = attacker.verifyOwnCountries();
-        Country defenderCountry = defender.verifyOwnCountries();
-
-
-    }
-*/
     private boolean validateBorderingCountry(String attackingCountry, String defendingCountry) {
         return map.validateBorderingCountry(attackingCountry, defendingCountry);
     }

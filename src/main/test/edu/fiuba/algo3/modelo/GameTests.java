@@ -22,7 +22,7 @@ public class GameTests {
     }
 
     @Test
-    public void attackerCountryConquers(){
+    public void successFullAttack(){
         Game game = new Game(2);
         Player player1 = game.getPlayer("07bb");
         Country canada = new Country("Canada");
@@ -35,6 +35,20 @@ public class GameTests {
         game.attack("Canada", 3,"New York");
 
         assertEquals(true, (newYork.getArmyAmount() < 2 || canada.getArmyAmount() < 6));
+    }
+    @Test
+    public void attackerCountryConquers(){
+        Game game = new Game(2);
+        Player player1 = game.getPlayer("07bb");
+        Country canada = new Country("Canada");
+        player1.addCountry(canada);
+        Player player2 = game.getPlayer("cc3311");
+        Country newYork = new Country("New York");
+        player2.addCountry(newYork);
+        game.playersSetArmies(5, "Canada", "07bb");
+        game.attack("Canada", 3,"New York");
+
+        assertEquals(player1, player1.dominatedCountry(newYork));
     }
 
 
