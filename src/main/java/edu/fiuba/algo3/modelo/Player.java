@@ -62,17 +62,30 @@ public class Player {
 
     public void removeArmy(Integer lostArmy, Country country) {
         country.removeArmy(lostArmy);
+        if(country.getArmyAmount() == 0){
+            removeCountry(country);
+        }
+
 
     }
-    public Country verifyOwnCountries(){
-        for(Country eachCountry: dominatedCountries){
+    public boolean canInvade(String countryName){
 
-            if(eachCountry.getArmyAmount() == 0){
-                removeCountry(eachCountry);
-                return eachCountry;
+        Country country = getCountry(countryName);
+        if(country != null){
+            if(country.getArmyAmount() > 1){
+                return true;
             }
         }
-        return null;
+        return false;
+
+    }
+    public boolean canBeInvaded(String countryName){
+
+        Country country = getCountry(countryName);
+        if(country != null){
+                return true;
+        }
+        return false;
 
     }
 

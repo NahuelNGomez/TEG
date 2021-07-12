@@ -94,11 +94,17 @@ public class Game {
     }
 
 /*
-    public void reorganize(Player attacker, Player defender){
+    public void reorganize(Player attacker, Player defender, String attackingCountry, String defendingCountry){
 
-        Country attackerCountry = attacker.verifyOwnCountries();
-        Country defenderCountry = defender.verifyOwnCountries();
+        Boolean attackerCanInvade = attacker.canInvade(attackingCountry);
+        Boolean defenderCanInvade = defender.canInvade(defendingCountry);
+        Boolean attackerCanBeInvaded = attacker.canBeInvaded();
+        Boolean defenderCanBeInvaded = defender.canBeInvaded();
 
+        if(attackerCanInvade && defenderCanBeInvaded){
+        //Significa que Atacante puede invadir y defensor tiene 1 o 0 ejercitos
+        } else if(defenderCanInvade && attackerCanBeInvaded){
+        //El defensor puede invadir
 
     }
 */
