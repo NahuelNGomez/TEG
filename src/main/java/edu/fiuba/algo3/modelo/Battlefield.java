@@ -9,7 +9,7 @@ public class Battlefield {
     private Dice dice;
 
     public Battlefield(){
-        dice = new Dice();
+        dice = dice.create();
     }
 
     private void checkValidCountryParameter(Country country) throws EmptyCountryParameterException {

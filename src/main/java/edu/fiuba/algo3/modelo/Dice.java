@@ -5,6 +5,13 @@ import java.util.Collections;
 import java.util.Random;
 
 public class Dice {
+    public static Dice singleton = null;
+
+    public static Dice create(){
+        if (Dice.singleton == null)
+            singleton = new Dice();
+        return singleton;
+    }
 
     public ArrayList<Integer> rollDice(int diceAmount) {
         ArrayList<Integer> diceResult = new ArrayList<Integer>();
@@ -16,6 +23,7 @@ public class Dice {
         Collections.sort(diceResult, Collections.reverseOrder());
         return diceResult;
     }
+
     public Integer[] diceRoundResults(ArrayList<Integer> attackerDice, ArrayList<Integer> defenderDice, Integer stop) {
         Integer[] results = {0,0};
 
