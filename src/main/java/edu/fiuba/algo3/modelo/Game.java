@@ -1,5 +1,6 @@
 package edu.fiuba.algo3.modelo;
 
+import edu.fiuba.algo3.modelo.exceptions.*;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -12,21 +13,45 @@ public class Game {
     private static String[] colors = {"07bb", "cc3311", "ee7733", "009988", "ee3377", "000000"};
     private static String[] countriesNames = {"Canada", "Alaska", "Oregon", "Terranova", "California", "New York", "Islandia", "Mexico", "China", "Francia"};
 
-    public Game(int numberOfPlayers){
-        //validate the numberOfPlayer > 1
+    public Game(int numberOfPlayers) throws InvalidNumberOfPlayers {
+        if(numberOfPlayers <= 1 || numberOfPlayers > 6){
+            throw new InvalidNumberOfPlayers();
+        }
         for(int i = 0; i < numberOfPlayers; i++){
             Player player = new Player(colors[i]);
             players.add(player);
         }
     }
-    public Player getPlayer(String color){
-        for( Player aPlayer: players){
 
-            if(aPlayer.getColor() == color){
-                return  aPlayer;
-            }
+    private void checkValidCountryParameter(Country country) throws EmptyCountryParameterException {
+        if(country == null) {
+            throw new EmptyCountryParameterException();
         }
-        return null;
+    }
+
+    private void checkSearchedPlayer(Player player) throws NonExistentPlayer {
+        if(player == null) {
+            throw new NonExistentPlayer();
+        }
+    }
+
+    private Player getPlayer(Integer playerNumber) throws NonExistentPlayer {
+        Player searchedPlayer = players.get(playerNumber - 1);
+        checkSearchedPlayer(searchedPlayer);
+        return (searchedPlayer != null) ?  searchedPlayer : null;
+    }
+
+    public boolean playerDominatedCountry(Integer playerNumber, Country country) throws NonExistentPlayer, EmptyCountryParameterException {
+        return getPlayer(playerNumber).dominatedCountry(country);
+    }
+
+    public void addCountryToPlayer(Country country , Integer playerNumber) throws NonExistentPlayer, EmptyCountryParameterException {
+        getPlayer(playerNumber).addCountry(country);
+    }
+
+
+    public boolean correctAmountOfCountries(Integer playerNumber, Integer expectedAmount ) throws NonExistentPlayer {
+        return getPlayer(playerNumber).correctAmountOfCountries(expectedAmount);
     }
 
     private void shuffleCards(){
@@ -39,7 +64,7 @@ public class Game {
         }
     }
 
-    public void dealCountryCards() {
+    public void dealCountryCards() throws EmptyCountryParameterException {
         this.shuffleCards();
         int leftCountries = (this.countriesNames.length) % (this.players.size());
         int numberOfCountriesPerPlayer = (this.countriesNames.length) / (this.players.size());
@@ -62,48 +87,50 @@ public class Game {
         }
     }
 
-    private Player searchCountryOwner(String countryName){
+
+    private Player searchCountryOwner(Country country) throws EmptyCountryParameterException, NonExistentPlayer {
+        checkValidCountryParameter(country);
         Player owner = null;
         for( Player player : players ){
-            Country country = player.getCountry(countryName);
-            if(country != null){
-                owner = player.dominatedCountry(country);
+            if(player.isSearchedCountry(country)){
+                owner = player;
             }
         }
+        checkSearchedPlayer(owner);
         return owner;
     }
 
-    public void playersSetArmies(int amount, String countryName, String playerColor){
-        Player player = getPlayer(playerColor);
-        player.setArmy(amount, countryName);
+
+    public void playersSetArmies(int amount, Country country) throws EmptyCountryParameterException, NonExistentPlayer, NonExistentCountry {
+        Player player = searchCountryOwner(country);
+        player.addArmyinCountry(amount, country);
     }
 
-    private void invade(Player attacker, Country countryDefender, String countryAttacker){
-        Country country = attacker.getCountry(countryAttacker);
-        attacker.removeArmy(1, country);
+
+    private void invade(Player attacker, Country countryDefender, Country countryAttacker) throws EmptyCountryParameterException, NonExistentCountry { //JUGADOR VACIO
+        attacker.removeArmy(1, countryAttacker);
         attacker.addCountry(countryDefender);
     }
 
 
-    public void attack(String attackingCountry, int amountDice, String defendingCountry){
+    public void attack(Country attackingCountry, int amountDice, Country defendingCountry) throws EmptyCountryParameterException, NonExistentPlayer, NonExistentCountry, InvalidNumberOfDices {
         boolean isBordering = this.validateBorderingCountry(attackingCountry, defendingCountry);
+
         Player attacker = this.searchCountryOwner(attackingCountry);
         Player defender = this.searchCountryOwner(defendingCountry);
-        if(isBordering && attacker.canInvade(attackingCountry, amountDice)) {
-            Country countryAttacker = attacker.getCountry(attackingCountry);
-            Country countryDefender = defender.getCountry(defendingCountry);
-            Integer[] result = battlefield.battle(countryAttacker, amountDice, countryDefender);
-            attacker.removeArmy(result[0], countryAttacker);
 
-            if(defender.removeArmy(result[1], countryDefender)){
-                 this.invade(attacker, countryDefender, attackingCountry);
+        if(isBordering && attacker.canInvade(attackingCountry, amountDice)) {
+            Integer[] result = battlefield.battle(amountDice, defendingCountry);
+            attacker.removeArmy(result[0], attackingCountry);
+
+            if(defender.removeArmy(result[1], defendingCountry)){
+                 this.invade(attacker, defendingCountry, attackingCountry);
             };
         }
-
     }
 
 
-    private boolean validateBorderingCountry(String attackingCountry, String defendingCountry) {
+    private boolean validateBorderingCountry(Country attackingCountry, Country defendingCountry) throws EmptyCountryParameterException {
         return map.validateBorderingCountry(attackingCountry, defendingCountry);
     }
 

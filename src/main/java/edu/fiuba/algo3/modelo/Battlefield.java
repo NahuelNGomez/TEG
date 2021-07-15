@@ -1,5 +1,8 @@
 package edu.fiuba.algo3.modelo;
 
+import edu.fiuba.algo3.modelo.exceptions.EmptyCountryParameterException;
+import edu.fiuba.algo3.modelo.exceptions.InvalidNumberOfDices;
+
 import java.util.ArrayList;
 
 public class Battlefield {
@@ -8,22 +11,29 @@ public class Battlefield {
     public Battlefield(){
         dice = new Dice();
     }
-    public Integer[] battle(Country attacker, int amountDice, Country defender) {
-        //Check amount dice
+
+    private void checkValidCountryParameter(Country country) throws EmptyCountryParameterException {
+        if(country == null) {
+            throw new EmptyCountryParameterException();
+        }
+    }
+
+    private void checkValidNumberOfDice(Integer amountDice) throws InvalidNumberOfDices {
+        if(amountDice > 3 || amountDice < 1) {
+            throw new InvalidNumberOfDices();
+        }
+    }
+
+    public Integer[] battle(int amountDice, Country defender) throws EmptyCountryParameterException, InvalidNumberOfDices {
+        checkValidCountryParameter(defender);
+        checkValidNumberOfDice(amountDice);
+
         ArrayList<Integer> attackerDice = dice.rollDice(amountDice);
         Integer defenderAmountDice = defender.diceAmount();
         ArrayList<Integer> defenderDice = dice.rollDice(defenderAmountDice);
-        Integer[] results = {0,0};
-        Integer stop = amountDice > defenderAmountDice ? defenderAmountDice : amountDice;
-        for(int i = 0; i < stop; i++){
-            if(attackerDice.get(i) > defenderDice.get(i)){
-                results[0]++;
-            }
-            else{
-                results[1]++;
-            }
-        }
 
-        return results;
+        Integer stop = amountDice > defenderAmountDice ? defenderAmountDice : amountDice;
+
+        return dice.diceRoundResults(attackerDice,defenderDice, stop);
     }
 }

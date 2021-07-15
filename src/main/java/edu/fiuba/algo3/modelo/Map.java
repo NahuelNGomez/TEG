@@ -1,5 +1,7 @@
 package edu.fiuba.algo3.modelo;
 
+import edu.fiuba.algo3.modelo.exceptions.EmptyCountryParameterException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -53,8 +55,16 @@ public class Map {
         countries.put("France", borderingFrance);
     }
 
-    public boolean validateBorderingCountry(String attackingCountry, String defendingCountry) {
-        return countries.get(attackingCountry).contains(defendingCountry);
+    private void checkValidCountryParameter(Country country) throws EmptyCountryParameterException {
+        if(country == null) {
+            throw new EmptyCountryParameterException();
+        }
+    }
+
+    public boolean validateBorderingCountry(Country attackingCountry, Country defendingCountry) throws EmptyCountryParameterException {
+        checkValidCountryParameter(attackingCountry);
+        checkValidCountryParameter(defendingCountry);
+        return countries.get(attackingCountry.getName()).contains(defendingCountry.getName());
     }
 }
 

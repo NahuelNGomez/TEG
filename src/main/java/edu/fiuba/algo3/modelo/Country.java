@@ -11,13 +11,28 @@ public class Country {
 
     }
 
-    public int getArmyAmount(){
-        return armyAmount;
-    }
-
+    //rompe encapsulamiento -- EL DICCIONARIO NO FUNCIONA SIN UNA CLAVE STRING
     public String getName(){
         return this.name;
     }
+
+    //rompe encapsulamiento -- shuffleCards
+    public Integer getArmyAmount(){
+        return this.armyAmount;
+    }
+
+    public boolean correctAmountOfArmyInCountry(Integer expectedAmount){
+        return this.armyAmount == expectedAmount;
+    }
+
+    public boolean stillHasArmy(){
+        return this.armyAmount > 0;
+    }
+
+    public boolean canInvade(Integer amountDice){
+        return this.armyAmount > amountDice;
+    }
+
     public void addArmy(int amount){
         armyAmount = armyAmount + amount;
     }
