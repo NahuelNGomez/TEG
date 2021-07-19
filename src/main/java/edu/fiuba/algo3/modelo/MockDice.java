@@ -1,28 +1,30 @@
 package edu.fiuba.algo3.modelo;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Random;
 
-public class Dice {
-    public static Dice singleton = null;
+public class MockDice {
+    public static MockDice singleton = null;
 
-    private Dice(){}
+    private MockDice(){}
 
-    public static Dice create(){
+    public static MockDice create(){
         if (Dice.singleton == null)
-            singleton = new Dice();
+            singleton = new MockDice();
         return singleton;
     }
 
-    public ArrayList<Integer> rollDice(int diceAmount) {
+    public ArrayList<Integer> rollDice(int diceAmount, int winner) {
         ArrayList<Integer> diceResult = new ArrayList<Integer>();
-        for(int i = 0; i < diceAmount; i++){
-            Random rand = new Random();
-            int diceNumber = rand.nextInt(6) + 1;
-            diceResult.add(diceNumber);
+        if(winner == 1){
+            for(int i = 0; i < diceAmount; i++){
+                diceResult.add(6);
+            }
+
+        } else if(winner == 0){
+            for(int i = 0; i < diceAmount; i++){
+                diceResult.add(1);
+            }
         }
-        Collections.sort(diceResult, Collections.reverseOrder());
         return diceResult;
     }
 
@@ -38,4 +40,6 @@ public class Dice {
         }
         return results;
     }
+
+
 }

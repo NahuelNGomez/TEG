@@ -7,31 +7,31 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerTests {
     Player player = new Player("077bb");
-    Country argentina = new Country("Argentina");
+    Country granBretaña = new Country("Gran Bretaña");
 
     @Test
     public void dominatedCountryByPlayer() throws EmptyCountryParameterException {
-        player.addCountry(argentina);
-        assertEquals(true, player.dominatedCountry(argentina));
+        player.addCountry(granBretaña);
+        assertEquals(true, player.dominatedCountry(granBretaña));
     }
 
     @Test
     public void notDominatedCountryByPlayer() throws EmptyCountryParameterException {
-        assertEquals(false, player.dominatedCountry(argentina));
+        assertEquals(false, player.dominatedCountry(granBretaña));
     }
 
     @Test
     public void theAssignAmountOfArmiesPerPlayerIsCorrect() throws EmptyCountryParameterException, NonExistentCountry {
         Integer expectedAmount = 4;
-        player.addCountry(argentina);
-        player.addArmyinCountry(3, argentina);
-        assertEquals(true, player.correctAmountOfArmyInCountry(argentina,expectedAmount));
+        player.addCountry(granBretaña);
+        player.addArmyinCountry(3, granBretaña);
+        assertEquals(true, player.correctAmountOfArmyInCountry(granBretaña,expectedAmount));
     }
 
     @Test
     public void countryRemovedIsNotOnTheListAnyMore() throws EmptyCountryParameterException {
-        player.addCountry(argentina);
-        player.removeCountry(argentina);
-        assertEquals(false, player.dominatedCountry(argentina));
+        player.addCountry(granBretaña);
+        player.removeCountry(granBretaña);
+        assertEquals(false, player.dominatedCountry(granBretaña));
     }
 }

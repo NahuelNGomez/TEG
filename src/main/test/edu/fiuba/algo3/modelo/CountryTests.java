@@ -11,10 +11,10 @@ public class CountryTests {
     public void eachPlayerStartsWithOneArmyInTheirAssignedCountry() throws EmptyCountryParameterException, NonExistentCountry {
 
         Player player = new Player("077bb");
-        Country argentina = new Country("Argentina");
+        Country francia = new Country("Francia");
         Integer expectedAmount = 1;
 
-        player.addCountry(argentina);
-        assertEquals(true,  player.correctAmountOfArmyInCountry(argentina,expectedAmount));
+        player.addCountry(francia);
+        assertEquals(true,  player.correctAmountOfArmyInCountry(francia,expectedAmount));
     }
 }

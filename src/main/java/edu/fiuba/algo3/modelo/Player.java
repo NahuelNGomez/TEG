@@ -2,16 +2,17 @@ package edu.fiuba.algo3.modelo;
 
 import edu.fiuba.algo3.modelo.exceptions.EmptyCountryParameterException;
 import edu.fiuba.algo3.modelo.exceptions.NonExistentCountry;
-import edu.fiuba.algo3.modelo.exceptions.NonExistentPlayer;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Player {
     private String color;
-    private ArrayList <Country>dominatedCountries = new ArrayList<Country>();
+    private ArrayList <Country>dominatedCountries;
 
     public Player(String color) {
         this.color = color;
+        dominatedCountries = new ArrayList();
     }
 
     private void checkValidCountryParameter(Country country) throws EmptyCountryParameterException {
@@ -98,6 +99,19 @@ public class Player {
         dominatedCountries.remove(country);
     }
 
+    public void firstPlacementRound(Integer maxPlacement) { //SE ELIGEN LOS PAISES Y CANTIDAD AL AZAR
+        Random rand = new Random();
+        while(maxPlacement > 0){
+            Integer randIndex = rand.nextInt(dominatedCountries.size());
+            Integer randIndex2 = rand.nextInt(maxPlacement) + 1;
+
+            Country countryToAdd = dominatedCountries.get(randIndex);
+            countryToAdd.addArmy(randIndex2);
+
+            maxPlacement -= randIndex2;
+        }
+    }
+
     /*public boolean canBeInvaded(String countryName){
         Country country = getCountry(countryName);
         if(country != null){
@@ -106,7 +120,12 @@ public class Player {
         return false;
     }*/
 
+    public Integer cantidadPaises(){
+        return dominatedCountries.size();
+    }
 
 
-
+    public ArrayList<Country> paisesDominados() {
+        return dominatedCountries;
+    }
 }
