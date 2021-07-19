@@ -51,5 +51,9 @@ public class Country {
         }
     }
 
+    public boolean hasALargerArmy(int armyAmount){
+        return (this.armyAmount > armyAmount);
+    }
+
 
 }

@@ -60,7 +60,7 @@ public class GameTests {
         game.attack(francia, 3,granBretaña);
 
         //CON BATTLEFIELD Y DADO MOCK SIEMPRE GANA EL ATACANTE
-        assertEquals(true, (granBretaña.getArmyAmount() < 2)/* || francia.getArmyAmount() < 6)*/);
+        assertEquals(false, (granBretaña.hasALargerArmy(2))/* || francia.getArmyAmount() < 6)*/);
     }
     @Test
     public void attackerCountryConquers() throws EmptyCountryParameterException, NonExistentPlayer, InvalidNumberOfPlayers, NonExistentCountry, InvalidNumberOfDices, IOException {
