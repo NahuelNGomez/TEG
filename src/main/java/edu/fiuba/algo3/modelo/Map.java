@@ -2,8 +2,8 @@ package edu.fiuba.algo3.modelo;
 
 import edu.fiuba.algo3.modelo.exceptions.EmptyContinentParameterException;
 import edu.fiuba.algo3.modelo.exceptions.EmptyCountryParameterException;
-import edu.fiuba.algo3.modelo.exceptions.NonExistenContinent;
 
+import edu.fiuba.algo3.modelo.exceptions.NonExistentContinent;
 import edu.fiuba.algo3.modelo.exceptions.NonExistentCountry;
 
 import java.io.BufferedReader;
@@ -69,12 +69,8 @@ public class Map {
         return countries.get(keyAttackerCountry).contains(valueDefendingCountry);
     }
 
-    public Continent searchContinentInMap(Continent continent) throws EmptyContinentParameterException, NonExistenContinent {
+    public Continent searchContinentInMap(Continent continent) throws NonExistentContinent {
         Continent newContinent = null;
-        if(continent == null){
-            throw new EmptyContinentParameterException();
-        }
-
 
         for( Continent value : continents) {
             if (value.getName().equals(continent.getName())) {
@@ -82,19 +78,19 @@ public class Map {
             }
         }
         if(newContinent == null){
-            throw new NonExistenContinent();
+            throw new NonExistentContinent();
         }
         return newContinent;
     }
 
-    public boolean sameAmountOfCountries(Continent continent, int expectedAmount) throws EmptyContinentParameterException, NonExistenContinent {
-
+    public boolean sameAmountOfCountries(Continent continent, int expectedAmount) throws EmptyContinentParameterException, NonExistentContinent {
+        if(continent == null){
+            throw new EmptyContinentParameterException();
+        }
         Continent newContinent = searchContinentInMap(continent);
-
         return (newContinent.sameNumberOfCountries(expectedAmount));
 
     }
-
 
    public void addContinent(Continent addingContinent, Country newCountry){
 

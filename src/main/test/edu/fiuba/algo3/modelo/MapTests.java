@@ -26,7 +26,7 @@ public class MapTests {
     }
 
     @Test
-    public void continentWithCorrectNumberOfCountries() throws EmptyContinentParameterException, NonExistenContinent {
+    public void continentWithCorrectNumberOfCountries() throws NonExistentContinent, EmptyContinentParameterException {
 
         Continent continent = new Continent("Oceania");
         int expectedAmount = 4;
@@ -35,11 +35,10 @@ public class MapTests {
 
     }
     @Test
-    void continentNotFoundAndThrowException()  {
-
+    public void continentNotFoundAndThrowException()  {
         Continent continent = new Continent("Argentina");
         int expectedAmount = 4;
-        assertThrows(NonExistenContinent.class, () -> map.sameAmountOfCountries(continent, expectedAmount));
+        assertThrows(NonExistentContinent.class, () -> map.sameAmountOfCountries(continent, expectedAmount));
 
 
     }
