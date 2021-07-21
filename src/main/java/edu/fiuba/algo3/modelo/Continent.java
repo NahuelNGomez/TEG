@@ -11,4 +11,16 @@ public class Continent {
         countriesInContinent = new ArrayList<>();
     }
 
+    public String getName(){
+        return name;
+    }
+
+    public void addCountry(Country newCountry){
+        countriesInContinent.add(newCountry);
+    }
+
+    public boolean sameNumberOfCountries(int amount){
+        return (amount == countriesInContinent.size());
+    }
+
 }

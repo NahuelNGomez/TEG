@@ -1,6 +1,5 @@
 package edu.fiuba.algo3.modelo;
-import edu.fiuba.algo3.modelo.exceptions.EmptyCountryParameterException;
-import edu.fiuba.algo3.modelo.exceptions.NonExistentCountry;
+import edu.fiuba.algo3.modelo.exceptions.*;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -25,4 +24,26 @@ public class MapTests {
         Country polonia = new Country("Polonia");
         assertEquals(false, map.validateBorderingCountry(granBretaña, polonia));
     }
+
+    @Test
+    public void continentWithCorrectNumberOfCountries() throws EmptyContinentParameterException, NonExistenContinent {
+
+        Continent continent = new Continent("Oceania");
+        int expectedAmount = 4;
+
+        assertEquals(true, map.sameAmountOfCountries(continent, expectedAmount));
+
+    }
+    @Test
+    void continentNotFoundAndThrowException()  {
+
+        Continent continent = new Continent("Argentina");
+        int expectedAmount = 4;
+        assertThrows(NonExistenContinent.class, () -> map.sameAmountOfCountries(continent, expectedAmount));
+
+
+    }
+
+
+
 }
