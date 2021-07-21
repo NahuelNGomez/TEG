@@ -42,6 +42,15 @@ public class Player {
         return (dominatedCountries.size() == expectedAmount);
     }
 
+    public boolean correctAmountOfArmy( Integer expectedAmount){
+        Integer amount = 0;
+         for(Country eachCountry: dominatedCountries){
+             amount = amount + eachCountry.getArmyAmount();
+         }
+
+         return (amount == expectedAmount);
+    }
+
     public boolean dominatedCountry(Country country) throws EmptyCountryParameterException {
         checkValidCountryParameter(country);
         return dominatedCountries.contains(country);
@@ -102,6 +111,7 @@ public class Player {
     public void firstPlacementRound(Integer maxPlacement) { //SE ELIGEN LOS PAISES Y CANTIDAD AL AZAR
         Random rand = new Random();
         while(maxPlacement > 0){
+
             Integer randIndex = rand.nextInt(dominatedCountries.size());
             Integer randIndex2 = rand.nextInt(maxPlacement) + 1;
 
@@ -127,5 +137,14 @@ public class Player {
 
     public ArrayList<Country> paisesDominados() {
         return dominatedCountries;
+    }
+
+    public void setDominatedCountries(ArrayList<Country> continent) {
+        dominatedCountries = continent;
+    }
+
+    public Country randomDominatedCountry() {
+        Random rand = new Random();
+        return(dominatedCountries.get(rand.nextInt(dominatedCountries.size())));
     }
 }

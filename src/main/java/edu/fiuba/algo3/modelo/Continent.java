@@ -23,4 +23,9 @@ public class Continent {
         return (amount == countriesInContinent.size());
     }
 
+    public ArrayList<Country> getCountries(){
+
+        return countriesInContinent;
+    }
+
 }

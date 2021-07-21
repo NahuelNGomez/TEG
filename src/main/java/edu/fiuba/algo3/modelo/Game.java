@@ -20,6 +20,7 @@ public class Game {
     private static ArrayList<CountryCard> countryCards = new ArrayList<CountryCard>();
     private Round rounds;/*, new AttackRound()*/;
 
+
     private static String[] colors = {"07bb", "cc3311", "ee7733", "009988", "ee3377", "000000"};
 
 
@@ -31,7 +32,7 @@ public class Game {
             Player player = new Player(colors[i]);
             players.add(player);
         }
-        rounds = new PlacementRound(players);
+        rounds = new PlacementRound(players, map);
         if(countryCards.isEmpty()) getCountryCards();
     }
 
@@ -133,6 +134,10 @@ public class Game {
         }
     }
 
+    public void attackRound() throws IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException, InvalidNumberOfDices {
+        AttackRound attackRound = new AttackRound(players, map);
+        attackRound.attackRound();
+    }
 
     private Player searchCountryOwner(Country country) throws EmptyCountryParameterException, NonExistentPlayer, NonExistentCountry {
         Country mapCountry = map.searchKeyCountryInMap(country);
@@ -191,9 +196,8 @@ public class Game {
         return map.validateBorderingCountry(attackCountry, defendCountry);
     }
 
-    public void firstPlacementRound(){
-        Integer  maxPlacement = 5;
-        rounds.firstPlacementRound(maxPlacement);
+    public void placementRound(int maxPlacement){
+        rounds.placementRound(maxPlacement);
     }
 
 
@@ -206,4 +210,20 @@ public class Game {
         return getPlayer(playerNumber).paisesDominados();
     }
 
+
+    public boolean correctAmountOfArmy(Integer firstPlayerNumber, Integer expectedAmount) throws NonExistentPlayer {
+        Player player = getPlayer(firstPlayerNumber);
+        return (player.correctAmountOfArmy(expectedAmount));
+
+    }
+
+    public void addContinentToPlayer(Integer firstPlayerNumber, Continent continent) throws NonExistentPlayer, NonExistentContinent {
+
+        getPlayer(firstPlayerNumber).setDominatedCountries(map.getContinent(continent));
+    }
+/*
+    public void addCountryToPlayer(Country country) {
+
+    }
+*/
 }

@@ -5,11 +5,12 @@ import java.util.ArrayList;
 
 public abstract class Round {
     protected ArrayList<Player> players;
-    protected Map map = new Map();
+    protected Map map;
 
-    public Round(ArrayList<Player> gamePlayers) throws IOException {
+    public Round(ArrayList<Player> gamePlayers, Map map) throws IOException {
         players = gamePlayers;
+        this.map = map;
     }
 
-    public abstract void firstPlacementRound(Integer maxPlacement);
+    public abstract void placementRound(Integer maxPlacement);
 }

@@ -5,13 +5,13 @@ import java.util.ArrayList;
 
 public class PlacementRound extends Round{
 
-    public PlacementRound(ArrayList<Player> gamePlayers) throws IOException {
-        super(gamePlayers);
+    public PlacementRound(ArrayList<Player> gamePlayers, Map map) throws IOException {
+        super(gamePlayers, map);
 
     }
 
     @Override
-    public void firstPlacementRound(Integer maxPlacement) {
+    public void placementRound(Integer maxPlacement) {
         Integer num = 1;
         for( Player player : players){
             player.firstPlacementRound(maxPlacement);

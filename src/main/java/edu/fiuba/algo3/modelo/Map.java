@@ -31,6 +31,11 @@ public class Map {
         searchKeyCountryInMap(country);
     }
 
+    public ArrayList<Country> getContinent(Continent continent) throws NonExistentContinent {
+        Continent newContinent = searchContinentInMap(continent);
+        return (newContinent.getCountries());
+    }
+
     public Country searchKeyCountryInMap(Country country) throws NonExistentCountry {
         Set<Country> keys = countries.keySet();
         Country searchedCountry = null;
