@@ -1,0 +1,30 @@
+@startuml
+title "Battle"
+actor User
+User -> Game: attack(attackingCountry, defendingCountry)
+Game -> Game: validate(attackingCountry, defendingCountry)
+
+Game -> Game: seekAttacker(attackingCountry)
+Game -> Game: seekDefender(defendingCountry)
+Game -> User : numberOfDice()
+User --> Game: numberOfDice
+Game -> battlefield: attack(player1, player2, numberOfDice )
+
+
+loop numberOfDice
+battlefield -> player1: rollDice()
+player1 --> battlefield : diceResult
+
+battlefield ->player2: rollDice()
+player2 --> battlefield : diceResult
+
+battlefield -> comparator: compare(diceResult, diceResult)
+comparator --> battlefield: diceResult
+end
+battlefield --> Game : totalResult
+
+Game -> Game : verifyArmy(totalResult)
+
+Game -> player1 : removeArmy(lostArym1, attackingCountry)
+Game -> player2 : removeArmy(lostArym2, defendingCountry)
+@enduml

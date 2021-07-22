@@ -1,19 +1,15 @@
 package edu.fiuba.algo3.modelo;
 
-<<<<<<< HEAD
-public class Battlefield {
-=======
 import edu.fiuba.algo3.modelo.exceptions.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
-public class Battlefield {
-    private Dice dice;
-    private MockDice mockDice;
+public class MockBattlefield {
+    private final MockDice mockDice;
 
-    public Battlefield(){
-        dice = dice.create();
-        mockDice = mockDice.create();
+    public MockBattlefield(){
+        mockDice = MockDice.create();
     }
 
     private void checkValidCountryParameter(Country country) throws EmptyCountryParameterException {
@@ -32,13 +28,12 @@ public class Battlefield {
         checkValidCountryParameter(defender);
         //checkValidNumberOfDice(amountDice);
 
-        ArrayList<Integer> attackerDice = dice.rollDice(amountDice);
+        ArrayList<Integer> attackerDice = mockDice.rollDice(amountDice, 1); //1 : player wins -- 0 : player loses
         Integer defenderAmountDice = defender.diceAmount();
-        ArrayList<Integer> defenderDice = dice.rollDice(defenderAmountDice);
+        ArrayList<Integer> defenderDice = mockDice.rollDice(amountDice, 0);
 
         Integer stop = amountDice > defenderAmountDice ? defenderAmountDice : amountDice;
 
-        return dice.diceRoundResults(attackerDice,defenderDice, stop);
+        return mockDice.diceRoundResults(attackerDice,defenderDice,stop);
     }
->>>>>>> develop
 }
