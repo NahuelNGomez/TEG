@@ -6,7 +6,4 @@ public class NonExistentPlayer extends Exception {
     public NonExistentPlayer() {
         this.message = "The player sent does not exist";
     }
-    public String getMessage(){
-        return this.message;
-    }
 }

@@ -1,10 +1,6 @@
 package edu.fiuba.algo3.modelo;
 
-import edu.fiuba.algo3.modelo.exceptions.EmptyContinentParameterException;
-import edu.fiuba.algo3.modelo.exceptions.EmptyCountryParameterException;
-
-import edu.fiuba.algo3.modelo.exceptions.NonExistentContinent;
-import edu.fiuba.algo3.modelo.exceptions.NonExistentCountry;
+import edu.fiuba.algo3.modelo.exceptions.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -16,12 +12,19 @@ import java.util.Set;
 public class Map {
     private HashMap<Country, ArrayList<Country>> countries;
     private ArrayList<Continent> continents;
+    private static Map map;
 
-
-    public Map() throws IOException {
+    private Map() throws IOException {
         countries = new HashMap<Country, ArrayList<Country>>();
         continents = new ArrayList<Continent>();
         this.getCountriesAndBorders(countries);
+    }
+
+    public static Map get() throws IOException {
+        if(map == null){
+            map = new Map();
+        }
+        return map;
     }
 
     public void checkValidCountryParameter(Country country) throws EmptyCountryParameterException, NonExistentCountry {
@@ -40,14 +43,12 @@ public class Map {
         Set<Country> keys = countries.keySet();
         Country searchedCountry = null;
 
-
         Country[] myArray = keys.toArray(new Country[keys.size()]);
         for(int index = 0 ; index < myArray.length; index++){
             if(myArray[index].getName().equals(country.getName())){
                 searchedCountry = myArray[index];
             }
         }
-
         if(searchedCountry == null ) throw new NonExistentCountry();
         return searchedCountry;
     }
@@ -98,8 +99,8 @@ public class Map {
     }
 
    public void addContinent(Continent addingContinent, Country newCountry){
-
         boolean searchedContinent = false;
+
         for(int i = 0; continents.size() > i; i++){
 
             if(addingContinent.getName().equals(continents.get(i).getName())){
@@ -116,41 +117,48 @@ public class Map {
 
     public void getCountriesAndBorders(HashMap<Country, ArrayList<Country>> countries) throws IOException {
         Country newCountry = null;
-        String SEPARADOR = ",";
-        BufferedReader bufferLectura = null;
+        String SEPARATOR = ",";
+        BufferedReader reader = null;
         try {
-            bufferLectura = new BufferedReader(new FileReader("src/main/java/edu/fiuba/algo3/archivos/Teg - Fronteras.csv"));
-            String linea = bufferLectura.readLine();
+            reader = new BufferedReader(new FileReader("src/main/java/edu/fiuba/algo3/archivos/Teg - Fronteras.csv"));
+            String line = reader.readLine();
 
-            while (linea != null) {
-                String[] campos = linea.split(SEPARADOR);
-                ArrayList<Country> limitrofes = new ArrayList<>();
-                for( int i = 2; i < campos.length; i++){
+            while (line != null) {
+                String[] fields = line.split(SEPARATOR);
+                ArrayList<Country> borderings = new ArrayList<>();
 
-                    Country addingCountry = new Country(campos[i]);
-                    limitrofes.add(addingCountry);
+                for( int i = 2; i < fields.length; i++){
+                    Country addingCountry = new Country(fields[i]);
+                    borderings.add(addingCountry);
                 }
-                Continent addingContinent = new Continent(campos[1]);
 
-                newCountry = new Country(campos[0]);
+                Continent addingContinent = new Continent(fields[1]);
+
+                newCountry = new Country(fields[0]);
                 addContinent(addingContinent, newCountry);
 
-                countries.put(newCountry,limitrofes);
-                linea = bufferLectura.readLine();
+                countries.put(newCountry,borderings);
+                line = reader.readLine();
             }
         }
         catch (IOException e) {
             e.printStackTrace();
         }
         finally {
-            if (bufferLectura != null) {
+            if (reader != null) {
                 try {
-                    bufferLectura.close();
+                    reader.close();
                 }
                 catch (IOException e) {
                     e.printStackTrace();
                 }
             }
+        }
+    }
+
+    public void clean() {
+        for(Country country : countries.keySet()){
+            country.cleanArmy();
         }
     }
 }

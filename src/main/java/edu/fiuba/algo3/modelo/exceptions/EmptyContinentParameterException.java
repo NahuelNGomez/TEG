@@ -6,8 +6,4 @@ public class EmptyContinentParameterException extends Exception {
     public EmptyContinentParameterException() {
         this.message = "The continent sent is empty";
     }
-
-    public String getMessage(){
-        return this.message;
-    }
 }

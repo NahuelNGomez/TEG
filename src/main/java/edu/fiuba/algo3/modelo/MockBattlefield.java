@@ -1,12 +1,11 @@
 package edu.fiuba.algo3.modelo;
 
-import edu.fiuba.algo3.modelo.exceptions.EmptyCountryParameterException;
-import edu.fiuba.algo3.modelo.exceptions.InvalidNumberOfDices;
+import edu.fiuba.algo3.modelo.exceptions.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MockBattlefield {
-    //private Dice dice;
     private final MockDice mockDice;
 
     public MockBattlefield(){
@@ -19,20 +18,19 @@ public class MockBattlefield {
         }
     }
 
-    private void checkValidNumberOfDice(Integer amountDice) throws InvalidNumberOfDices {
+    /*private void checkValidNumberOfDice(Integer amountDice) throws InvalidNumberOfDices {
         if(amountDice > 3 || amountDice < 1) {
             throw new InvalidNumberOfDices();
         }
-    }
+    }*/
 
-    public Integer[] battle(int amountDice, Country defender) throws EmptyCountryParameterException, InvalidNumberOfDices {
+    public Integer[] battle(int amountDice, Country defender, Country attacker) throws EmptyCountryParameterException {
         checkValidCountryParameter(defender);
-        checkValidNumberOfDice(amountDice);
+        //checkValidNumberOfDice(amountDice);
 
-
-        ArrayList<Integer> attackerDice = mockDice.rollDice(amountDice,1); //si le mando 1 es el ganador si es cero pierde
+        ArrayList<Integer> attackerDice = mockDice.rollDice(amountDice, 1); //1 : player wins -- 0 : player loses
         Integer defenderAmountDice = defender.diceAmount();
-        ArrayList<Integer> defenderDice = mockDice.rollDice(amountDice,0);
+        ArrayList<Integer> defenderDice = mockDice.rollDice(amountDice, 0);
 
         Integer stop = amountDice > defenderAmountDice ? defenderAmountDice : amountDice;
 

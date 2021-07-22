@@ -7,7 +7,4 @@ public class NonExistentContinent extends Exception{
         this.message = "The continent sent does not exist";
     }
 
-    public String getMessage(){
-        return this.message;
-    }
 }

@@ -1,9 +1,6 @@
 package edu.fiuba.algo3.modelo;
 
-import edu.fiuba.algo3.modelo.exceptions.EmptyCountryParameterException;
-import edu.fiuba.algo3.modelo.exceptions.InvalidNumberOfDices;
-import edu.fiuba.algo3.modelo.exceptions.NonExistentCountry;
-import edu.fiuba.algo3.modelo.exceptions.NonExistentPlayer;
+import edu.fiuba.algo3.modelo.exceptions.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,27 +14,17 @@ public class AttackRound extends Round{
     }
 
     @Override
-    public void placementRound(Integer maxPlacement) {
-
-    }
-
-    public void attackRound() throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException, InvalidNumberOfDices {
-
+    public void startRound(Integer maxPlacement) throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException{
         for(Player eachPlayer: players){
-
-
            if(players.indexOf(eachPlayer) == players.size()-1){
-              attack(eachPlayer.randomDominatedCountry(),1 ,players.get(0).randomDominatedCountry());
+              attack(eachPlayer.getADominatedCountry(),1 ,players.get(0).getADominatedCountry());
 
            } else{
-               attack(eachPlayer.randomDominatedCountry(), 1,players.get((players.indexOf(eachPlayer)+1)).randomDominatedCountry());
+               attack(eachPlayer.getADominatedCountry(), 1,players.get((players.indexOf(eachPlayer)+1)).getADominatedCountry());
            }
-
-
-
         }
-
     }
+
     private Player searchCountryOwner(Country country) throws EmptyCountryParameterException, NonExistentPlayer, NonExistentCountry {
         Country mapCountry = map.searchKeyCountryInMap(country);
 
@@ -68,7 +55,8 @@ public class AttackRound extends Round{
         attacker.addCountry(defendCountry);
         attacker.addArmyinCountry(1, defendCountry);
     }
-    public void attack(Country attackingCountry, int amountDice, Country defendingCountry) throws EmptyCountryParameterException, NonExistentPlayer, NonExistentCountry, InvalidNumberOfDices {
+
+    public void attack(Country attackingCountry, int amountDice, Country defendingCountry) throws EmptyCountryParameterException, NonExistentPlayer, NonExistentCountry {
         //boolean isBordering = this.validateBorderingCountry(attackingCountry, defendingCountry);
         Country attackCountry = map.searchKeyCountryInMap(attackingCountry);
         Country defendCountry = map.searchKeyCountryInMap(defendingCountry);
@@ -77,7 +65,7 @@ public class AttackRound extends Round{
         Player defender = this.searchCountryOwner(defendCountry);
 
         if(/*isBordering && */attacker.canInvade(attackCountry, amountDice)) {
-            Integer[] result = battlefield.battle(amountDice, defendCountry);
+            Integer[] result = battlefield.battle(amountDice, defendCountry, attackCountry );
             attacker.removeArmy(result[1], attackCountry);
 
             if(defender.removeArmy(result[0], defendCountry)){

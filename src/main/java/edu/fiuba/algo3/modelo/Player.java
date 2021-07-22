@@ -1,7 +1,6 @@
 package edu.fiuba.algo3.modelo;
 
-import edu.fiuba.algo3.modelo.exceptions.EmptyCountryParameterException;
-import edu.fiuba.algo3.modelo.exceptions.NonExistentCountry;
+import edu.fiuba.algo3.modelo.exceptions.*;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -27,41 +26,15 @@ public class Player {
         }
     }
 
-    //rompe encapsulamiento
-    public Integer countryAmount(){
+    public Integer amountOfDominatedCountries(){
         return dominatedCountries.size();
     }
 
     public void addCountry(Country country) throws EmptyCountryParameterException {
         checkValidCountryParameter(country);
         dominatedCountries.add(country);
+        country.addArmy(1);
     }
-
-
-    public boolean correctAmountOfCountries( Integer expectedAmount){
-        return (dominatedCountries.size() == expectedAmount);
-    }
-
-    public boolean correctAmountOfArmy( Integer expectedAmount){
-        Integer amount = 0;
-         for(Country eachCountry: dominatedCountries){
-             amount = amount + eachCountry.getArmyAmount();
-         }
-
-         return (amount == expectedAmount);
-    }
-
-    public boolean dominatedCountry(Country country) throws EmptyCountryParameterException {
-        checkValidCountryParameter(country);
-        return dominatedCountries.contains(country);
-    }
-
-    public boolean correctAmountOfArmyInCountry(Country country, Integer expectedAmount) throws EmptyCountryParameterException, NonExistentCountry {
-        checkValidCountryParameter(country);
-        checkPlayerOwnsCountry(country);
-        return country.correctAmountOfArmyInCountry(expectedAmount);
-    }
-
 
     public void addArmyinCountry(int amount, Country country) throws EmptyCountryParameterException, NonExistentCountry {
         checkValidCountryParameter(country);
@@ -108,9 +81,13 @@ public class Player {
         dominatedCountries.remove(country);
     }
 
-    public void firstPlacementRound(Integer maxPlacement) { //SE ELIGEN LOS PAISES Y CANTIDAD AL AZAR
-        Random rand = new Random();
-        while(maxPlacement > 0){
+    public void firstPlacementRound(Integer maxPlacement) { //Countries and amount of army is chosen randomly
+        //Random rand = new Random();
+
+        Country countryToAdd = dominatedCountries.get(0);
+        countryToAdd.addArmy(maxPlacement);
+
+        /*while(maxPlacement > 0){
 
             Integer randIndex = rand.nextInt(dominatedCountries.size());
             Integer randIndex2 = rand.nextInt(maxPlacement) + 1;
@@ -119,32 +96,40 @@ public class Player {
             countryToAdd.addArmy(randIndex2);
 
             maxPlacement -= randIndex2;
+        }*/
+    }
+
+
+    public void setDominatedCountries(ArrayList<Country> continent) throws EmptyCountryParameterException {
+        for(Country country : continent){
+            addCountry(country);
         }
     }
 
-    /*public boolean canBeInvaded(String countryName){
-        Country country = getCountry(countryName);
-        if(country != null){
-                return true;
+    public Country getADominatedCountry() {
+        return(dominatedCountries.get(0));
+    }
+
+    public boolean correctAmountOfCountries( Integer expectedAmount){
+        return (dominatedCountries.size() == expectedAmount);
+    }
+
+    public boolean correctAmountOfArmy( Integer expectedAmount){
+        Integer amount = 0;
+        for(Country eachCountry: dominatedCountries){
+            amount = amount + eachCountry.getArmyAmount();
         }
-        return false;
-    }*/
-
-    public Integer cantidadPaises(){
-        return dominatedCountries.size();
+        return (amount == expectedAmount);
     }
 
-
-    public ArrayList<Country> paisesDominados() {
-        return dominatedCountries;
+    public boolean dominatedCountry(Country country) throws EmptyCountryParameterException {
+        checkValidCountryParameter(country);
+        return dominatedCountries.contains(country);
     }
 
-    public void setDominatedCountries(ArrayList<Country> continent) {
-        dominatedCountries = continent;
-    }
-
-    public Country randomDominatedCountry() {
-        Random rand = new Random();
-        return(dominatedCountries.get(rand.nextInt(dominatedCountries.size())));
+    public boolean correctAmountOfArmyInCountry(Country country, Integer expectedAmount) throws EmptyCountryParameterException, NonExistentCountry {
+        checkValidCountryParameter(country);
+        checkPlayerOwnsCountry(country);
+        return country.correctAmountOfArmyInCountry(expectedAmount);
     }
 }

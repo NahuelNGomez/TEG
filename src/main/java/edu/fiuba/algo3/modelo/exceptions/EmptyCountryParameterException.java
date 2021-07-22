@@ -6,8 +6,5 @@ public class EmptyCountryParameterException extends Exception{
     public EmptyCountryParameterException() {
         this.message = "The country sent is empty";
     }
-    public String getMessage(){
-        return this.message;
-    }
 
 }

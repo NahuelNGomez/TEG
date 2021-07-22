@@ -7,8 +7,4 @@ public class InvalidNumberOfPlayers extends Throwable {
         this.message = "Invalid number of players";
     }
 
-
-    public String getMessage(){
-        return this.message;
-    }
 }

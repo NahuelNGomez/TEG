@@ -7,7 +7,4 @@ public class NonExistentCountry extends Exception{
         this.message = "The country sent does not exist";
     }
 
-    public String getMessage(){
-        return this.message;
-    }
 }

@@ -7,11 +7,18 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MapTests {
-    Map map = new Map();
+    Map map = Map.get();
 
     public MapTests() throws IOException {
     }
 
+    @Test
+    public void singletonMapWorks() throws IOException {
+        Map aux = map;
+        map = Map.get();
+
+        assertEquals(map,aux);
+    }
     @Test
     public void twoCountriesAreBordering() throws EmptyCountryParameterException, NonExistentCountry {
         Country granBretaña = new Country("Gran Bretania");

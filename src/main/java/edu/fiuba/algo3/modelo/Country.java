@@ -6,8 +6,7 @@ public class Country {
 
     public Country(String name) {
         this.name = name;
-        this.armyAmount = 1;
-
+        this.armyAmount = 0;
     }
 
     //rompe encapsulamiento -- EL DICCIONARIO NO FUNCIONA SIN UNA CLAVE STRING
@@ -29,7 +28,14 @@ public class Country {
     }
 
     public boolean canInvade(Integer amountDice){
-        return this.armyAmount > amountDice;
+        if(amountDice <= 3 && amountDice >= 1){
+            if (armyAmount >= 3) {
+                return (amountDice <= 3);
+            } else {
+                return (amountDice <= armyAmount);
+            }
+        }
+        return false;
     }
 
     public void addArmy(int amount){
@@ -56,4 +62,15 @@ public class Country {
     }
 
 
+    public void cleanArmy() {
+        armyAmount = 0;
+    }
+
+    /* boolean rightAmountOfDice(int amountDice) {
+        if (armyAmount >= 3) {
+            return (amountDice == 3);
+        } else {
+            return (amountDice == armyAmount);
+        }
+    }*/
 }

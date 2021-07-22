@@ -1,5 +1,7 @@
 package edu.fiuba.algo3.modelo;
 
+import edu.fiuba.algo3.modelo.exceptions.*;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -12,5 +14,5 @@ public abstract class Round {
         this.map = map;
     }
 
-    public abstract void placementRound(Integer maxPlacement);
+    public abstract void startRound(Integer maxPlacement) throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException;
 }
