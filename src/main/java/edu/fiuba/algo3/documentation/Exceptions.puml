@@ -1,0 +1,34 @@
+@startuml
+
+class Exception {
+}
+
+class EmptyContinentParameterException{
+}
+
+class EmptyCountryParameterException{
+}
+
+class InvalidNumberOfPlayers{
+}
+
+class NonExistentContinent{
+}
+
+class NonExistentCountry{
+}
+
+class NonExistentPlayer{
+}
+
+class UnsuccessfulAttack{
+}
+
+Exception <|--right EmptyContinentParameterException
+Exception <|--left EmptyCountryParameterException
+Exception <|-- InvalidNumberOfPlayers
+Exception <|-- NonExistentContinent
+Exception <|-- NonExistentCountry
+Exception <|-- NonExistentPlayer
+
+@enduml

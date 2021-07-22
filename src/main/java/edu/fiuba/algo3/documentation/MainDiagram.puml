@@ -1,44 +1,66 @@
 @startuml
-
 title "Main Diagram"
 class Game{
-
+- objectiveCardsCards : ArrayList
+- countryCards : ArrayList
+- countriesNames: ArrayList
++ shuffleCards()
++ dealCountryCards()
++ attack(String:attackingCountry, int:amountDice, String:defendingCountry)
++ reorganize(Player:attacker, Player:defender)
+- invade(Player: attacker, Country: countryDefender, Country: countryAttacker)
 
 }
 class Player{
+-color: Color
++ dominatedCountry(): Player
++ verifyOwnCountries(): Country
++ removeCountry(Country: country)
 
 }
 
-class Map{
 
+class Map{
+- countries: HashMap<String, ArrayList<String>>
++ validateBorderingCountry(String attackingCountry, String defendingCountry): boolean
+}
+
+class Continent {
+- name : String
++ sameNumberOfCountries(int amount) : boolean
 }
 
 class Country{
-
-
+- name: String
+- armyAmount: int
++ addArmy(int: amount)
++ diceAmount(): int
++ canInvade(int: amountDice) : boolean
 }
 
-class Card{
+
+class Battlefield{
++ battle(Country attacker, int amountDice, Country defender): Integer[]
 
 }
 
 class Dice{
++rollDice(int:diceAmount):ArrayList<integer>
 
 }
-class Army{
-}
+
 
 
 Game "1"--> "2..6" Player
-Game "1"--> Card
-Game "1"--> "    1..3" Dice
+Battlefield "1"--> "1" Dice
 Game "1  "--> "1" Map
-Player --> Army
-Army -- Country
-Map --> "50" Country
 
-Player --> Card
-Player --> Country
-Country -- Card
+
+Map "1"--> "50" Country
+Map "1"--> "5" Continent
+
+Continent "1"-->"1..*" Country
+
+Player "1" --> "1..50" Country
+Game "1" -->"1" Battlefield
 @enduml
-

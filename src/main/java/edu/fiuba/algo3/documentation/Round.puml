@@ -1,0 +1,27 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class Game {
+}
+
+abstract Round{
+- players : ArrayLisy
+# map : Map
+}
+
+class AttackRound{
++ startRound(Integer: maxPlacement)
++ attack(Country: attackingCountry, int: amountDice, Country: defendingCountry)
+- invade(Player: attacker, Country: countryDefender, Country: countryAttacker)
+}
+
+class PlacementRound {
++ startRound(Integer: maxPlacement)
+}
+
+Game --> Round
+Round <|-- AttackRound
+Round <|-- PlacementRound
+@enduml
+
+@enduml
