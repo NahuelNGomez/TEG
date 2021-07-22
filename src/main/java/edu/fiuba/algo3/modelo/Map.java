@@ -1,11 +1,5 @@
 package edu.fiuba.algo3.modelo;
 
-<<<<<<< HEAD
-public class Map {
-    private Country Pais1;
-    private Country Pais2;
-}
-=======
 import edu.fiuba.algo3.modelo.exceptions.*;
 
 import java.io.BufferedReader;
@@ -169,4 +163,3 @@ public class Map {
     }
 }
 
->>>>>>> develop

@@ -1,8 +1,6 @@
 package edu.fiuba.algo3.modelo;
 
 public class CountryCard extends Card {
-<<<<<<< HEAD
-=======
     private Country cardCountry;
     private String image;
 
@@ -14,5 +12,4 @@ public class CountryCard extends Card {
     public Country getCountryCard(){
         return cardCountry;
     }
->>>>>>> develop
 }

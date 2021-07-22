@@ -1,28 +1,10 @@
 package edu.fiuba.algo3.modelo;
 
-<<<<<<< HEAD
-=======
 import edu.fiuba.algo3.modelo.exceptions.*;
->>>>>>> develop
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerTests {
-<<<<<<< HEAD
-    Player player = new Player("077bb");
-    Country country = new Country("Argentina");
-    @Test
-    public void paisDominadoPorJugador(){
-        player.addCountry(country);
-        assertEquals(player, player.dominatedCountry(country));
-    }
-
-    @Test
-    public void paisNoDominadoPorJugador(){
-        assertNull(player.dominatedCountry(country));
-    }
-}
-=======
     Color firstColor = new Color("077bb");
     Player player = new Player(firstColor);
     Country granBretaña = new Country("Gran Bretaña");
@@ -63,4 +45,3 @@ public class PlayerTests {
         assertThrows(EmptyCountryParameterException.class, () -> player.addArmyinCountry(1,null));
     }
 }
->>>>>>> develop

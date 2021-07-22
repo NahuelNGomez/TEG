@@ -2,13 +2,6 @@ package edu.fiuba.algo3.modelo;
 
 public class Country {
     private String name;
-<<<<<<< HEAD
-
-
-    public Country(String name) {
-        this.name = name;
-    }
-=======
     private int armyAmount;
 
     public Country(String name) {
@@ -78,5 +71,4 @@ public class Country {
             return (amountDice == armyAmount);
         }
     }*/
->>>>>>> develop
 }

@@ -1,8 +1,5 @@
 package edu.fiuba.algo3.modelo;
 
-<<<<<<< HEAD
-public class Dice {
-=======
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -41,5 +38,4 @@ public class Dice {
         }
         return results;
     }
->>>>>>> develop
 }

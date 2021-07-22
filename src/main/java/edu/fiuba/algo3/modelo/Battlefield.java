@@ -1,8 +1,5 @@
 package edu.fiuba.algo3.modelo;
 
-<<<<<<< HEAD
-public class Battlefield {
-=======
 import edu.fiuba.algo3.modelo.exceptions.*;
 
 import java.util.ArrayList;
@@ -40,5 +37,4 @@ public class Battlefield {
 
         return dice.diceRoundResults(attackerDice,defenderDice, stop);
     }
->>>>>>> develop
 }
