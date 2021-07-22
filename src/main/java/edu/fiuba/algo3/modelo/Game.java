@@ -19,8 +19,7 @@ public class Game {
     private static ArrayList<ObjectiveCard> objectiveCardsCards = new ArrayList<ObjectiveCard>();
     private static ArrayList<CountryCard> countryCards = new ArrayList<CountryCard>();
     private Round rounds;
-
-
+    private ArrayList<Color> colorsArray;
     private static String[] colors = {"07bb", "cc3311", "ee7733", "009988", "ee3377", "000000"};
 
 
@@ -28,8 +27,12 @@ public class Game {
         if(numberOfPlayers <= 1 || numberOfPlayers > 6){
             throw new InvalidNumberOfPlayers();
         }
+        colorsArray = new ArrayList<>();
+        for(int i = 0 ; i < colors.length; i++){
+            colorsArray.add(new Color(colors[i]));
+        }
         for(int i = 0; i < numberOfPlayers; i++){
-            Player player = new Player(colors[i]);
+            Player player = new Player(colorsArray.get(i));
             players.add(player);
         }
         map = Map.get();

@@ -46,10 +46,10 @@ public class MapTests {
         Continent continent = new Continent("Argentina");
         int expectedAmount = 4;
         assertThrows(NonExistentContinent.class, () -> map.sameAmountOfCountries(continent, expectedAmount));
-
-
     }
 
+    @Test
+    public void invalidCSV(){
 
-
+    }
 }

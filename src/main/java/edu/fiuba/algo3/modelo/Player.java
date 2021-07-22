@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Player {
-    private String color;
+    private Color color;
     private ArrayList <Country>dominatedCountries;
 
-    public Player(String color) {
+    public Player(Color color) {
         this.color = color;
         dominatedCountries = new ArrayList();
     }

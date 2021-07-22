@@ -50,10 +50,8 @@ public class Country {
     }
 
     public void removeArmy(Integer lostArmy) {
-        if(armyAmount >= lostArmy){
+        if(armyAmount >= lostArmy) {
             armyAmount = armyAmount - lostArmy;
-        } else{
-            armyAmount = 0;
         }
     }
 

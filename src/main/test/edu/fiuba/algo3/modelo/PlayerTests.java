@@ -5,7 +5,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerTests {
-    Player player = new Player("077bb");
+    Color firstColor = new Color("077bb");
+    Player player = new Player(firstColor);
     Country granBretaña = new Country("Gran Bretaña");
 
     @Test
@@ -32,5 +33,15 @@ public class PlayerTests {
         player.addCountry(granBretaña);
         player.removeCountry(granBretaña);
         assertEquals(false, player.dominatedCountry(granBretaña));
+    }
+
+    @Test
+    public void nonExistentCountryRaisesException(){
+        assertThrows(NonExistentCountry.class, () -> player.addArmyinCountry(1,granBretaña));
+    }
+
+    @Test
+    public void emptyCountryRaisesException(){
+        assertThrows(EmptyCountryParameterException.class, () -> player.addArmyinCountry(1,null));
     }
 }
