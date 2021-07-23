@@ -2,8 +2,6 @@ package edu.fiuba.algo3.modelo;
 
 import edu.fiuba.algo3.modelo.exceptions.*;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,8 +17,11 @@ public class Game {
     private static ArrayList<ObjectiveCard> objectiveCardsCards = new ArrayList<ObjectiveCard>();
     private static ArrayList<CountryCard> countryCards = new ArrayList<CountryCard>();
     private Round rounds;
+
     private ArrayList<Color> colorsArray;
     private static String[] colors = {"07bb", "cc3311", "ee7733", "009988", "ee3377", "000000"};
+
+    private SettingGame set = new SettingGame();
 
 
     public Game(int numberOfPlayers) throws InvalidNumberOfPlayers, IOException {
@@ -68,32 +69,7 @@ public class Game {
 
 
     private void getCountryCards(){
-        String SEPARATOR = ",";
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new FileReader("src/main/java/edu/fiuba/algo3/archivos/Teg - Cartas.csv"));
-            String line = reader.readLine();
-
-            while (line != null) {
-                String[] fields = line.split(SEPARATOR);
-                Country mapCountry = map.searchKeyCountryInMap(new Country(fields[0]));
-                countryCards.add(new CountryCard(mapCountry,fields[1]));
-                line = reader.readLine();
-            }
-        }
-        catch (IOException | NonExistentCountry e) {
-            e.printStackTrace();
-        }
-        finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                }
-                catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        countryCards = set.getCountryCards();
     }
 
     private void shuffleCards(){
@@ -157,7 +133,7 @@ public class Game {
     }
 
 
-    public void attack(Country attackingCountry, int amountDice, Country defendingCountry) throws EmptyCountryParameterException, NonExistentPlayer, NonExistentCountry, UnsuccessfullAttack {
+    public void attack(Country attackingCountry, int amountDice, Country defendingCountry) throws EmptyCountryParameterException, NonExistentPlayer, NonExistentCountry, InvalidAttack {
         //boolean isBordering = this.validateBorderingCountry(attackingCountry, defendingCountry);
         Country attackCountry = map.searchKeyCountryInMap(attackingCountry);
         Country defendCountry = map.searchKeyCountryInMap(defendingCountry);
@@ -165,7 +141,7 @@ public class Game {
         Player attacker = this.searchCountryOwner(attackCountry);
         Player defender = this.searchCountryOwner(defendCountry);
 
-        if(/*!isBordering || */!attacker.canInvade(attackCountry, amountDice)) throw new UnsuccessfullAttack();
+        if(/*!isBordering || */!attacker.canInvade(attackCountry, amountDice)) throw new InvalidAttack();
 
         Integer[] result = battlefield.battle(amountDice, defendCountry,attackCountry);
         attacker.removeArmy(result[0], attackCountry);

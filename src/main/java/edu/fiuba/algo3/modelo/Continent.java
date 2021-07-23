@@ -24,7 +24,6 @@ public class Continent {
     }
 
     public ArrayList<Country> getCountries(){
-
         return countriesInContinent;
     }
 

@@ -40,7 +40,7 @@ public class GameTests {
     }
 
     @Test
-    public void successFullAttack() throws EmptyCountryParameterException, NonExistentPlayer, InvalidNumberOfPlayers, NonExistentCountry, IOException, UnsuccessfullAttack {
+    public void successFullAttack() throws EmptyCountryParameterException, NonExistentPlayer, InvalidNumberOfPlayers, NonExistentCountry, IOException, InvalidAttack {
         Integer numberOfPlayers = 2;
 
         Game game = new Game(numberOfPlayers);
@@ -59,7 +59,7 @@ public class GameTests {
         assertEquals(false, (granBretaña.hasALargerArmy(2)));
     }
     @Test
-    public void attackerCountryConquers() throws EmptyCountryParameterException, NonExistentPlayer, InvalidNumberOfPlayers, NonExistentCountry, IOException, UnsuccessfullAttack {
+    public void attackerCountryConquers() throws EmptyCountryParameterException, NonExistentPlayer, InvalidNumberOfPlayers, NonExistentCountry, IOException, InvalidAttack {
         Integer numberOfPlayers = 2;
 
         Game game = new Game(numberOfPlayers);
@@ -100,7 +100,7 @@ public class GameTests {
         game.addCountryToPlayer(francia,firstPlayerNumber);
         game.addCountryToPlayer(alemania,secondPlayerNumber);
 
-        assertThrows(UnsuccessfullAttack.class, () -> game.attack(francia,3,alemania));
+        assertThrows(InvalidAttack.class, () -> game.attack(francia,3,alemania));
     }
 
     @Test
@@ -201,6 +201,11 @@ public class GameTests {
         assertEquals(false ,game.playerDominatedCountry(secondPlayerNumber, iran));
     }
 
+    @Test
+    public void pruebaBuffer() throws InvalidNumberOfPlayers, IOException {
+        Integer numberOfPlayers = 2;
+        Game game = new Game(numberOfPlayers);
+    }
 
 
 }

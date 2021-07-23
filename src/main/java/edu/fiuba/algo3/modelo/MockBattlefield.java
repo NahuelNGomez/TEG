@@ -3,7 +3,6 @@ package edu.fiuba.algo3.modelo;
 import edu.fiuba.algo3.modelo.exceptions.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class MockBattlefield {
     private final MockDice mockDice;

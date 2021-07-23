@@ -1,5 +1,6 @@
 package edu.fiuba.algo3.modelo;
 
+
 public class Country {
     private String name;
     private int armyAmount;
@@ -63,12 +64,4 @@ public class Country {
     public void cleanArmy() {
         armyAmount = 0;
     }
-
-    /* boolean rightAmountOfDice(int amountDice) {
-        if (armyAmount >= 3) {
-            return (amountDice == 3);
-        } else {
-            return (amountDice == armyAmount);
-        }
-    }*/
 }

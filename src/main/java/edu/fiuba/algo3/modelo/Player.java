@@ -81,13 +81,13 @@ public class Player {
         dominatedCountries.remove(country);
     }
 
-    public void firstPlacementRound(Integer maxPlacement) { //Countries and amount of army is chosen randomly
+    public void firstPlacementRound(Integer maxPlacement) { //adding to the first country all the army
         //Random rand = new Random();
 
         Country countryToAdd = dominatedCountries.get(0);
         countryToAdd.addArmy(maxPlacement);
 
-        /*while(maxPlacement > 0){
+        /*while(maxPlacement > 0){ //Countries and amount of army is chosen randomly
 
             Integer randIndex = rand.nextInt(dominatedCountries.size());
             Integer randIndex2 = rand.nextInt(maxPlacement) + 1;

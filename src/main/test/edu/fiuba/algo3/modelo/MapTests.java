@@ -20,36 +20,32 @@ public class MapTests {
         assertEquals(map,aux);
     }
     @Test
-    public void twoCountriesAreBordering() throws EmptyCountryParameterException, NonExistentCountry {
+    public void twoCountriesAreBordering() throws EmptyCountryParameterException, NonExistentCountry, IOException {
         Country granBretaña = new Country("Gran Bretania");
         Country islandia = new Country("Islandia");
         assertEquals(true, map.validateBorderingCountry(granBretaña, islandia));
     }
     @Test
-    public void twoCountriesAreNotBordering() throws EmptyCountryParameterException, NonExistentCountry {
+    public void twoCountriesAreNotBordering() throws EmptyCountryParameterException, NonExistentCountry, IOException {
         Country granBretaña = new Country("Gran Bretania");
         Country polonia = new Country("Polonia");
         assertEquals(false, map.validateBorderingCountry(granBretaña, polonia));
     }
 
     @Test
-    public void continentWithCorrectNumberOfCountries() throws NonExistentContinent, EmptyContinentParameterException {
-
+    public void continentWithCorrectNumberOfCountries() throws NonExistentContinent, EmptyContinentParameterException, IOException {
         Continent continent = new Continent("Oceania");
         int expectedAmount = 4;
 
-        assertEquals(true, map.sameAmountOfCountries(continent, expectedAmount));
+        boolean verif = map.sameAmountOfCountries(continent, expectedAmount);
+        assertEquals(true, verif);
 
     }
     @Test
-    public void continentNotFoundAndThrowException()  {
+    public void continentNotFoundAndThrowException() throws IOException {
         Continent continent = new Continent("Argentina");
         int expectedAmount = 4;
         assertThrows(NonExistentContinent.class, () -> map.sameAmountOfCountries(continent, expectedAmount));
     }
 
-    @Test
-    public void invalidCSV(){
-
-    }
 }
