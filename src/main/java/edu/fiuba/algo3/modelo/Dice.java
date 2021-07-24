@@ -1,7 +1,5 @@
 package edu.fiuba.algo3.modelo;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Random;
 
 public class Dice {
@@ -15,27 +13,18 @@ public class Dice {
         return singleton;
     }
 
-    public ArrayList<Integer> rollDice(int diceAmount) {
-        ArrayList<Integer> diceResult = new ArrayList<Integer>();
+    public DiceRoll rollDice(int diceAmount) {
+        DiceRoll result = new DiceRoll();
+
         for(int i = 0; i < diceAmount; i++){
             Random rand = new Random();
             int diceNumber = rand.nextInt(6) + 1;
-            diceResult.add(diceNumber);
+            result.addResult(diceNumber);
         }
-        Collections.sort(diceResult, Collections.reverseOrder());
-        return diceResult;
+        return result;
     }
 
-    public Integer[] diceRoundResults(ArrayList<Integer> attackerDice, ArrayList<Integer> defenderDice, Integer stop) {
-        Integer[] results = {0,0};
-
-        for(int i = 0; i < stop; i++){
-            if( attackerDice.get(i)  > defenderDice.get(i) ){
-                results[0]++;
-            } else {
-                results[1]++;
-            }
-        }
-        return results;
+    public Integer[] diceRoundResults(DiceRoll attackerDice, DiceRoll defenderDice, Integer stop) {
+        return attackerDice.compareResultsWith(defenderDice,stop);
     }
 }

@@ -65,7 +65,7 @@ public class AttackRound extends Round{
         Player defender = this.searchCountryOwner(defendCountry);
 
         if(/*isBordering && */attacker.canInvade(attackCountry, amountDice)) {
-            Integer[] result = battlefield.battle(amountDice, defendCountry, attackCountry );
+            Integer[] result = battlefield.battle(amountDice, defendCountry);
             attacker.removeArmy(result[1], attackCountry);
 
             if(defender.removeArmy(result[0], defendCountry)){

@@ -46,17 +46,17 @@ public class GameTests {
         Game game = new Game(numberOfPlayers);
 
         Country francia = new Country("Francia");
-        Country granBretaña = new Country("Gran Bretania");
+        Country alemania = new Country("Alemania");
 
         game.addCountryToPlayer(francia,firstPlayerNumber);
-        game.addCountryToPlayer(granBretaña,secondPlayerNumber);
+        game.addCountryToPlayer(alemania,secondPlayerNumber);
 
         game.playersSetArmies(5, francia);
-        game.playersSetArmies(1, granBretaña);
+        game.playersSetArmies(1, alemania);
 
-        game.attack(francia, 3,granBretaña);
+        game.attack(francia, 3,alemania);
 
-        assertEquals(false, (granBretaña.hasALargerArmy(2)));
+        assertEquals(false, (alemania.hasALargerArmy(2)));
     }
     @Test
     public void attackerCountryConquers() throws EmptyCountryParameterException, NonExistentPlayer, InvalidNumberOfPlayers, NonExistentCountry, IOException, InvalidAttack {

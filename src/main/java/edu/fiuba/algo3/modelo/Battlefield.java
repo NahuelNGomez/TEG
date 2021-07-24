@@ -19,22 +19,15 @@ public class Battlefield {
         }
     }
 
-    /*private void checkValidNumberOfDice(Integer amountDice) throws InvalidNumberOfDices {
-        if(amountDice > 3 || amountDice < 1) {
-            throw new InvalidNumberOfDices();
-        }
-    }*/
-
-    public Integer[] battle(int amountDice, Country defender, Country attacker) throws EmptyCountryParameterException {
+    public Integer[] battle(int amountDice, Country defender) throws EmptyCountryParameterException {
         checkValidCountryParameter(defender);
-        //checkValidNumberOfDice(amountDice);
 
-        ArrayList<Integer> attackerDice = dice.rollDice(amountDice);
+        DiceRoll attackerDiceResult = dice.rollDice(amountDice);
         Integer defenderAmountDice = defender.diceAmount();
-        ArrayList<Integer> defenderDice = dice.rollDice(defenderAmountDice);
+        DiceRoll defenderDiceResult = dice.rollDice(defenderAmountDice);
 
         Integer stop = amountDice > defenderAmountDice ? defenderAmountDice : amountDice;
 
-        return dice.diceRoundResults(attackerDice,defenderDice, stop);
+        return dice.diceRoundResults(attackerDiceResult,defenderDiceResult, stop);
     }
 }

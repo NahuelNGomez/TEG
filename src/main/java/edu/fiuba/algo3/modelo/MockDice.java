@@ -1,7 +1,5 @@
 package edu.fiuba.algo3.modelo;
 
-import java.util.ArrayList;
-
 public class MockDice {
     public static MockDice singleton = null;
 
@@ -13,32 +11,24 @@ public class MockDice {
         return singleton;
     }
 
-    public ArrayList<Integer> rollDice(int diceAmount, int winner) {
-        ArrayList<Integer> diceResult = new ArrayList<Integer>();
+    public DiceRoll rollDice(int diceAmount, int winner) {
+        DiceRoll result = new DiceRoll();
+
         if(winner == 1){
             for(int i = 0; i < diceAmount; i++){
-                diceResult.add(6);
+                result.addResult(6);
             }
 
         } else if(winner == 0){
             for(int i = 0; i < diceAmount; i++){
-                diceResult.add(1);
+                result.addResult(1);
             }
         }
-        return diceResult;
+        return result;
     }
 
-    public Integer[] diceRoundResults(ArrayList<Integer> attackerDice, ArrayList<Integer> defenderDice, Integer stop) {
-        Integer[] results = {0,0};
-
-        for(int i = 0; i < stop; i++){
-            if( attackerDice.get(i)  > defenderDice.get(i) ){
-                results[0]++;
-            } else {
-                results[1]++;
-            }
-        }
-        return results;
+    public Integer[] diceRoundResults(DiceRoll attackerDice, DiceRoll defenderDice, Integer stop) {
+        return attackerDice.compareResultsWith(defenderDice,stop);
     }
 
 

@@ -143,8 +143,8 @@ public class Game {
 
         if(/*!isBordering || */!attacker.canInvade(attackCountry, amountDice)) throw new InvalidAttack();
 
-        Integer[] result = battlefield.battle(amountDice, defendCountry,attackCountry);
-        attacker.removeArmy(result[0], attackCountry);
+        Integer[] result = battlefield.battle(amountDice, defendCountry);
+        attacker.removeArmy(result[1], attackCountry);
 
         if(defender.removeArmy(result[0], defendCountry)){
              this.invade(attacker, defendCountry, attackCountry);
