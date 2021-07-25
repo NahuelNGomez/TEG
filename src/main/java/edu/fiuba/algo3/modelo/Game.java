@@ -39,8 +39,9 @@ public class Game {
         map = Map.get();
         map.clean();
         rounds = new PlacementRound(players, map);
-        if(countryCards.isEmpty()) getCountryCards();
+        if(countryCards.size() < 50) getCountryCards();
     }
+
 
 
     private void checkValidCountryParameter(Country country) throws EmptyCountryParameterException {
@@ -122,6 +123,14 @@ public class Game {
         player.addArmyinCountry(amount, mapCountry);
     }
 
+    public void giveACountryCard(Player attacker){
+        Random random = new Random();
+        CountryCard countryCard = countryCards.get(random.nextInt(countryCards.size()));
+        Player.addCountryCard(countryCard);
+       countryCards.remove(countryCard);
+
+    }
+
 
     private void invade(Player attacker, Country countryDefender, Country countryAttacker) throws EmptyCountryParameterException, NonExistentCountry { //JUGADOR VACIO
         Country attackCountry = map.searchKeyCountryInMap(countryAttacker);
@@ -130,6 +139,7 @@ public class Game {
         attacker.removeArmy(1, attackCountry);
         attacker.addCountry(defendCountry);
         defendCountry.addArmy(1);
+        giveACountryCard(attacker);
     }
 
 
@@ -194,4 +204,11 @@ public class Game {
         }
     }
 
+    public boolean correctAmountOfCountryCards(Integer firstPlayerNumber, Integer expectedAmount) throws NonExistentPlayer {
+       return getPlayer(firstPlayerNumber).correctAmountOfCountryCards(expectedAmount);
+    }
+
+    public boolean correctRemainingNumberOfCountryCards(int expected) {
+        return (expected == countryCards.size());
+    }
 }

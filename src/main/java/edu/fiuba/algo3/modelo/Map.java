@@ -106,6 +106,7 @@ public class Map {
     public void clean() {
         for(Country country : countries.keySet()){
             country.cleanArmy();
+
         }
     }
 }

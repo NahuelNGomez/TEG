@@ -200,11 +200,41 @@ public class GameTests {
         assertEquals(false ,game.playerDominatedCountry(secondPlayerNumber, siberia));
         assertEquals(false ,game.playerDominatedCountry(secondPlayerNumber, iran));
     }
-
+/*
     @Test
     public void pruebaBuffer() throws InvalidNumberOfPlayers, IOException {
         Integer numberOfPlayers = 2;
         Game game = new Game(numberOfPlayers);
+    }
+*/
+    @Test
+    public void correctAmountOfCountryCards() throws InvalidNumberOfPlayers, IOException {
+        Integer numberOfPlayers = 2;
+        Game game = new Game(numberOfPlayers);
+        assertEquals(true ,game.correctRemainingNumberOfCountryCards(50));
+    }
+
+    @Test
+    public void conquerAndWinACountryCard() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException, InvalidAttack {
+
+        Integer numberOfPlayers = 2;
+        Integer expectedAmount = 1;
+
+        Game game = new Game(numberOfPlayers);
+
+        Country francia = new Country("Francia");
+        Country alemania = new Country("Alemania");
+
+        game.addCountryToPlayer(francia,firstPlayerNumber);
+        game.addCountryToPlayer(alemania,secondPlayerNumber);
+
+        game.playersSetArmies(5, francia);
+        game.attack(francia, 1,alemania);
+
+        assertEquals(true, game.playerDominatedCountry(firstPlayerNumber,alemania));
+        assertEquals(true, game.correctAmountOfCountryCards(firstPlayerNumber, expectedAmount));
+        assertEquals(true, game.correctRemainingNumberOfCountryCards(49));
+
     }
 
 

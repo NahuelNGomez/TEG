@@ -12,4 +12,5 @@ public class CountryCard extends Card {
     public Country getCountryCard(){
         return cardCountry;
     }
+
 }

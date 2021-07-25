@@ -3,15 +3,22 @@ package edu.fiuba.algo3.modelo;
 import edu.fiuba.algo3.modelo.exceptions.*;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class Player {
     private Color color;
     private ArrayList <Country>dominatedCountries;
+    private static ArrayList<CountryCard> ownCountryCards;
 
     public Player(Color color) {
         this.color = color;
         dominatedCountries = new ArrayList();
+        ownCountryCards= new ArrayList();
+    }
+
+    public static void addCountryCard(CountryCard countryCard) {
+
+        ownCountryCards.add(countryCard);
+
     }
 
     private void checkValidCountryParameter(Country country) throws EmptyCountryParameterException {
@@ -97,6 +104,10 @@ public class Player {
 
             maxPlacement -= randIndex2;
         }*/
+    }
+
+    public boolean correctAmountOfCountryCards(int expectedAmount){
+        return (expectedAmount == ownCountryCards.size());
     }
 
 
