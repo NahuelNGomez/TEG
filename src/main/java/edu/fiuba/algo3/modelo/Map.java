@@ -5,6 +5,7 @@ import edu.fiuba.algo3.modelo.exceptions.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.Set;
 
 public class Map {
@@ -12,10 +13,12 @@ public class Map {
     private ArrayList<Continent> continents;
     private static Map map;
     private SettingMap set;
+    private ArmyMover armyMover;
 
     private Map() throws IOException {
         countries = new HashMap<Country, ArrayList<Country>>();
         continents = new ArrayList<Continent>();
+        armyMover = new ArmyMover();
         if(set == null)  set = new SettingMap();
         this.getCountriesAndBorders();
     }
@@ -26,6 +29,8 @@ public class Map {
         }
         return map;
     }
+
+
 
     public void checkValidCountryParameter(Country country) throws EmptyCountryParameterException, NonExistentCountry {
         if(country == null) {
@@ -109,5 +114,13 @@ public class Map {
 
         }
     }
-}
 
+    public void regroup(Country country1, Country country2, Integer armyToRegroup) throws NonExistentCountry {
+
+        Country mapCountry1 = searchKeyCountryInMap(country1);
+        Country mapCountry2 = searchKeyCountryInMap(country2);
+
+            ArmyMover.moveArmy(mapCountry1, mapCountry2, armyToRegroup);
+    }
+
+}

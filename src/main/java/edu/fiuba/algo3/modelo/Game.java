@@ -211,4 +211,39 @@ public class Game {
     public boolean correctRemainingNumberOfCountryCards(int expected) {
         return (expected == countryCards.size());
     }
+
+    public void regroup(Integer firstPlayerNumber, Country country1, Country country2, Integer armyToRegroup) throws EmptyCountryParameterException, NonExistentCountry, NonExistentPlayer {
+
+        checkValidCountryParameter(country1);
+        checkValidCountryParameter(country2);
+        if(checkRegroup(country1, country2, firstPlayerNumber)){
+            map.regroup(country1, country2, armyToRegroup);
+        }
+
+    }
+
+    private boolean checkRegroup(Country country1, Country country2, Integer firstPlayerNumber) throws NonExistentCountry, EmptyCountryParameterException, NonExistentPlayer {
+
+        Player player = getPlayer(firstPlayerNumber);
+
+        Country countryAux1 = country2;
+        Country countryAux2 = country2;
+        Integer maxMovements = 100;
+
+        while(!map.validateBorderingCountry(countryAux1,country1) && maxMovements > 0){
+            while(!map.validateBorderingCountry(countryAux2,countryAux1) && maxMovements > 0){
+                countryAux2 = player.getRandomOwnCountry();
+                maxMovements--;
+            }
+            countryAux1 = countryAux2;
+        }
+        return (maxMovements > 0);
+    }
+
+    public boolean correctAmountOfArmyInCountry(Integer firstPlayerNumber, Country polonia, Integer expectedAmountPoland) throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
+        Player player = getPlayer(firstPlayerNumber);
+        Country mapCountry = map.searchKeyCountryInMap(polonia);
+       return( player.correctAmountOfArmyInCountry(mapCountry, expectedAmountPoland));
+
+    }
 }

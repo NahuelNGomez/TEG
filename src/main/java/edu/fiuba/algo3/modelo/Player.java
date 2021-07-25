@@ -3,6 +3,7 @@ package edu.fiuba.algo3.modelo;
 import edu.fiuba.algo3.modelo.exceptions.*;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Player {
     private Color color;
@@ -31,6 +32,11 @@ public class Player {
         if(dominatedCountries.contains(country) == false){
             throw new NonExistentCountry();
         }
+    }
+
+    public Country getRandomOwnCountry(){
+        Random random = new Random();
+        return (dominatedCountries.get(random.nextInt(dominatedCountries.size())));
     }
 
     public Integer amountOfDominatedCountries(){
