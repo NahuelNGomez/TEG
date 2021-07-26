@@ -49,7 +49,7 @@ public class Player {
         country.addArmy(1);
     }
 
-    public void addArmyinCountry(int amount, Country country) throws EmptyCountryParameterException, NonExistentCountry {
+    public void addArmyInCountry(int amount, Country country) throws EmptyCountryParameterException, NonExistentCountry {
         checkValidCountryParameter(country);
         checkPlayerOwnsCountry(country);
         if(dominatedCountries.contains(country)){
@@ -148,5 +148,9 @@ public class Player {
         checkValidCountryParameter(country);
         checkPlayerOwnsCountry(country);
         return country.correctAmountOfArmyInCountry(expectedAmount);
+    }
+
+    public boolean objectiveCompleted() {
+        return (dominatedCountries.size() == 30);
     }
 }

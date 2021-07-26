@@ -24,7 +24,7 @@ public class PlayerTests {
     public void theAssignAmountOfArmiesPerPlayerIsCorrect() throws EmptyCountryParameterException, NonExistentCountry {
         Integer expectedAmount = 4;
         player.addCountry(granBretaña);
-        player.addArmyinCountry(3, granBretaña);
+        player.addArmyInCountry(3, granBretaña);
         assertEquals(true, player.correctAmountOfArmyInCountry(granBretaña,expectedAmount));
     }
 
@@ -37,11 +37,11 @@ public class PlayerTests {
 
     @Test
     public void nonExistentCountryRaisesException(){
-        assertThrows(NonExistentCountry.class, () -> player.addArmyinCountry(1,granBretaña));
+        assertThrows(NonExistentCountry.class, () -> player.addArmyInCountry(1,granBretaña));
     }
 
     @Test
     public void emptyCountryRaisesException(){
-        assertThrows(EmptyCountryParameterException.class, () -> player.addArmyinCountry(1,null));
+        assertThrows(EmptyCountryParameterException.class, () -> player.addArmyInCountry(1,null));
     }
 }

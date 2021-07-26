@@ -17,6 +17,7 @@ public class Game {
     private static ArrayList<ObjectiveCard> objectiveCardsCards = new ArrayList<ObjectiveCard>();
     private static ArrayList<CountryCard> countryCards = new ArrayList<CountryCard>();
     private Round rounds;
+    private WinnerDefiner winnerDefiner;
 
     private ArrayList<Color> colorsArray;
     private static String[] colors = {"07bb", "cc3311", "ee7733", "009988", "ee3377", "000000"};
@@ -40,8 +41,20 @@ public class Game {
         map.clean();
         rounds = new PlacementRound(players, map);
         if(countryCards.size() < 50) getCountryCards();
+        this.winnerDefiner = new WinnerDefiner(players);
     }
 
+    public Player play() throws NonExistentCountry, EmptyCountryParameterException, NonExistentPlayer, IOException {
+        int firstPlacement = 5;
+        int secondPlacement = 3;
+        dealCountryCards();
+        placementRound(firstPlacement);
+        placementRound(secondPlacement);
+        while (!winnerDefiner.theresAWinner()){
+            attackRound();
+        }
+        return winnerDefiner.winner();
+    }
 
 
     private void checkValidCountryParameter(Country country) throws EmptyCountryParameterException {
@@ -120,7 +133,7 @@ public class Game {
     public void playersSetArmies(int amount, Country country) throws EmptyCountryParameterException, NonExistentPlayer, NonExistentCountry {
         Country mapCountry = map.searchKeyCountryInMap(country);
         Player player = searchCountryOwner(mapCountry);
-        player.addArmyinCountry(amount, mapCountry);
+        player.addArmyInCountry(amount, mapCountry);
     }
 
     public void giveACountryCard(Player attacker){

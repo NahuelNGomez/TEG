@@ -7,22 +7,27 @@ import java.util.ArrayList;
 
 public class AttackRound extends Round{
     private MockBattlefield battlefield = new MockBattlefield();
+    private WinnerDefiner winnerDefiner;
 
     public AttackRound(ArrayList<Player> gamePlayers, Map map) throws IOException {
         super(gamePlayers, map);
+        this.winnerDefiner = new WinnerDefiner(players);
 
     }
 
     @Override
     public void startRound(Integer maxPlacement) throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException{
-        for(Player eachPlayer: players){
-           if(players.indexOf(eachPlayer) == players.size()-1){
-              attack(eachPlayer.getADominatedCountry(),1 ,players.get(0).getADominatedCountry());
+        int i = 0;
+        while (i < players.size() && !winnerDefiner.theresAWinner()){
+           if(players.indexOf(players.get(i)) == players.size()-1){
+              attack(players.get(i).getADominatedCountry(),1 ,players.get(0).getADominatedCountry());
 
            } else{
-               attack(eachPlayer.getADominatedCountry(), 1,players.get((players.indexOf(eachPlayer)+1)).getADominatedCountry());
+               attack(players.get(i).getADominatedCountry(), 1,players.get((players.indexOf(players.get(i))+1)).getADominatedCountry());
            }
+           i++;
         }
+
     }
 
     private Player searchCountryOwner(Country country) throws EmptyCountryParameterException, NonExistentPlayer, NonExistentCountry {
@@ -53,7 +58,7 @@ public class AttackRound extends Round{
 
         attacker.removeArmy(1, attackCountry);
         attacker.addCountry(defendCountry);
-        attacker.addArmyinCountry(1, defendCountry);
+        attacker.addArmyInCountry(1, defendCountry);
     }
 
     public void attack(Country attackingCountry, int amountDice, Country defendingCountry) throws EmptyCountryParameterException, NonExistentPlayer, NonExistentCountry {
