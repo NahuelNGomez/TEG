@@ -53,21 +53,6 @@ public class GameTests {
     }
 
     @Test
-    public void attackerAmountOfDicesIsIncorrectRaisesException() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
-        Integer numberOfPlayers = 2;
-
-        Game game = new Game(numberOfPlayers);
-
-        Country francia = new Country("Francia");
-        Country alemania = new Country("Alemania");
-
-        game.addCountryToPlayer(francia,firstPlayerNumber);
-        game.addCountryToPlayer(alemania,secondPlayerNumber);
-
-        assertThrows(InvalidAttack.class, () -> game.attack(francia,3,alemania,1));
-    }
-
-    @Test
     public void nonExistentPlayerRaisesException() throws InvalidNumberOfPlayers, IOException {
         Integer numberOfPlayers = 2;
 
@@ -174,29 +159,6 @@ public class GameTests {
     }
 
     @Test
-    public void conquerAndWinACountryCard() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException, InvalidAttack {
-
-        Integer numberOfPlayers = 2;
-        Integer expectedAmount = 1;
-
-        Game game = new Game(numberOfPlayers);
-
-        Country francia = new Country("Francia");
-        Country alemania = new Country("Alemania");
-
-        game.addCountryToPlayer(francia,firstPlayerNumber);
-        game.addCountryToPlayer(alemania,secondPlayerNumber);
-
-        game.playersSetArmies(5, francia);
-        game.attack(francia, 1,alemania,0);
-
-        assertEquals(true, game.playerDominatedCountry(firstPlayerNumber,alemania));
-        assertEquals(true, game.correctAmountOfCountryCards(firstPlayerNumber, expectedAmount));
-        assertEquals(true, game.correctRemainingNumberOfCountryCards(49));
-
-    }
-
-    @Test
     public void playerRegroupThreeArmies() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException, InvalidAttack {
 
         Integer numberOfPlayers = 2;
@@ -290,7 +252,7 @@ public class GameTests {
         assertNotEquals(null, game.winner());
         assertEquals(true, game.isWinner(firstPlayerNumber));
     }
-
+/*
     @Test
     public void anotherWithRounds() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
         Integer numberOfPlayers = 3;
@@ -300,7 +262,7 @@ public class GameTests {
         assertNotEquals(null, game.winner());
         //assertEquals(true, game.winner() == null); //es que un jugador se quedo sin fichas
     }
-
+*/
     @Test
     public void playerDominatesAContinentAndAddsArmyToIt() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
         Country zaire = new Country("Zaire");

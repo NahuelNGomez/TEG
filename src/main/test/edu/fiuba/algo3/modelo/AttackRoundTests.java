@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AttackRoundTests {
     int numberOfPlayers = 2;
@@ -47,6 +48,28 @@ public class AttackRoundTests {
 
         assertEquals(true, game.playerDominatedCountry(firstPlayerNumber,alemania));
     }
+
+    @Test
+    public void conquerAndWinACountryCard() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException, InvalidAttack {
+
+        Integer expectedAmount = 1;
+
+        Country francia = new Country("Francia");
+        Country alemania = new Country("Alemania");
+
+        game.addCountryToPlayer(francia,firstPlayerNumber);
+        game.addCountryToPlayer(alemania,secondPlayerNumber);
+
+        game.playersSetArmies(5, francia);
+        attackRound.attack(francia, 1,alemania,0);
+
+        assertEquals(true, game.playerDominatedCountry(firstPlayerNumber,alemania));
+        assertEquals(true, game.correctAmountOfCountryCards(firstPlayerNumber, expectedAmount));
+        assertEquals(true, attackRound.correctRemainingNumberOfCountryCards(49));
+
+    }
+
+
 
    /*@Test
     public void anAttackRoundWithTwoPlayersWinsTheFirstOne() throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {

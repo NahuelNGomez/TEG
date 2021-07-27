@@ -42,6 +42,7 @@ public class Game {
         map.clean();
 
         rounds = new ArrayList<>();
+
         rounds.add(new AttackRound(players,map));
         rounds.add(new RegroupRound(players,map));
 
@@ -141,45 +142,6 @@ public class Game {
         player.addArmyInCountry(amount, mapCountry);
     }
 
-    public void giveACountryCard(Player attacker){
-        Random random = new Random();
-        CountryCard countryCard = countryCards.get(random.nextInt(countryCards.size()));
-        Player.addCountryCard(countryCard);
-       countryCards.remove(countryCard);
-    }
-
-
-    private void invade(Player attacker, Country countryDefender, Country countryAttacker) throws EmptyCountryParameterException, NonExistentCountry { //JUGADOR VACIO
-        Country attackCountry = map.searchKeyCountryInMap(countryAttacker);
-        Country defendCountry = map.searchKeyCountryInMap(countryDefender);
-
-        attacker.removeArmy(1, attackCountry);
-        attacker.addCountry(defendCountry);
-        defendCountry.addArmy(1);
-        giveACountryCard(attacker);
-    }
-
-
-    public void attack(Country attackingCountry, int amountDice, Country defendingCountry, Integer winner) throws EmptyCountryParameterException, NonExistentPlayer, NonExistentCountry, InvalidAttack {
-        //boolean isBordering = this.validateBorderingCountry(attackingCountry, defendingCountry);
-        Country attackCountry = map.searchKeyCountryInMap(attackingCountry);
-        Country defendCountry = map.searchKeyCountryInMap(defendingCountry);
-
-        Player attacker = this.searchCountryOwner(attackCountry);
-        Player defender = this.searchCountryOwner(defendCountry);
-
-        if(/*!isBordering || */!attacker.canInvade(attackCountry, amountDice)) throw new InvalidAttack();
-
-        Integer[] result = battlefield.battle(amountDice, defendCountry, winner);
-
-        if(attacker.removeArmy(result[1], attackCountry)) {
-            this.invade(defender, attackCountry, defendCountry);
-        }
-        if(defender.removeArmy(result[0], defendCountry)){
-             this.invade(attacker, defendCountry, attackCountry);
-        };
-    }
-
     private boolean validateBorderingCountry(Country attackingCountry, Country defendingCountry) throws EmptyCountryParameterException, NonExistentCountry {
         Country attackCountry = map.searchKeyCountryInMap(attackingCountry);
         Country defendCountry = map.searchKeyCountryInMap(defendingCountry);
@@ -212,6 +174,8 @@ public class Game {
                 i = 0;
             }
             winner = rounds.get(i).startRound();
+            /*winner = attackRound();
+            regroupRound();*/
 
             /*for(Player player: players){
                 if(player.correctAmountOfCountries(0)){
@@ -222,6 +186,10 @@ public class Game {
         }
         //if(loser != null) players.remove(loser);
         return winner;
+    }
+
+    private void setUpRound() {
+
     }
 
     public void regroup(Integer playerNumber, Country country1, Country country2, Integer armyToRegroup) throws EmptyCountryParameterException, NonExistentCountry, NonExistentPlayer {
@@ -243,8 +211,8 @@ public class Game {
     }
 
 
-    public void attackRound() throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
-        rounds.get(0).startRound();
+    public Player attackRound() throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
+        return rounds.get(0).startRound();
     }
 
     public void placementRound(int maxPlacement) throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
@@ -274,11 +242,11 @@ public class Game {
     }
 
     public void addContinentToPlayer(Integer firstPlayerNumber, Continent continent) throws NonExistentPlayer, NonExistentContinent, EmptyCountryParameterException, EmptyContinentParameterException {
-        checkValidContintParameter(continent);
+        checkValidContinentParameter(continent);
         getPlayer(firstPlayerNumber).setDominatedCountries(map.getContinent(continent));
     }
 
-    private void checkValidContintParameter(Continent continent) throws EmptyContinentParameterException {
+    private void checkValidContinentParameter(Continent continent) throws EmptyContinentParameterException {
         if(continent == null){
             throw new EmptyContinentParameterException();
         }

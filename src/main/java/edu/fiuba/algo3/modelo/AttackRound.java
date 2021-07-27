@@ -4,6 +4,7 @@ import edu.fiuba.algo3.modelo.exceptions.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class AttackRound extends Round{
     private MockBattlefield battlefield = new MockBattlefield();
@@ -20,7 +21,7 @@ public class AttackRound extends Round{
     }
 
     @Override
-    public Player startRound() throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException{
+    public Player startRound() throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
         int i = 0;
 
         while (i < players.size() && !winnerDefiner.theresAWinner() && playersStillHaveCountries()) {
@@ -81,11 +82,18 @@ public class AttackRound extends Round{
         attacker.removeArmy(1, attackCountry);
         attacker.addCountry(defendCountry);
         attacker.addArmyInCountry(1, defendCountry);
+        giveACountryCard(attacker);
 
         if(checkIfAttackerDominatedAContinent(attacker)){
             Continent dominatedByPlayer = map.continentDominatedByPlayer(attacker);
             attacker.addArmyInCountry(dominatedByPlayer.getAmountOfArmyWhenDominated(),countryAttacker);
         }
+    }
+    public void giveACountryCard(Player attacker){
+        Random random = new Random();
+        CountryCard countryCard = countryCards.get(random.nextInt(countryCards.size()));
+        attacker.addCountryCard(countryCard);
+        countryCards.remove(countryCard);
     }
 
     private boolean checkIfAttackerDominatedAContinent(Player player) throws EmptyCountryParameterException {
@@ -112,6 +120,9 @@ public class AttackRound extends Round{
                 this.invade(attacker, defendCountry, attackCountry);
             }
         }
+    }
+    public boolean correctRemainingNumberOfCountryCards(int expected) {
+        return (expected == countryCards.size());
     }
 
     private void checkValidCountryParameter(Country country) throws EmptyCountryParameterException {
