@@ -6,10 +6,7 @@ class Game{
 - countriesNames: ArrayList
 + shuffleCards()
 + dealCountryCards()
-+ attack(String:attackingCountry, int:amountDice, String:defendingCountry)
 + reorganize(Player:attacker, Player:defender)
-- invade(Player: attacker, Country: countryDefender, Country: countryAttacker)
-
 }
 class Player{
 -color: Color
@@ -37,24 +34,18 @@ class Country{
 + diceAmount(): int
 + canInvade(int: amountDice) : boolean
 }
-
-
-class Battlefield{
-+ battle(Country attacker, int amountDice, Country defender): Integer[]
-
-}
-
-class Dice{
-+rollDice(int:diceAmount):ArrayList<integer>
+abstract Round{
 
 }
 
 
 
 Game "1"--> "2..6" Player
-Battlefield "1"--> "1" Dice
 Game "1  "--> "1" Map
+Game "1" --> "3...*" Round
 
+Round --> Map
+Round "1" --> "2..6" Player
 
 Map "1"--> "50" Country
 Map "1"--> "5" Continent
@@ -62,5 +53,7 @@ Map "1"--> "5" Continent
 Continent "1"-->"1..*" Country
 
 Player "1" --> "1..50" Country
-Game "1" -->"1" Battlefield
+
+
+
 @enduml

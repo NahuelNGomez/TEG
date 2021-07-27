@@ -5,23 +5,41 @@ class Game {
 }
 
 abstract Round{
-- players : ArrayLisy
+- players : ArrayList
 # map : Map
 }
 
 class AttackRound{
+- battlefield : Battlefield
+- winnerDefiner : winnerDefiner
 + startRound(Integer: maxPlacement)
 + attack(Country: attackingCountry, int: amountDice, Country: defendingCountry)
 - invade(Player: attacker, Country: countryDefender, Country: countryAttacker)
 }
 
 class PlacementRound {
-+ startRound(Integer: maxPlacement)
++ firstRounds(Integer: maxPlacement)
+}
+
+class RegroupRound{
++ startRound()
++ regroup(Integer: firstPlayerNumber, Country: country1, Country: country2, Integer: armyToRegroup)
+}
+
+class Battlefield{
++ battle(Country attacker, int amountDice, Country defender): Integer[]
+}
+
+class Dice{
++rollDice(int:diceAmount):ArrayList<integer>
 }
 
 Game --> Round
 Round <|-- AttackRound
-Round <|-- PlacementRound
+AttackRound "1" -->"1" Battlefield
+Battlefield "1"--> "1" Dice
+Round <|--left PlacementRound
+Round <|-- RegroupRound
 @enduml
 
 @enduml
