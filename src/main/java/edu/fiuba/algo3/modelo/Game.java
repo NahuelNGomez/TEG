@@ -298,4 +298,12 @@ public class Game {
        return( player.correctAmountOfArmyInCountry(mapCountry, expectedAmountPoland));
 
     }
+    //AttackRoundTests
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    public Map getMap() {
+        return map;
+    }
 }

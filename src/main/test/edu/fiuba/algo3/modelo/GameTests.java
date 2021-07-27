@@ -39,42 +39,6 @@ public class GameTests {
         assertEquals(true, game.correctAmountOfCountries(thirdPlayerNumber, expectedAmountOfCountriesThirdPlayer ));
     }
 
-    @Test
-    public void successFullAttack() throws EmptyCountryParameterException, NonExistentPlayer, InvalidNumberOfPlayers, NonExistentCountry, IOException, InvalidAttack {
-        Integer numberOfPlayers = 2;
-
-        Game game = new Game(numberOfPlayers);
-
-        Country francia = new Country("Francia");
-        Country alemania = new Country("Alemania");
-
-        game.addCountryToPlayer(francia,firstPlayerNumber);
-        game.addCountryToPlayer(alemania,secondPlayerNumber);
-
-        game.playersSetArmies(5, francia);
-        game.playersSetArmies(1, alemania);
-
-        game.attack(francia, 3,alemania,0);
-
-        assertEquals(false, (alemania.hasALargerArmy(2)));
-    }
-    @Test
-    public void attackerCountryConquers() throws EmptyCountryParameterException, NonExistentPlayer, InvalidNumberOfPlayers, NonExistentCountry, IOException, InvalidAttack {
-        Integer numberOfPlayers = 2;
-
-        Game game = new Game(numberOfPlayers);
-
-        Country francia = new Country("Francia");
-        Country alemania = new Country("Alemania");
-
-        game.addCountryToPlayer(francia,firstPlayerNumber);
-        game.addCountryToPlayer(alemania,secondPlayerNumber);
-
-        game.playersSetArmies(5, francia);
-        game.attack(francia, 1,alemania,0);
-
-        assertEquals(true, game.playerDominatedCountry(firstPlayerNumber,alemania));
-    }
 
     @Test
     public void gameWithoutEnoughPlayersRaisesException(){

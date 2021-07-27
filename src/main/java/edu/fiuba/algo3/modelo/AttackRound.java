@@ -25,13 +25,13 @@ public class AttackRound extends Round{
 
         while (i < players.size() && !winnerDefiner.theresAWinner() && playersStillHaveCountries()) {
             if (players.indexOf(players.get(i)) == players.size() - 1) {
-                if((players.get(i).amountOfDominatedCountries() != 0) && (players.get(0).amountOfDominatedCountries() != 0)){
+                if((players.get(i).hasCountriesLeft()) && (players.get(0).hasCountriesLeft())){
                     attack(players.get(i).getADominatedCountry(), 1, players.get(0).getADominatedCountry(), i);
                 } else {
                     System.out.println("ALGUNO SE QUEDO SIN COUNTRIES");
                 }
             } else {
-                if((players.get(i).amountOfDominatedCountries() != 0) && (players.get((players.indexOf(players.get(i)) + 1)).amountOfDominatedCountries() != 0)){
+                if((players.get(i).hasCountriesLeft()) && (players.get((players.indexOf(players.get(i)) + 1)).hasCountriesLeft())){
                     attack(players.get(i).getADominatedCountry(), 1, players.get((players.indexOf(players.get(i)) + 1)).getADominatedCountry(), i);
                 } else {
                     System.out.println("ALGUNO SE QUEDO SIN COUNTRIES");
@@ -47,7 +47,7 @@ public class AttackRound extends Round{
 
     public boolean playersStillHaveCountries(){
         for( Player player : players){
-            if(player.amountOfDominatedCountries() == 0) return false;
+            if(!player.hasCountriesLeft()) return false;
         }
         return true;
     }

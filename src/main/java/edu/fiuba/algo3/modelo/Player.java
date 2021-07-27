@@ -164,4 +164,8 @@ public class Player {
         }
         return null;
     }
+
+    public boolean hasCountriesLeft() {
+        return (amountOfDominatedCountries() != 0);
+    }
 }
