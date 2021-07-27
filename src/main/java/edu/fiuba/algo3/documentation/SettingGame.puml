@@ -1,0 +1,29 @@
+@startuml
+
+class SettingGame{
++ getCountryCards() : ArrayList
+}
+
+class SettingMap{
++ getCountriesAndBorders() : HashMap
+}
+
+abstract Round{
+- getCountryCards()
+}
+
+class Map{
+}
+
+class CVSReader{
++ readCSV() : ArrayList
+}
+
+Round --> SettingGame
+Round --> Map
+
+SettingGame --> CVSReader
+SettingMap --> CVSReader
+
+Map --> SettingMap
+@enduml

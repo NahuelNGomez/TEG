@@ -1,18 +1,24 @@
 @startuml
-'https://plantuml.com/class-diagram
+title "Round Class"
 
 class Game {
 }
 
 abstract Round{
-- players : ArrayList
+# players : ArrayList
 # map : Map
+# countryCards : ArrayList
+}
+
+class SetUpRound{
++ startRound()
++ dealCountryCards()
 }
 
 class AttackRound{
 - battlefield : Battlefield
 - winnerDefiner : winnerDefiner
-+ startRound(Integer: maxPlacement)
++ startRound() : Player
 + attack(Country: attackingCountry, int: amountDice, Country: defendingCountry)
 - invade(Player: attacker, Country: countryDefender, Country: countryAttacker)
 }
@@ -31,15 +37,23 @@ class Battlefield{
 }
 
 class Dice{
-+rollDice(int:diceAmount):ArrayList<integer>
++rollDice(int:diceAmount): DiceRoll
+}
+
+class DiceRoll{
+- results : ArrayList<Integer>
++ compareResultsWith(DiceRoll diceResult, Integer stop) : Integer[]
++ addResult(Integer oneResult)
 }
 
 Game --> Round
 Round <|-- AttackRound
 AttackRound "1" -->"1" Battlefield
 Battlefield "1"--> "1" Dice
+Dice ...> DiceRoll
 Round <|--left PlacementRound
 Round <|-- RegroupRound
+Round <|--right SetUpRound
 @enduml
 
 @enduml

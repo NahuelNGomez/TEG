@@ -2,11 +2,8 @@
 title "Main Diagram"
 class Game{
 - objectiveCardsCards : ArrayList
-- countryCards : ArrayList
 - countriesNames: ArrayList
-+ shuffleCards()
-+ dealCountryCards()
-+ reorganize(Player:attacker, Player:defender)
++ play()
 }
 class Player{
 -color: Color
@@ -35,7 +32,7 @@ class Country{
 + canInvade(int: amountDice) : boolean
 }
 abstract Round{
-
+# countryCards : ArrayList
 }
 
 

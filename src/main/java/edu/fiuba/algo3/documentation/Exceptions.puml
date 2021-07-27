@@ -1,5 +1,7 @@
 @startuml
 
+title "Exceptions"
+
 class Exception {
 }
 
@@ -21,8 +23,6 @@ class NonExistentCountry{
 class NonExistentPlayer{
 }
 
-class InvalidAttack{
-}
 
 Exception <|--right EmptyContinentParameterException
 Exception <|--left EmptyCountryParameterException
@@ -30,6 +30,5 @@ Exception <|-- InvalidNumberOfPlayers
 Exception <|-- NonExistentContinent
 Exception <|-- NonExistentCountry
 Exception <|-- NonExistentPlayer
-Exception <|-- InvalidAttack
 
 @enduml
