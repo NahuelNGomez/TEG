@@ -16,12 +16,12 @@ public class MockBattlefield {
         }
     }
 
-    public Integer[] battle(int amountDice, Country defender) throws EmptyCountryParameterException {
+    public Integer[] battle(int amountDice, Country defender, Integer winner) throws EmptyCountryParameterException {
         checkValidCountryParameter(defender);
 
-        DiceRoll attackerDiceResult = mockDice.rollDice(amountDice,1);
+        DiceRoll attackerDiceResult = mockDice.rollDice(amountDice,winner);
         Integer defenderAmountDice = defender.diceAmount();
-        DiceRoll defenderDiceResult = mockDice.rollDice(defenderAmountDice,0);
+        DiceRoll defenderDiceResult = mockDice.rollDice(defenderAmountDice,winner-1);
 
         Integer stop = amountDice > defenderAmountDice ? defenderAmountDice : amountDice;
 

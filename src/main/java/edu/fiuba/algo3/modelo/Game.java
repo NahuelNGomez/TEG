@@ -16,13 +16,14 @@ public class Game {
     private ArrayList<Player> players = new ArrayList<Player>();
     private static ArrayList<ObjectiveCard> objectiveCardsCards = new ArrayList<ObjectiveCard>();
     private static ArrayList<CountryCard> countryCards = new ArrayList<CountryCard>();
-    private Round rounds;
-    private WinnerDefiner winnerDefiner;
+
+    private ArrayList<Round> rounds;
+    private Round placementRound = new PlacementRound(players,map);
+    private Player winner = null;
+    private SettingGame set = new SettingGame();
 
     private ArrayList<Color> colorsArray;
     private static String[] colors = {"07bb", "cc3311", "ee7733", "009988", "ee3377", "000000"};
-
-    private SettingGame set = new SettingGame();
 
 
     public Game(int numberOfPlayers) throws InvalidNumberOfPlayers, IOException {
@@ -39,23 +40,13 @@ public class Game {
         }
         map = Map.get();
         map.clean();
-        rounds = new PlacementRound(players, map);
+
+        rounds = new ArrayList<>();
+        rounds.add(new AttackRound(players,map));
+        rounds.add(new RegroupRound(players,map));
+
         if(countryCards.size() < 50) getCountryCards();
-        this.winnerDefiner = new WinnerDefiner(players);
     }
-
-    public Player play() throws NonExistentCountry, EmptyCountryParameterException, NonExistentPlayer, IOException {
-        int firstPlacement = 5;
-        int secondPlacement = 3;
-        dealCountryCards();
-        placementRound(firstPlacement);
-        placementRound(secondPlacement);
-        while (!winnerDefiner.theresAWinner()){
-            attackRound();
-        }
-        return winnerDefiner.winner();
-    }
-
 
     private void checkValidCountryParameter(Country country) throws EmptyCountryParameterException {
         if(country == null) {
@@ -69,10 +60,9 @@ public class Game {
         }
     }
 
-    private Player getPlayer(Integer playerNumber) throws NonExistentPlayer {
+    public Player getPlayer(Integer playerNumber) throws NonExistentPlayer {
         checkSearchedPlayer(playerNumber);
-        Player searchedPlayer = players.get(playerNumber - 1);
-        return (searchedPlayer != null) ?  searchedPlayer : null;
+        return players.get(playerNumber - 1);
     }
 
     public void addCountryToPlayer(Country country , Integer playerNumber) throws NonExistentPlayer, EmptyCountryParameterException, NonExistentCountry {
@@ -95,6 +85,7 @@ public class Game {
 
         int leftCountries = (countryCards.size()) % (this.players.size());
         int numberOfCountriesPerPlayer = (countryCards.size()) / (this.players.size());
+
         Random rand = new Random();
         int i;
         int k = 0;
@@ -141,7 +132,6 @@ public class Game {
         CountryCard countryCard = countryCards.get(random.nextInt(countryCards.size()));
         Player.addCountryCard(countryCard);
        countryCards.remove(countryCard);
-
     }
 
 
@@ -156,7 +146,7 @@ public class Game {
     }
 
 
-    public void attack(Country attackingCountry, int amountDice, Country defendingCountry) throws EmptyCountryParameterException, NonExistentPlayer, NonExistentCountry, InvalidAttack {
+    public void attack(Country attackingCountry, int amountDice, Country defendingCountry, Integer winner) throws EmptyCountryParameterException, NonExistentPlayer, NonExistentCountry, InvalidAttack {
         //boolean isBordering = this.validateBorderingCountry(attackingCountry, defendingCountry);
         Country attackCountry = map.searchKeyCountryInMap(attackingCountry);
         Country defendCountry = map.searchKeyCountryInMap(defendingCountry);
@@ -166,9 +156,11 @@ public class Game {
 
         if(/*!isBordering || */!attacker.canInvade(attackCountry, amountDice)) throw new InvalidAttack();
 
-        Integer[] result = battlefield.battle(amountDice, defendCountry);
-        attacker.removeArmy(result[1], attackCountry);
+        Integer[] result = battlefield.battle(amountDice, defendCountry, winner);
 
+        if(attacker.removeArmy(result[1], attackCountry)) {
+            this.invade(defender, attackCountry, defendCountry);
+        }
         if(defender.removeArmy(result[0], defendCountry)){
              this.invade(attacker, defendCountry, attackCountry);
         };
@@ -182,13 +174,91 @@ public class Game {
     }
 
     //ROUNDS
-    public void attackRound() throws IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
-        AttackRound attackRound = new AttackRound(players, map);
-        attackRound.startRound(0);
+
+    public Player winner(){
+        return winner;
+    }
+
+    public boolean isWinner(Integer playerNumber) throws NonExistentPlayer {
+        return (winner == getPlayer(playerNumber));
+    }
+
+    public Player play() throws NonExistentCountry, EmptyCountryParameterException, NonExistentPlayer, IOException {
+        int firstPlacement = 5;
+        int secondPlacement = 3;
+
+        dealCountryCards();
+        placementRound(firstPlacement);
+        placementRound(secondPlacement);
+
+        /*System.out.println("PAISES DEL JUGADOR 1");
+        for(Country country : players.get(0).getDominatedCountries()){
+            System.out.println(country.getName());
+        }
+        System.out.println("PAISES DEL JUGADOR 2");
+        for(Country country : players.get(1).getDominatedCountries()){
+            System.out.println(country.getName());
+        }
+        System.out.println("PAISES DEL JUGADOR 3");
+        for(Country country : players.get(2).getDominatedCountries()){
+            System.out.println(country.getName());
+        }*/
+
+        int i = 0;
+        int j = 1;
+        Player loser = null;
+
+        while (winner == null && playersStillHaveCountries()) {
+           //System.out.println("RONDA NRO: " + (j));
+            if (i >= (rounds.size())) {
+                i = 0;
+            }
+            winner = rounds.get(i).startRound();
+
+            /*for(Player player: players){
+                if(player.correctAmountOfCountries(0)){
+                    loser = player;
+                }
+            }*/
+            i++;
+            j++;
+        }
+        //if(loser != null) players.remove(loser);
+        return winner;
+    }
+
+    public void regroup(Integer playerNumber, Country country1, Country country2, Integer armyToRegroup) throws EmptyCountryParameterException, NonExistentCountry, NonExistentPlayer {
+        checkValidCountryParameter(country1);
+        checkValidCountryParameter(country2);
+
+        Country mapCountry1 = map.searchKeyCountryInMap(country1);
+        Country mapCountry2 = map.searchKeyCountryInMap(country2);
+
+        if(checkRegroup(mapCountry1, mapCountry2, playerNumber)){
+            mapCountry1.removeArmy(armyToRegroup);
+            mapCountry2.addArmy(armyToRegroup);
+        }
+    }
+
+    private boolean checkRegroup(Country country1, Country country2, Integer firstPlayerNumber) throws NonExistentCountry, EmptyCountryParameterException, NonExistentPlayer {
+        Player player = getPlayer(firstPlayerNumber);
+        return (player.dominatedCountry(country1) && player.dominatedCountry(country2) && map.validateBorderingCountry(country1,country2));
+    }
+
+
+    public void attackRound() throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
+        rounds.get(0).startRound();
     }
 
     public void placementRound(int maxPlacement) throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
-        rounds.startRound(maxPlacement);
+        placementRound.firstRounds(maxPlacement);
+    }
+
+    public boolean playersStillHaveCountries(){
+        for( Player player : players){
+            if(player.amountOfDominatedCountries() == 0) return false;
+        }
+        return true;
     }
 
     public boolean playerDominatedCountry(Integer playerNumber, Country country) throws NonExistentPlayer, EmptyCountryParameterException, NonExistentCountry {
@@ -223,34 +293,6 @@ public class Game {
 
     public boolean correctRemainingNumberOfCountryCards(int expected) {
         return (expected == countryCards.size());
-    }
-
-    public void regroup(Integer firstPlayerNumber, Country country1, Country country2, Integer armyToRegroup) throws EmptyCountryParameterException, NonExistentCountry, NonExistentPlayer {
-
-        checkValidCountryParameter(country1);
-        checkValidCountryParameter(country2);
-        if(checkRegroup(country1, country2, firstPlayerNumber)){
-            map.regroup(country1, country2, armyToRegroup);
-        }
-
-    }
-
-    private boolean checkRegroup(Country country1, Country country2, Integer firstPlayerNumber) throws NonExistentCountry, EmptyCountryParameterException, NonExistentPlayer {
-
-        Player player = getPlayer(firstPlayerNumber);
-
-        Country countryAux1 = country2;
-        Country countryAux2 = country2;
-        Integer maxMovements = 100;
-
-        while(!map.validateBorderingCountry(countryAux1,country1) && maxMovements > 0){
-            while(!map.validateBorderingCountry(countryAux2,countryAux1) && maxMovements > 0){
-                countryAux2 = player.getRandomOwnCountry();
-                maxMovements--;
-            }
-            countryAux1 = countryAux2;
-        }
-        return (maxMovements > 0);
     }
 
     public boolean correctAmountOfArmyInCountry(Integer firstPlayerNumber, Country polonia, Integer expectedAmountPoland) throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {

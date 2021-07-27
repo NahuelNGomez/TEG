@@ -12,22 +12,37 @@ public class AttackRound extends Round{
     public AttackRound(ArrayList<Player> gamePlayers, Map map) throws IOException {
         super(gamePlayers, map);
         this.winnerDefiner = new WinnerDefiner(players);
-
     }
 
     @Override
-    public void startRound(Integer maxPlacement) throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException{
+    public void firstRounds(Integer maxPlacement){
+        System.out.println("no hace nada");
+    }
+
+    @Override
+    public Player startRound() throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException{
         int i = 0;
-        while (i < players.size() && !winnerDefiner.theresAWinner()){
-           if(players.indexOf(players.get(i)) == players.size()-1){
-              attack(players.get(i).getADominatedCountry(),1 ,players.get(0).getADominatedCountry());
 
-           } else{
-               attack(players.get(i).getADominatedCountry(), 1,players.get((players.indexOf(players.get(i))+1)).getADominatedCountry());
-           }
-           i++;
+        while (i < players.size() && !winnerDefiner.theresAWinner() && playersStillHaveCountries()) {
+            if (players.indexOf(players.get(i)) == players.size() - 1) { //el ultimo ataca al primero
+                attack(players.get(i).getADominatedCountry(), 1, players.get(0).getADominatedCountry(), i);
+
+            } else { //si no es el ultimo ataca al siguiente
+                attack(players.get(i).getADominatedCountry(), 1, players.get((players.indexOf(players.get(i)) + 1)).getADominatedCountry(), i);
+            }
+            i++;
+            if (winnerDefiner.theresAWinner()) {
+                return winnerDefiner.winner();
+            }
         }
+        return null;
+    }
 
+    public boolean playersStillHaveCountries(){
+        for( Player player : players){
+            if(player.amountOfDominatedCountries() == 0) return false;
+        }
+        return true;
     }
 
     private Player searchCountryOwner(Country country) throws EmptyCountryParameterException, NonExistentPlayer, NonExistentCountry {
@@ -53,6 +68,7 @@ public class AttackRound extends Round{
 
 
     private void invade(Player attacker, Country countryDefender, Country countryAttacker) throws EmptyCountryParameterException, NonExistentCountry { //JUGADOR VACIO
+        //System.out.println(countryAttacker.getName() + " INVADE A " + countryDefender.getName());
         Country attackCountry = map.searchKeyCountryInMap(countryAttacker);
         Country defendCountry = map.searchKeyCountryInMap(countryDefender);
 
@@ -61,7 +77,7 @@ public class AttackRound extends Round{
         attacker.addArmyInCountry(1, defendCountry);
     }
 
-    public void attack(Country attackingCountry, int amountDice, Country defendingCountry) throws EmptyCountryParameterException, NonExistentPlayer, NonExistentCountry {
+    public void attack(Country attackingCountry, int amountDice, Country defendingCountry, Integer winner) throws EmptyCountryParameterException, NonExistentPlayer, NonExistentCountry {
         //boolean isBordering = this.validateBorderingCountry(attackingCountry, defendingCountry);
         Country attackCountry = map.searchKeyCountryInMap(attackingCountry);
         Country defendCountry = map.searchKeyCountryInMap(defendingCountry);
@@ -69,13 +85,34 @@ public class AttackRound extends Round{
         Player attacker = this.searchCountryOwner(attackCountry);
         Player defender = this.searchCountryOwner(defendCountry);
 
-        if(/*isBordering && */attacker.canInvade(attackCountry, amountDice)) {
-            Integer[] result = battlefield.battle(amountDice, defendCountry);
-            attacker.removeArmy(result[1], attackCountry);
+        //CHEQUEAR QUE SON LIMITROFES EN LA INTERFAZ CON PICKERS
 
-            if(defender.removeArmy(result[0], defendCountry)){
+        if(attacker.canInvade(attackCountry, amountDice)) {
+            //System.out.println(attackCountry.getName() + " ATACA A " + defendCountry.getName());
+            Integer[] result = battlefield.battle(amountDice, defendCountry, winner);
+
+            if(attacker.removeArmy(result[1], attackCountry)) {
+                this.invade(defender, attackCountry, defendCountry);
+            }
+            if(defender.removeArmy(result[0], defendCountry) /*&& (defendCountry.getArmyAmount() > 1)*/){
                 this.invade(attacker, defendCountry, attackCountry);
             };
+
+            /*System.out.println(players.get(0).amountOfDominatedCountries());
+            System.out.println(players.get(1).amountOfDominatedCountries());*/
+
+            /*System.out.println("PAISES DEL JUGADOR 1");
+            for(Country country : players.get(0).getDominatedCountries()){
+                System.out.println(country.getName() + country.getArmyAmount());
+            }
+            System.out.println("PAISES DEL JUGADOR 2");
+            for(Country country : players.get(1).getDominatedCountries()){
+                System.out.println(country.getName() + country.getArmyAmount());
+            }
+            System.out.println("PAISES DEL JUGADOR 3");
+            for(Country country : players.get(2).getDominatedCountries()){
+                System.out.println(country.getName() + country.getArmyAmount());
+            }*/
         }
     }
 

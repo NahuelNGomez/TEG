@@ -54,7 +54,7 @@ public class GameTests {
         game.playersSetArmies(5, francia);
         game.playersSetArmies(1, alemania);
 
-        game.attack(francia, 3,alemania);
+        game.attack(francia, 3,alemania,0);
 
         assertEquals(false, (alemania.hasALargerArmy(2)));
     }
@@ -71,7 +71,7 @@ public class GameTests {
         game.addCountryToPlayer(alemania,secondPlayerNumber);
 
         game.playersSetArmies(5, francia);
-        game.attack(francia, 1,alemania);
+        game.attack(francia, 1,alemania,0);
 
         assertEquals(true, game.playerDominatedCountry(firstPlayerNumber,alemania));
     }
@@ -100,7 +100,7 @@ public class GameTests {
         game.addCountryToPlayer(francia,firstPlayerNumber);
         game.addCountryToPlayer(alemania,secondPlayerNumber);
 
-        assertThrows(InvalidAttack.class, () -> game.attack(francia,3,alemania));
+        assertThrows(InvalidAttack.class, () -> game.attack(francia,3,alemania,1));
     }
 
     @Test
@@ -192,6 +192,7 @@ public class GameTests {
         game.addCountryToPlayer(gobi, secondPlayerNumber);
         game.playersSetArmies(5, china);
 
+
         game.attackRound();
         game.attackRound();
 
@@ -200,13 +201,7 @@ public class GameTests {
         assertEquals(false ,game.playerDominatedCountry(secondPlayerNumber, siberia));
         assertEquals(false ,game.playerDominatedCountry(secondPlayerNumber, iran));
     }
-/*
-    @Test
-    public void pruebaBuffer() throws InvalidNumberOfPlayers, IOException {
-        Integer numberOfPlayers = 2;
-        Game game = new Game(numberOfPlayers);
-    }
-*/
+
     @Test
     public void correctAmountOfCountryCards() throws InvalidNumberOfPlayers, IOException {
         Integer numberOfPlayers = 2;
@@ -229,7 +224,7 @@ public class GameTests {
         game.addCountryToPlayer(alemania,secondPlayerNumber);
 
         game.playersSetArmies(5, francia);
-        game.attack(francia, 1,alemania);
+        game.attack(francia, 1,alemania,0);
 
         assertEquals(true, game.playerDominatedCountry(firstPlayerNumber,alemania));
         assertEquals(true, game.correctAmountOfCountryCards(firstPlayerNumber, expectedAmount));
@@ -241,9 +236,9 @@ public class GameTests {
     public void playerRegroupThreeArmies() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException, InvalidAttack {
 
         Integer numberOfPlayers = 2;
-        Integer armyToRegroup = 3;
-        Integer expectedAmountGermany = 3;
-        Integer expectedAmountPoland = 4;
+        Integer armyToRegroup = 1;
+        Integer expectedAmountGermany = 5;
+        Integer expectedAmountPoland = 2;
 
         Game game = new Game(numberOfPlayers);
 
@@ -256,7 +251,6 @@ public class GameTests {
 
         game.addCountryToPlayer(francia,secondPlayerNumber);
 
-
         game.playersSetArmies(5, alemania);
         game.regroup(firstPlayerNumber, alemania, polonia, armyToRegroup);
 
@@ -264,17 +258,15 @@ public class GameTests {
         assertEquals(true, game.playerDominatedCountry(firstPlayerNumber,polonia));
         assertEquals(true, game.correctAmountOfArmyInCountry(firstPlayerNumber, alemania, expectedAmountGermany));
         assertEquals(true, game.correctAmountOfArmyInCountry(firstPlayerNumber, polonia, expectedAmountPoland));
-
-
     }
 
     @Test
-    public void iorrectRegroupOfPlayer() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException, InvalidAttack {
-
+    public void incorrectRegroupOfPlayer() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
         Integer numberOfPlayers = 2;
-        Integer armyToRegroup = 3;
-        Integer expectedAmountGermany = 3;
-        Integer expectedAmountPoland = 4;
+        Integer armyToRegroup = 1;
+
+        Integer expectedAmountIslandia = 5;
+        Integer expectedAmountPoland = 2;
 
         Game game = new Game(numberOfPlayers);
 
@@ -291,57 +283,57 @@ public class GameTests {
 
         game.addCountryToPlayer(alemania,secondPlayerNumber);
 
-
         game.playersSetArmies(5, islandia);
         game.regroup(firstPlayerNumber, islandia, polonia, armyToRegroup);
 
-
-        assertEquals(true, game.correctAmountOfArmyInCountry(firstPlayerNumber, islandia, expectedAmountGermany));
-        assertEquals(true, game.correctAmountOfArmyInCountry(firstPlayerNumber, polonia, expectedAmountPoland));
-
-
+        assertEquals(false, game.correctAmountOfArmyInCountry(firstPlayerNumber, islandia, expectedAmountIslandia));
+        assertEquals(false, game.correctAmountOfArmyInCountry(firstPlayerNumber, polonia, expectedAmountPoland));
     }
 
     @Test
-    public void incorrectRegroupOfPlayer() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException, InvalidAttack {
-
+    public void correctRegroupOfPlayer() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
         Integer numberOfPlayers = 2;
         Integer armyToRegroup = 3;
-        Integer expectedAmountGermany = 3;
-        Integer expectedAmountPoland = 4;
+
+        Integer expectedAmountIslandia = 3;
+        Integer expectedAmountSuecia = 4;
 
         Game game = new Game(numberOfPlayers);
 
         Country islandia = new Country("Islandia");
         Country suecia = new Country("Suecia");
-
         Country polonia = new Country("Polonia");
-        Country alemania = new Country("Alemania");
 
         game.addCountryToPlayer(islandia,firstPlayerNumber);
         game.addCountryToPlayer(suecia,firstPlayerNumber);
-
         game.addCountryToPlayer(polonia,firstPlayerNumber);
 
-        game.addCountryToPlayer(alemania,secondPlayerNumber);
-
-
         game.playersSetArmies(5, islandia);
-        game.regroup(firstPlayerNumber, islandia, polonia, armyToRegroup);
+        game.regroup(firstPlayerNumber, islandia, suecia, armyToRegroup);
 
-
-        assertEquals(false, game.correctAmountOfArmyInCountry(firstPlayerNumber, islandia, expectedAmountGermany));
-        assertEquals(false, game.correctAmountOfArmyInCountry(firstPlayerNumber, polonia, expectedAmountPoland));
+        assertEquals(true, game.correctAmountOfArmyInCountry(firstPlayerNumber, islandia, expectedAmountIslandia));
+        assertEquals(true, game.correctAmountOfArmyInCountry(firstPlayerNumber, suecia, expectedAmountSuecia));
 
 
     }
-
-    /*@Test
-    public void aPlayerConquers30CountriesAndWinsTheGame() throws InvalidNumberOfPlayers, IOException {
+    @Test
+    public void withRounds() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
         Integer numberOfPlayers = 2;
         Game game = new Game(numberOfPlayers);
-        assertEquals(game.getPlayer(1), );
-    }*/
+
+        game.play();
+        assertNotEquals(null, game.winner());
+        assertEquals(true, game.isWinner(firstPlayerNumber));
+    }
+    @Test
+    public void anotherWithRounds() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
+        Integer numberOfPlayers = 3;
+        Game game = new Game(numberOfPlayers);
+
+        game.play();
+        //assertNotEquals(null, game.winner());
+        assertEquals(null, game.winner()); //es que un jugador se quedo sin fichas
+    }
 
 
 }

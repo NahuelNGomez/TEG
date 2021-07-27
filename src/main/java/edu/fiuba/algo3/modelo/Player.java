@@ -17,7 +17,6 @@ public class Player {
     }
 
     public static void addCountryCard(CountryCard countryCard) {
-
         ownCountryCards.add(countryCard);
 
     }
@@ -129,6 +128,10 @@ public class Player {
 
     public boolean correctAmountOfCountries( Integer expectedAmount){
         return (dominatedCountries.size() == expectedAmount);
+    }
+
+    public ArrayList<Country> getDominatedCountries(){
+        return dominatedCountries;
     }
 
     public boolean correctAmountOfArmy( Integer expectedAmount){

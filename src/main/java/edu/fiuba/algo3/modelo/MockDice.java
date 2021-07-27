@@ -14,12 +14,12 @@ public class MockDice {
     public DiceRoll rollDice(int diceAmount, int winner) {
         DiceRoll result = new DiceRoll();
 
-        if(winner == 1){
+        if((winner % 2)  == 0){
             for(int i = 0; i < diceAmount; i++){
                 result.addResult(6);
             }
 
-        } else if(winner == 0){
+        } else { //es impar
             for(int i = 0; i < diceAmount; i++){
                 result.addResult(1);
             }

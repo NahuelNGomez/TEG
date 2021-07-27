@@ -33,7 +33,7 @@ public class Country {
             if (armyAmount >= 3) {
                 return (amountDice <= 3);
             } else {
-                return (amountDice <= armyAmount);
+                return (amountDice < armyAmount);
             }
         }
         return false;
@@ -53,6 +53,8 @@ public class Country {
     public void removeArmy(Integer lostArmy) {
         if(armyAmount >= lostArmy) {
             armyAmount = armyAmount - lostArmy;
+        } else {
+            armyAmount = 0;
         }
     }
 

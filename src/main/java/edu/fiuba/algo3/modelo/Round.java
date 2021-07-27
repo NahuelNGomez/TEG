@@ -14,5 +14,7 @@ public abstract class Round {
         this.map = map;
     }
 
-    public abstract void startRound(Integer maxPlacement) throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException;
+    public abstract void firstRounds(Integer maxPlacement) throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException;
+
+    public abstract Player startRound() throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException;
 }

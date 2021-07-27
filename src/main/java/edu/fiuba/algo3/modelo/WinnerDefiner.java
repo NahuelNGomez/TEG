@@ -17,6 +17,7 @@ public class WinnerDefiner {
         }
         return false;
     }
+
     public Player winner() {
         for(Player player : players){
             if(player.objectiveCompleted()){
