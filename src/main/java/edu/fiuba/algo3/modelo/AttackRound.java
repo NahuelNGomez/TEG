@@ -24,11 +24,18 @@ public class AttackRound extends Round{
         int i = 0;
 
         while (i < players.size() && !winnerDefiner.theresAWinner() && playersStillHaveCountries()) {
-            if (players.indexOf(players.get(i)) == players.size() - 1) { //el ultimo ataca al primero
-                attack(players.get(i).getADominatedCountry(), 1, players.get(0).getADominatedCountry(), i);
-
-            } else { //si no es el ultimo ataca al siguiente
-                attack(players.get(i).getADominatedCountry(), 1, players.get((players.indexOf(players.get(i)) + 1)).getADominatedCountry(), i);
+            if (players.indexOf(players.get(i)) == players.size() - 1) {
+                if((players.get(i).amountOfDominatedCountries() != 0) && (players.get(0).amountOfDominatedCountries() != 0)){
+                    attack(players.get(i).getADominatedCountry(), 1, players.get(0).getADominatedCountry(), i);
+                } else {
+                    System.out.println("ALGUNO SE QUEDO SIN COUNTRIES");
+                }
+            } else {
+                if((players.get(i).amountOfDominatedCountries() != 0) && (players.get((players.indexOf(players.get(i)) + 1)).amountOfDominatedCountries() != 0)){
+                    attack(players.get(i).getADominatedCountry(), 1, players.get((players.indexOf(players.get(i)) + 1)).getADominatedCountry(), i);
+                } else {
+                    System.out.println("ALGUNO SE QUEDO SIN COUNTRIES");
+                }
             }
             i++;
             if (winnerDefiner.theresAWinner()) {
@@ -68,13 +75,21 @@ public class AttackRound extends Round{
 
 
     private void invade(Player attacker, Country countryDefender, Country countryAttacker) throws EmptyCountryParameterException, NonExistentCountry { //JUGADOR VACIO
-        //System.out.println(countryAttacker.getName() + " INVADE A " + countryDefender.getName());
         Country attackCountry = map.searchKeyCountryInMap(countryAttacker);
         Country defendCountry = map.searchKeyCountryInMap(countryDefender);
 
         attacker.removeArmy(1, attackCountry);
         attacker.addCountry(defendCountry);
         attacker.addArmyInCountry(1, defendCountry);
+
+        if(checkIfAttackerDominatedAContinent(attacker)){
+            Continent dominatedByPlayer = map.continentDominatedByPlayer(attacker);
+            attacker.addArmyInCountry(dominatedByPlayer.getAmountOfArmyWhenDominated(),countryAttacker);
+        }
+    }
+
+    private boolean checkIfAttackerDominatedAContinent(Player player) throws EmptyCountryParameterException {
+        return map.checkIfAttackerDominatedAContinent(player);
     }
 
     public void attack(Country attackingCountry, int amountDice, Country defendingCountry, Integer winner) throws EmptyCountryParameterException, NonExistentPlayer, NonExistentCountry {
@@ -88,7 +103,6 @@ public class AttackRound extends Round{
         //CHEQUEAR QUE SON LIMITROFES EN LA INTERFAZ CON PICKERS
 
         if(attacker.canInvade(attackCountry, amountDice)) {
-            //System.out.println(attackCountry.getName() + " ATACA A " + defendCountry.getName());
             Integer[] result = battlefield.battle(amountDice, defendCountry, winner);
 
             if(attacker.removeArmy(result[1], attackCountry)) {
@@ -96,23 +110,7 @@ public class AttackRound extends Round{
             }
             if(defender.removeArmy(result[0], defendCountry) /*&& (defendCountry.getArmyAmount() > 1)*/){
                 this.invade(attacker, defendCountry, attackCountry);
-            };
-
-            /*System.out.println(players.get(0).amountOfDominatedCountries());
-            System.out.println(players.get(1).amountOfDominatedCountries());*/
-
-            /*System.out.println("PAISES DEL JUGADOR 1");
-            for(Country country : players.get(0).getDominatedCountries()){
-                System.out.println(country.getName() + country.getArmyAmount());
             }
-            System.out.println("PAISES DEL JUGADOR 2");
-            for(Country country : players.get(1).getDominatedCountries()){
-                System.out.println(country.getName() + country.getArmyAmount());
-            }
-            System.out.println("PAISES DEL JUGADOR 3");
-            for(Country country : players.get(2).getDominatedCountries()){
-                System.out.println(country.getName() + country.getArmyAmount());
-            }*/
         }
     }
 

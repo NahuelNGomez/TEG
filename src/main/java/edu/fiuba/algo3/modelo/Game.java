@@ -68,7 +68,21 @@ public class Game {
     public void addCountryToPlayer(Country country , Integer playerNumber) throws NonExistentPlayer, EmptyCountryParameterException, NonExistentCountry {
         checkValidCountryParameter(country);
         Country mapCountry = map.searchKeyCountryInMap(country);
-        getPlayer(playerNumber).addCountry(mapCountry);
+        Player player =  getPlayer(playerNumber);
+        player.addCountry(mapCountry);
+
+        if (checkIfAttackerDominatedAContinent(player)) {
+            Continent dominatedByPlayer = map.continentDominatedByPlayer(player);
+            player.addArmyInCountry(dominatedByPlayer.getAmountOfArmyWhenDominated(), mapCountry);
+        }
+    }
+
+    private boolean checkIfAttackerDominatedAContinent(Player player) throws EmptyCountryParameterException {
+        return map.checkIfAttackerDominatedAContinent(player);
+    }
+
+    public Continent continentDominatedByPlayer(Player player) throws EmptyCountryParameterException {
+        return map.continentDominatedByPlayer(player);
     }
 
 
@@ -174,7 +188,6 @@ public class Game {
     }
 
     //ROUNDS
-
     public Player winner(){
         return winner;
     }
@@ -191,25 +204,10 @@ public class Game {
         placementRound(firstPlacement);
         placementRound(secondPlacement);
 
-        /*System.out.println("PAISES DEL JUGADOR 1");
-        for(Country country : players.get(0).getDominatedCountries()){
-            System.out.println(country.getName());
-        }
-        System.out.println("PAISES DEL JUGADOR 2");
-        for(Country country : players.get(1).getDominatedCountries()){
-            System.out.println(country.getName());
-        }
-        System.out.println("PAISES DEL JUGADOR 3");
-        for(Country country : players.get(2).getDominatedCountries()){
-            System.out.println(country.getName());
-        }*/
-
         int i = 0;
-        int j = 1;
-        Player loser = null;
+        //Player loser = null;
 
         while (winner == null && playersStillHaveCountries()) {
-           //System.out.println("RONDA NRO: " + (j));
             if (i >= (rounds.size())) {
                 i = 0;
             }
@@ -221,7 +219,6 @@ public class Game {
                 }
             }*/
             i++;
-            j++;
         }
         //if(loser != null) players.remove(loser);
         return winner;

@@ -28,7 +28,7 @@ public class Player {
     }
 
     public void checkPlayerOwnsCountry(Country country) throws NonExistentCountry {
-        if(dominatedCountries.contains(country) == false){
+        if(!dominatedCountries.contains(country)){
             throw new NonExistentCountry();
         }
     }
@@ -54,7 +54,6 @@ public class Player {
         if(dominatedCountries.contains(country)){
             country.addArmy(amount);
         }
-
     }
 
     public boolean isSearchedCountry (Country country) throws EmptyCountryParameterException {
@@ -72,7 +71,7 @@ public class Player {
         checkPlayerOwnsCountry(country);
 
         country.removeArmy(lostArmy);
-        if(country.stillHasArmy() == false){
+        if(!country.stillHasArmy()){
             removeCountry(country);
             return true;
         }
@@ -155,5 +154,14 @@ public class Player {
 
     public boolean objectiveCompleted() {
         return (dominatedCountries.size() == 30);
+    }
+
+    public Continent dominatedContinent(ArrayList<Continent> continents) {
+        for(Continent continent : continents){
+            if(dominatedCountries.containsAll(continent.getCountries())){
+                return continent;
+            }
+        }
+        return null;
     }
 }

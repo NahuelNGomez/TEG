@@ -53,8 +53,6 @@ public class RegroupRound extends Round{
         return (maxMovements > 0);
     }
 
-
-
     /*private void regroup(Integer firstPlayerNumber, Country country1, Country country2, Integer armyToRegroup) throws EmptyCountryParameterException, NonExistentCountry {
         checkValidCountryParameter(country1);
         checkValidCountryParameter(country2);

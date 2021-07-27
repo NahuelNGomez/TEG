@@ -164,7 +164,7 @@ public class GameTests {
         Integer expectedAmount = 23;
 
         Game game = new Game(numberOfPlayers);
-        Continent continent = new Continent("Asia");
+        Continent continent = new Continent("Asia",0);
 
         game.addContinentToPlayer(firstPlayerNumber, continent);
         game.addCountryToPlayer(new Country("Suecia"), secondPlayerNumber);
@@ -322,18 +322,43 @@ public class GameTests {
         Game game = new Game(numberOfPlayers);
 
         game.play();
+
         assertNotEquals(null, game.winner());
         assertEquals(true, game.isWinner(firstPlayerNumber));
     }
+
     @Test
     public void anotherWithRounds() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
         Integer numberOfPlayers = 3;
         Game game = new Game(numberOfPlayers);
 
         game.play();
-        //assertNotEquals(null, game.winner());
-        assertEquals(null, game.winner()); //es que un jugador se quedo sin fichas
+        assertNotEquals(null, game.winner());
+        //assertEquals(true, game.winner() == null); //es que un jugador se quedo sin fichas
     }
 
+    @Test
+    public void playerDominatesAContinentAndAddsArmyToIt() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
+        Country zaire = new Country("Zaire");
+        Country etiopia = new Country("Etiopia");
+        Country egipto = new Country("Egipto");
+        Country madagascar = new Country("Madagascar");
+        Country sahara = new Country("Sahara");
+        Country sudafrica = new Country("Sudafrica");
 
+        Integer numberOfArmy = 9;
+
+        Integer numberOfPlayers = 2;
+        Game game = new Game(numberOfPlayers);
+
+        game.addCountryToPlayer(zaire,firstPlayerNumber);
+        game.addCountryToPlayer(etiopia,firstPlayerNumber);
+        game.addCountryToPlayer(egipto,firstPlayerNumber);
+        game.addCountryToPlayer(madagascar,firstPlayerNumber);
+        game.addCountryToPlayer(sahara,firstPlayerNumber);
+        game.addCountryToPlayer(sudafrica,firstPlayerNumber);
+
+        Continent africa = game.continentDominatedByPlayer(game.getPlayer(firstPlayerNumber));
+        assertTrue(africa.correctAmountOfArmyInCountries(numberOfArmy));
+    }
 }

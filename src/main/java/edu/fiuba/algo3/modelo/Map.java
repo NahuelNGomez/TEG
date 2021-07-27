@@ -28,7 +28,6 @@ public class Map {
         return map;
     }
 
-
     public void checkValidCountryParameter(Country country) throws EmptyCountryParameterException, NonExistentCountry {
         if(country == null) {
             throw new EmptyCountryParameterException();
@@ -66,7 +65,6 @@ public class Map {
         return valueCountry;
     }
 
-
     public boolean validateBorderingCountry(Country attackingCountry, Country defendingCountry) throws EmptyCountryParameterException, NonExistentCountry {
         checkValidCountryParameter(attackingCountry);
         checkValidCountryParameter(defendingCountry);
@@ -97,7 +95,6 @@ public class Map {
         }
         Continent newContinent = searchContinentInMap(continent);
         return (newContinent.sameNumberOfCountries(expectedAmount));
-
     }
 
     public void getCountriesAndBorders() throws IOException {
@@ -108,15 +105,21 @@ public class Map {
     public void clean() {
         for(Country country : countries.keySet()){
             country.cleanArmy();
-
         }
     }
 
     public void regroup(Country country1, Country country2, Integer armyToRegroup) throws NonExistentCountry {
-
         Country mapCountry1 = searchKeyCountryInMap(country1);
         Country mapCountry2 = searchKeyCountryInMap(country2);
 
         ArmyMover.moveArmy(mapCountry1, mapCountry2, armyToRegroup);
+    }
+
+    public boolean checkIfAttackerDominatedAContinent(Player player) throws EmptyCountryParameterException {
+        return (continentDominatedByPlayer(player) != null);
+    }
+
+    public Continent continentDominatedByPlayer(Player player) throws EmptyCountryParameterException {
+        return player.dominatedContinent(continents);
     }
 }

@@ -19,7 +19,7 @@ public class MockDice {
                 result.addResult(6);
             }
 
-        } else { //es impar
+        } else {
             for(int i = 0; i < diceAmount; i++){
                 result.addResult(1);
             }
