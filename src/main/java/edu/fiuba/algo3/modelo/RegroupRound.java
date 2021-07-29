@@ -1,79 +1,60 @@
 package edu.fiuba.algo3.modelo;
 
 import edu.fiuba.algo3.modelo.exceptions.EmptyCountryParameterException;
+import edu.fiuba.algo3.modelo.exceptions.InvalidRegroup;
 import edu.fiuba.algo3.modelo.exceptions.NonExistentCountry;
 import edu.fiuba.algo3.modelo.exceptions.NonExistentPlayer;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class RegroupRound extends Round{
+public class RegroupRound {
+    private ArrayList<Player> players;
+    private Map map;
+    private ArmyMover armyMover;
 
-    public RegroupRound(ArrayList<Player> gamePlayers, Map map) throws IOException {
-        super(gamePlayers, map);
+    public RegroupRound(ArrayList<Player> gamePlayers, Map gameMap) throws IOException {
+        players = gamePlayers;
+        map = gameMap;
+        armyMover = new ArmyMover();
     }
 
-    @Override
-    public void firstRounds(Integer maxPlacement){
-        System.out.println("NO HACE NADA");
-    }
+    void regroup(Player player, Country firstCountry, Country secondCountry, Integer armyToRegroup) throws EmptyCountryParameterException, NonExistentCountry, InvalidRegroup {
+        Country mapFirstCountry = map.searchKeyCountryInMap(firstCountry);
+        Country mapSecondCountry = map.searchKeyCountryInMap(secondCountry);
 
-    @Override
-    public Player startRound() throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
-        for( Player player : players){
-            regroup(players.indexOf(player), player.getRandomOwnCountry(), player.getRandomOwnCountry(), 1);
+        if(!checkRegroup(mapFirstCountry,mapSecondCountry,player,armyToRegroup)){
+            throw new InvalidRegroup();
         }
-        return null;
+        ArmyMover.moveArmy(mapFirstCountry,mapSecondCountry,armyToRegroup);
     }
 
-    public void regroup(Integer firstPlayerNumber, Country country1, Country country2, Integer armyToRegroup) throws EmptyCountryParameterException, NonExistentCountry, NonExistentPlayer {
+    private boolean checkRegroup(Country firstCountry, Country secondCountry, Player player,Integer armyToRegroup) throws NonExistentCountry, EmptyCountryParameterException {
+        boolean ownsFirstCountry = player.dominatedCountry(firstCountry);
+        boolean ownsSecondCountry = player.dominatedCountry(secondCountry);
+        boolean areBordering = map.validateBorderingCountry(firstCountry, secondCountry);
+        boolean correctAmount = (firstCountry.getArmyAmount()) > armyToRegroup;
 
-        checkValidCountryParameter(country1);
-        checkValidCountryParameter(country2);
-        if(checkRegroup(country1, country2, firstPlayerNumber)){
-            map.regroup(country1, country2, armyToRegroup);
-        }
+        return (ownsFirstCountry && ownsSecondCountry && areBordering && correctAmount);
     }
 
-    private boolean checkRegroup(Country country1, Country country2, Integer numberPlayer) throws NonExistentCountry, EmptyCountryParameterException, NonExistentPlayer {
-
-        Player player = players.get(numberPlayer);
-
-        Country countryAux1 = country2;
-        Country countryAux2 = country2;
-        Integer maxMovements = 100;
-
-        while(!map.validateBorderingCountry(countryAux1,country1) && maxMovements > 0){
-            while(!map.validateBorderingCountry(countryAux2,countryAux1) && maxMovements > 0){
-                countryAux2 = player.getRandomOwnCountry();
-                maxMovements--;
-            }
-            countryAux1 = countryAux2;
-        }
-        return (maxMovements > 0);
+    public Integer amountOfArmiesToAddInRegroupRound(Player player){
+        return player.amountOfArmiesToAddInRegroupRound();
     }
 
-    /*private void regroup(Integer firstPlayerNumber, Country country1, Country country2, Integer armyToRegroup) throws EmptyCountryParameterException, NonExistentCountry {
-        checkValidCountryParameter(country1);
-        checkValidCountryParameter(country2);
-
-        Country mapCountry1 = map.searchKeyCountryInMap(country1);
-        Country mapCountry2 = map.searchKeyCountryInMap(country2);
-
-        if(checkRegroup(mapCountry1, mapCountry2, firstPlayerNumber) && () && ()){
-            mapCountry1.removeArmy(armyToRegroup);
-            mapCountry2.addArmy(armyToRegroup);
+    public void addArmiesInRound(Player player, HashMap<Country, Integer> armiesToAdd) throws InvalidRegroup, NonExistentCountry, EmptyCountryParameterException {
+        Integer total = 0;
+        for(Integer num : armiesToAdd.values()){
+            total = total + num;
         }
-    }
-
-    private boolean checkRegroup(Country country1, Country country2, Integer playerNumber) throws NonExistentCountry, EmptyCountryParameterException {
-        Player player = players.get(playerNumber);
-        return (player.dominatedCountry(country1) && player.dominatedCountry(country2) && map.validateBorderingCountry(country1, country2));
-    }*/
-
-    private void checkValidCountryParameter(Country country) throws EmptyCountryParameterException {
-        if(country == null) {
-            throw new EmptyCountryParameterException();
+        if(total > amountOfArmiesToAddInRegroupRound(player)){
+            throw new InvalidRegroup();
         }
+        for(Country country : armiesToAdd.keySet()){
+            Country mapCountry = map.searchKeyCountryInMap(country);
+            player.addArmyInCountry(armiesToAdd.get(country),mapCountry);
+        }
+
     }
 }

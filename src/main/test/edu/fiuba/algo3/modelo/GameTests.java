@@ -4,6 +4,8 @@ import edu.fiuba.algo3.modelo.exceptions.*;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -11,7 +13,8 @@ public class GameTests {
     Integer firstPlayerNumber = 1;
     Integer secondPlayerNumber = 2;
     Integer thirdPlayerNumber = 3;
-    @Test
+
+    /*@Test
     public void assignCardNoCountriesLeft() throws NonExistentPlayer, InvalidNumberOfPlayers, EmptyCountryParameterException, IOException, NonExistentCountry {
         Integer numberOfPlayers = 2;
 
@@ -20,7 +23,7 @@ public class GameTests {
         Game game = new Game(numberOfPlayers);
         game.dealCountryCards();
 
-        assertEquals(true, game.correctAmountOfCountries(firstPlayerNumber, expectedAmountOfCountries ));
+        assertEquals(true, game.correctAmountOfCountries(firstPlayerNumber, expectedAmountOfCountries));
     }
 
     @Test
@@ -34,20 +37,20 @@ public class GameTests {
         Game game = new Game(numberOfPlayers);
         game.dealCountryCards();
 
-        assertEquals(true, game.correctAmountOfCountries(firstPlayerNumber, expectedAmountOfCountriesFirstPlayer ));
-        assertEquals(true, game.correctAmountOfCountries(secondPlayerNumber, expectedAmountOfCountriesSecondPlayer ));
-        assertEquals(true, game.correctAmountOfCountries(thirdPlayerNumber, expectedAmountOfCountriesThirdPlayer ));
-    }
+        assertEquals(true, game.correctAmountOfCountries(firstPlayerNumber, expectedAmountOfCountriesFirstPlayer));
+        assertEquals(true, game.correctAmountOfCountries(secondPlayerNumber, expectedAmountOfCountriesSecondPlayer));
+        assertEquals(true, game.correctAmountOfCountries(thirdPlayerNumber, expectedAmountOfCountriesThirdPlayer));
+    }*/
 
-
+    //pruebas de excepciones
     @Test
-    public void gameWithoutEnoughPlayersRaisesException(){
+    public void gameWithoutEnoughPlayersRaisesException() {
         Integer numberOfPlayers = 1;
         assertThrows(InvalidNumberOfPlayers.class, () -> new Game(numberOfPlayers));
     }
 
     @Test
-    public void gameWithTooManyPlayersRaisesException(){
+    public void gameWithTooManyPlayersRaisesException() {
         Integer numberOfPlayers = 8;
         assertThrows(InvalidNumberOfPlayers.class, () -> new Game(numberOfPlayers));
     }
@@ -59,7 +62,7 @@ public class GameTests {
         Game game = new Game(numberOfPlayers);
         Country francia = new Country("Francia");
 
-        assertThrows(NonExistentPlayer.class, () -> game.addCountryToPlayer(francia,thirdPlayerNumber));
+        assertThrows(NonExistentPlayer.class, () -> game.addCountryToPlayer(francia, thirdPlayerNumber));
     }
 
     @Test
@@ -69,222 +72,630 @@ public class GameTests {
         Game game = new Game(numberOfPlayers);
         Country croacia = new Country("Croacia");
 
-        assertThrows(NonExistentCountry.class, () -> game.addCountryToPlayer(croacia,thirdPlayerNumber));
+        assertThrows(NonExistentCountry.class, () -> game.addCountryToPlayer(croacia, firstPlayerNumber));
     }
+    //terminan pruebas de excepciones
 
+
+    //pruebas de rondas de ubicacion de 8 fichas
     @Test
-    public void emptyCountryParameterRaisesException() throws InvalidNumberOfPlayers, IOException {
+    public void oneRoundGameCountryFirstPlacement() throws InvalidNumberOfPlayers, IOException, NonExistentCountry, EmptyCountryParameterException, NonExistentPlayer, InvalidPlacement {
         Integer numberOfPlayers = 2;
-
-        Game game = new Game(numberOfPlayers);
-
-        assertThrows(EmptyCountryParameterException.class, () -> game.addCountryToPlayer(null,secondPlayerNumber));
-    }
-
-    @Test
-    public void emptyContinentParameterRaisesException() throws InvalidNumberOfPlayers, IOException {
-        Integer numberOfPlayers = 2;
-
-        Game game = new Game(numberOfPlayers);
-
-        assertThrows(EmptyContinentParameterException.class, () -> game.addContinentToPlayer(secondPlayerNumber,null));
-    }
-
-    @Test
-    public void oneRoundGameCountryPlacement() throws InvalidNumberOfPlayers, IOException, NonExistentCountry, EmptyCountryParameterException, NonExistentPlayer {
-        Integer numberOfPlayers = 2;
-
-        Integer armyToPlace = 5;
         Integer expectedAmount = 30;
-
         Game game = new Game(numberOfPlayers);
 
-        game.dealCountryCards();
-        game.placementRound(armyToPlace);
+        Country francia = new Country("Francia");Country granBretania = new Country("Gran Bretania");Country tartaria = new Country("Tartaria");Country mongolia = new Country("Mongolia");Country zaire = new Country("Zaire");Country polonia = new Country("Polonia");Country oregon = new Country("Oregon");Country etiopia = new Country("Etiopia");Country chile = new Country("Chile");Country australia = new Country("Australia");Country kamtchatka = new Country("Kamtchatka");Country egipto = new Country("Egipto");
+        Country turquia = new Country("Turquia");Country nuevaYork = new Country("Nueva York");Country terranova = new Country("Terranova");Country iran = new Country("Iran");Country madagascar = new Country("Madagascar");Country argentina = new Country("Argentina");
+        Country israel = new Country("Israel");Country rusia = new Country("Rusia");Country borneo = new Country("Borneo");Country california = new Country("California");Country taymir = new Country("Taymir");Country aral = new Country("Aral");Country siberia = new Country("Siberia");Country canada = new Country("Canada");
+        Country sahara = new Country("Sahara");Country yukon = new Country("Yukon");Country uruguay = new Country("Uruguay");Country groenlandia  = new Country("Groenlandia");Country japon = new Country("Japon");Country sumatra = new Country("Sumatra");
+        Country alaska = new Country("Alaska");Country brasil = new Country("Brasil");Country gobi = new Country("Gobi");Country italia = new Country("Italia");Country espania = new Country("Espania");Country colombia = new Country("Colombia");
+        Country suecia = new Country("Suecia");Country sudafrica = new Country("Sudafrica");Country arabia = new Country("Arabia");Country india = new Country("India");Country java = new Country("Java");Country mexico = new Country("Mexico");
+        Country peru = new Country("Peru");Country alemania = new Country("Alemania");Country china = new Country("China");Country labrador = new Country("Labrador");Country islandia = new Country("Islandia");Country malasia = new Country("Malasia");
 
-        assertEquals(true ,game.correctAmountOfArmy(firstPlayerNumber, expectedAmount));
+        ArrayList<Country> allCountries = new ArrayList<>()
+        {{ add(francia); add(granBretania); add(tartaria);add(mongolia);add(zaire);add(polonia);add(oregon);add(etiopia);add(chile);add(australia);add(kamtchatka);
+            add(egipto);add(turquia);add(nuevaYork);add(iran);add(madagascar);add(argentina);add(israel);add(rusia);add(borneo);add(california);add(taymir);add(aral);add(siberia);add(canada);
+            add(sahara);add(yukon);add(uruguay);add(groenlandia);add(japon);add(sumatra);add(alaska);add(brasil);add(gobi);add(italia);
+            add(espania);add(colombia);add(suecia);add(sudafrica);add(arabia);add(india);add(java);add(mexico);add(peru);add(alemania);add(china);add(labrador);add(islandia);add(malasia);add(terranova); }};
+
+
+        for(int i = 0 ; i < (allCountries.size()/2); i++){
+            game.addCountryToPlayer(allCountries.get(i), firstPlayerNumber);
+        }
+        for(int i = (allCountries.size()/2) ; i < (allCountries.size()); i++){
+            game.addCountryToPlayer(allCountries.get(i), secondPlayerNumber);
+        }
+
+        HashMap<Country,Integer> armiesToAddFirst = new HashMap<>();
+        armiesToAddFirst.put(francia,2);
+        armiesToAddFirst.put(tartaria,1);
+        armiesToAddFirst.put(zaire,2);
+
+        game.placingFiveArmiesInPlacementRound(firstPlayerNumber,armiesToAddFirst);
+        assertTrue(game.correctAmountOfArmy(firstPlayerNumber, expectedAmount));
+
+
+        HashMap<Country,Integer> armiesToAddSecond = new HashMap<>();
+        armiesToAddSecond.put(islandia,2);
+        armiesToAddSecond.put(brasil,1);
+        armiesToAddSecond.put(arabia,2);
+
+        game.placingFiveArmiesInPlacementRound(secondPlayerNumber,armiesToAddSecond);
+        assertTrue(game.correctAmountOfArmy(secondPlayerNumber, expectedAmount));
     }
 
     @Test
-    public void oneRoundGameCountryPlacementAndSecondPlayerControlsAsia() throws InvalidNumberOfPlayers, IOException, NonExistentCountry, EmptyCountryParameterException, NonExistentPlayer, NonExistentContinent, EmptyContinentParameterException {
-        Integer numberOfPlayers = 3;
-
-        Integer armyToPlace = 8;
-        Integer expectedAmount = 23;
-
-        Game game = new Game(numberOfPlayers);
-        Continent continent = new Continent("Asia",0);
-
-        game.addContinentToPlayer(firstPlayerNumber, continent);
-        game.addCountryToPlayer(new Country("Suecia"), secondPlayerNumber);
-        game.addCountryToPlayer(new Country("Brasil"), thirdPlayerNumber);
-
-        game.placementRound(armyToPlace);
-
-        assertEquals(true ,game.correctAmountOfArmy(firstPlayerNumber, expectedAmount));
-    }
-
-    @Test
-    public void oneAttackRound() throws InvalidNumberOfPlayers, IOException, NonExistentCountry, EmptyCountryParameterException, NonExistentPlayer {
+    public void oneRoundGameCountrySecondPlacement() throws InvalidNumberOfPlayers, IOException, NonExistentCountry, EmptyCountryParameterException, NonExistentPlayer, InvalidPlacement {
         Integer numberOfPlayers = 2;
-
+        Integer expectedAmount = 28;
         Game game = new Game(numberOfPlayers);
 
-        Country china = new Country("China");
-        Country iran = new Country("Iran");
-        Country siberia = new Country("Siberia");
-        Country gobi = new Country("Gobi");
+        Country francia = new Country("Francia");Country granBretania = new Country("Gran Bretania");Country tartaria = new Country("Tartaria");Country mongolia = new Country("Mongolia");Country zaire = new Country("Zaire");Country polonia = new Country("Polonia");Country oregon = new Country("Oregon");Country etiopia = new Country("Etiopia");Country chile = new Country("Chile");Country australia = new Country("Australia");Country kamtchatka = new Country("Kamtchatka");Country egipto = new Country("Egipto");
+        Country turquia = new Country("Turquia");Country nuevaYork = new Country("Nueva York");Country terranova = new Country("Terranova");Country iran = new Country("Iran");Country madagascar = new Country("Madagascar");Country argentina = new Country("Argentina");
+        Country israel = new Country("Israel");Country rusia = new Country("Rusia");Country borneo = new Country("Borneo");Country california = new Country("California");Country taymir = new Country("Taymir");Country aral = new Country("Aral");Country siberia = new Country("Siberia");Country canada = new Country("Canada");
+        Country sahara = new Country("Sahara");Country yukon = new Country("Yukon");Country uruguay = new Country("Uruguay");Country groenlandia  = new Country("Groenlandia");Country japon = new Country("Japon");Country sumatra = new Country("Sumatra");
+        Country alaska = new Country("Alaska");Country brasil = new Country("Brasil");Country gobi = new Country("Gobi");Country italia = new Country("Italia");Country espania = new Country("Espania");Country colombia = new Country("Colombia");
+        Country suecia = new Country("Suecia");Country sudafrica = new Country("Sudafrica");Country arabia = new Country("Arabia");Country india = new Country("India");Country java = new Country("Java");Country mexico = new Country("Mexico");
+        Country peru = new Country("Peru");Country alemania = new Country("Alemania");Country china = new Country("China");Country labrador = new Country("Labrador");Country islandia = new Country("Islandia");Country malasia = new Country("Malasia");
 
-        game.addCountryToPlayer(china, firstPlayerNumber);
-        game.addCountryToPlayer(iran, secondPlayerNumber);
-        game.addCountryToPlayer(siberia, secondPlayerNumber);
-        game.addCountryToPlayer(gobi, secondPlayerNumber);
-        game.playersSetArmies(5, china);
+        ArrayList<Country> allCountries = new ArrayList<>()
+        {{ add(francia); add(granBretania); add(tartaria);add(mongolia);add(zaire);add(polonia);add(oregon);add(etiopia);add(chile);add(australia);add(kamtchatka);
+            add(egipto);add(turquia);add(nuevaYork);add(iran);add(madagascar);add(argentina);add(israel);add(rusia);add(borneo);add(california);add(taymir);add(aral);add(siberia);add(canada);
+            add(sahara);add(yukon);add(uruguay);add(groenlandia);add(japon);add(sumatra);add(alaska);add(brasil);add(gobi);add(italia);
+            add(espania);add(colombia);add(suecia);add(sudafrica);add(arabia);add(india);add(java);add(mexico);add(peru);add(alemania);add(china);add(labrador);add(islandia);add(malasia);add(terranova); }};
 
 
-        game.attackRound();
-        game.attackRound();
+        for(int i = 0 ; i < (allCountries.size()/2); i++){
+            game.addCountryToPlayer(allCountries.get(i), firstPlayerNumber);
+        }
+        for(int i = (allCountries.size()/2) ; i < (allCountries.size()); i++){
+            game.addCountryToPlayer(allCountries.get(i), secondPlayerNumber);
+        }
 
-        assertEquals(true ,game.playerDominatedCountry(firstPlayerNumber, iran));
-        assertEquals(true ,game.playerDominatedCountry(firstPlayerNumber, siberia));
-        assertEquals(false ,game.playerDominatedCountry(secondPlayerNumber, siberia));
-        assertEquals(false ,game.playerDominatedCountry(secondPlayerNumber, iran));
+        HashMap<Country,Integer> armiesToAddFirst = new HashMap<>();
+        armiesToAddFirst.put(francia,1);
+        armiesToAddFirst.put(tartaria,1);
+        armiesToAddFirst.put(zaire,1);
+
+        game.placingThreeArmiesInPlacementRound(firstPlayerNumber,armiesToAddFirst);
+        assertTrue(game.correctAmountOfArmy(firstPlayerNumber, expectedAmount));
+
+
+        HashMap<Country,Integer> armiesToAddSecond = new HashMap<>();
+        armiesToAddSecond.put(islandia,1);
+        armiesToAddSecond.put(brasil,1);
+        armiesToAddSecond.put(arabia,1);
+
+        game.placingThreeArmiesInPlacementRound(secondPlayerNumber,armiesToAddSecond);
+        assertTrue(game.correctAmountOfArmy(secondPlayerNumber, expectedAmount));
     }
 
     @Test
-    public void correctAmountOfCountryCards() throws InvalidNumberOfPlayers, IOException {
+    public void firstPlacementRoundRaisesExceptionWithMoraThanFiveArmiesToAdd() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
         Integer numberOfPlayers = 2;
         Game game = new Game(numberOfPlayers);
-        assertEquals(true ,game.correctRemainingNumberOfCountryCards(50));
+
+        Country francia = new Country("Francia");Country granBretania = new Country("Gran Bretania");Country tartaria = new Country("Tartaria");Country mongolia = new Country("Mongolia");Country zaire = new Country("Zaire");Country polonia = new Country("Polonia");Country oregon = new Country("Oregon");Country etiopia = new Country("Etiopia");Country chile = new Country("Chile");Country australia = new Country("Australia");Country kamtchatka = new Country("Kamtchatka");Country egipto = new Country("Egipto");
+        Country turquia = new Country("Turquia");Country nuevaYork = new Country("Nueva York");Country terranova = new Country("Terranova");Country iran = new Country("Iran");Country madagascar = new Country("Madagascar");Country argentina = new Country("Argentina");
+        Country israel = new Country("Israel");Country rusia = new Country("Rusia");Country borneo = new Country("Borneo");Country california = new Country("California");Country taymir = new Country("Taymir");Country aral = new Country("Aral");Country siberia = new Country("Siberia");Country canada = new Country("Canada");
+        Country sahara = new Country("Sahara");Country yukon = new Country("Yukon");Country uruguay = new Country("Uruguay");Country groenlandia  = new Country("Groenlandia");Country japon = new Country("Japon");Country sumatra = new Country("Sumatra");
+        Country alaska = new Country("Alaska");Country brasil = new Country("Brasil");Country gobi = new Country("Gobi");Country italia = new Country("Italia");Country espania = new Country("Espania");Country colombia = new Country("Colombia");
+        Country suecia = new Country("Suecia");Country sudafrica = new Country("Sudafrica");Country arabia = new Country("Arabia");Country india = new Country("India");Country java = new Country("Java");Country mexico = new Country("Mexico");
+        Country peru = new Country("Peru");Country alemania = new Country("Alemania");Country china = new Country("China");Country labrador = new Country("Labrador");Country islandia = new Country("Islandia");Country malasia = new Country("Malasia");
+
+        ArrayList<Country> allCountries = new ArrayList<>()
+        {{ add(francia); add(granBretania); add(tartaria);add(mongolia);add(zaire);add(polonia);add(oregon);add(etiopia);add(chile);add(australia);add(kamtchatka);
+            add(egipto);add(turquia);add(nuevaYork);add(iran);add(madagascar);add(argentina);add(israel);add(rusia);add(borneo);add(california);add(taymir);add(aral);add(siberia);add(canada);
+            add(sahara);add(yukon);add(uruguay);add(groenlandia);add(japon);add(sumatra);add(alaska);add(brasil);add(gobi);add(italia);
+            add(espania);add(colombia);add(suecia);add(sudafrica);add(arabia);add(india);add(java);add(mexico);add(peru);add(alemania);add(china);add(labrador);add(islandia);add(malasia);add(terranova); }};
+
+        for(int i = 0 ; i < (allCountries.size()/2); i++){
+            game.addCountryToPlayer(allCountries.get(i), firstPlayerNumber);
+        }
+        for(int i = (allCountries.size()/2) ; i < (allCountries.size()); i++){
+            game.addCountryToPlayer(allCountries.get(i), secondPlayerNumber);
+        }
+
+        HashMap<Country,Integer> armiesToAddFirst = new HashMap<>();
+        armiesToAddFirst.put(francia,2);
+        armiesToAddFirst.put(tartaria,2);
+        armiesToAddFirst.put(zaire,2);
+
+        assertThrows(InvalidPlacement.class, () -> game.placingFiveArmiesInPlacementRound(firstPlayerNumber,armiesToAddFirst));
     }
 
     @Test
-    public void playerRegroupThreeArmies() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException, InvalidAttack {
+    public void secondPlacementRoundRaisesExceptionWithMoraThanThreeArmiesToAdd() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
+        Integer numberOfPlayers = 2;
+        Game game = new Game(numberOfPlayers);
 
+        Country francia = new Country("Francia");Country granBretania = new Country("Gran Bretania");Country tartaria = new Country("Tartaria");Country mongolia = new Country("Mongolia");Country zaire = new Country("Zaire");Country polonia = new Country("Polonia");Country oregon = new Country("Oregon");Country etiopia = new Country("Etiopia");Country chile = new Country("Chile");Country australia = new Country("Australia");Country kamtchatka = new Country("Kamtchatka");Country egipto = new Country("Egipto");
+        Country turquia = new Country("Turquia");Country nuevaYork = new Country("Nueva York");Country terranova = new Country("Terranova");Country iran = new Country("Iran");Country madagascar = new Country("Madagascar");Country argentina = new Country("Argentina");
+        Country israel = new Country("Israel");Country rusia = new Country("Rusia");Country borneo = new Country("Borneo");Country california = new Country("California");Country taymir = new Country("Taymir");Country aral = new Country("Aral");Country siberia = new Country("Siberia");Country canada = new Country("Canada");
+        Country sahara = new Country("Sahara");Country yukon = new Country("Yukon");Country uruguay = new Country("Uruguay");Country groenlandia  = new Country("Groenlandia");Country japon = new Country("Japon");Country sumatra = new Country("Sumatra");
+        Country alaska = new Country("Alaska");Country brasil = new Country("Brasil");Country gobi = new Country("Gobi");Country italia = new Country("Italia");Country espania = new Country("Espania");Country colombia = new Country("Colombia");
+        Country suecia = new Country("Suecia");Country sudafrica = new Country("Sudafrica");Country arabia = new Country("Arabia");Country india = new Country("India");Country java = new Country("Java");Country mexico = new Country("Mexico");
+        Country peru = new Country("Peru");Country alemania = new Country("Alemania");Country china = new Country("China");Country labrador = new Country("Labrador");Country islandia = new Country("Islandia");Country malasia = new Country("Malasia");
+
+        ArrayList<Country> allCountries = new ArrayList<>()
+        {{ add(francia); add(granBretania); add(tartaria);add(mongolia);add(zaire);add(polonia);add(oregon);add(etiopia);add(chile);add(australia);add(kamtchatka);
+            add(egipto);add(turquia);add(nuevaYork);add(iran);add(madagascar);add(argentina);add(israel);add(rusia);add(borneo);add(california);add(taymir);add(aral);add(siberia);add(canada);
+            add(sahara);add(yukon);add(uruguay);add(groenlandia);add(japon);add(sumatra);add(alaska);add(brasil);add(gobi);add(italia);
+            add(espania);add(colombia);add(suecia);add(sudafrica);add(arabia);add(india);add(java);add(mexico);add(peru);add(alemania);add(china);add(labrador);add(islandia);add(malasia);add(terranova); }};
+
+        for(int i = 0 ; i < (allCountries.size()/2); i++){
+            game.addCountryToPlayer(allCountries.get(i), firstPlayerNumber);
+        }
+        for(int i = (allCountries.size()/2) ; i < (allCountries.size()); i++){
+            game.addCountryToPlayer(allCountries.get(i), secondPlayerNumber);
+        }
+
+        HashMap<Country,Integer> armiesToAddFirst = new HashMap<>();
+        armiesToAddFirst.put(francia,2);
+        armiesToAddFirst.put(tartaria,2);
+        armiesToAddFirst.put(zaire,2);
+
+        assertThrows(InvalidPlacement.class, () -> game.placingThreeArmiesInPlacementRound(firstPlayerNumber,armiesToAddFirst));
+    }
+    // terminan las pruebas de las rondas de ubicar fichas
+
+    //pruebas de attack
+    @Test
+    public void attackRoundWithTwoPlayersPlayerOneDominatesACountryOfPlayerTwo() throws InvalidNumberOfPlayers, IOException, NonExistentCountry, EmptyCountryParameterException, NonExistentPlayer, InvalidAttack {
+        Integer numberOfPlayers = 2;
+        Game game = new Game(numberOfPlayers);
+
+        Country francia = new Country("Francia");Country granBretania = new Country("Gran Bretania");Country tartaria = new Country("Tartaria");Country mongolia = new Country("Mongolia");Country zaire = new Country("Zaire");Country polonia = new Country("Polonia");Country oregon = new Country("Oregon");Country etiopia = new Country("Etiopia");Country chile = new Country("Chile");Country australia = new Country("Australia");Country kamtchatka = new Country("Kamtchatka");Country egipto = new Country("Egipto");
+        Country turquia = new Country("Turquia");Country nuevaYork = new Country("Nueva York");Country terranova = new Country("Terranova");Country iran = new Country("Iran");Country madagascar = new Country("Madagascar");Country argentina = new Country("Argentina");
+        Country israel = new Country("Israel");Country rusia = new Country("Rusia");Country borneo = new Country("Borneo");Country california = new Country("California");Country taymir = new Country("Taymir");Country aral = new Country("Aral");Country siberia = new Country("Siberia");Country canada = new Country("Canada");
+        Country sahara = new Country("Sahara");Country yukon = new Country("Yukon");Country uruguay = new Country("Uruguay");Country groenlandia  = new Country("Groenlandia");Country japon = new Country("Japon");Country sumatra = new Country("Sumatra");
+        Country alaska = new Country("Alaska");Country brasil = new Country("Brasil");Country gobi = new Country("Gobi");Country italia = new Country("Italia");Country espania = new Country("Espania");Country colombia = new Country("Colombia");
+        Country suecia = new Country("Suecia");Country sudafrica = new Country("Sudafrica");Country arabia = new Country("Arabia");Country india = new Country("India");Country java = new Country("Java");Country mexico = new Country("Mexico");
+        Country peru = new Country("Peru");Country alemania = new Country("Alemania");Country china = new Country("China");Country labrador = new Country("Labrador");Country islandia = new Country("Islandia");Country malasia = new Country("Malasia");
+
+        ArrayList<Country> allCountries = new ArrayList<>()
+        {{ add(francia); add(granBretania); add(tartaria);add(mongolia);add(zaire);add(polonia);add(oregon);add(etiopia);add(chile);add(australia);add(kamtchatka);
+            add(egipto);add(turquia);add(nuevaYork);add(iran);add(madagascar);add(argentina);add(israel);add(rusia);add(borneo);add(california);add(taymir);add(aral);add(siberia);add(canada);
+            add(sahara);add(yukon);add(uruguay);add(groenlandia);add(japon);add(sumatra);add(alaska);add(brasil);add(gobi);add(italia);
+            add(espania);add(colombia);add(suecia);add(sudafrica);add(arabia);add(india);add(java);add(mexico);add(peru);add(alemania);add(china);add(labrador);add(islandia);add(malasia);add(terranova); }};
+
+        for(int i = 0 ; i < (allCountries.size()/2); i++){
+            game.addCountryToPlayer(allCountries.get(i), firstPlayerNumber);
+        }
+        for(int i = (allCountries.size()/2) ; i < (allCountries.size()); i++){
+            game.addCountryToPlayer(allCountries.get(i), secondPlayerNumber);
+        }
+
+        game.playerSetArmies(firstPlayerNumber,5,francia);
+        game.playerSetArmies(secondPlayerNumber,1,alemania);
+
+        game.attack(firstPlayerNumber,francia,alemania,3);
+
+        assertEquals(true ,game.playerDominatedCountry(firstPlayerNumber, alemania));
+        assertEquals(false ,game.playerDominatedCountry(secondPlayerNumber, alemania));
+    }
+
+    @Test
+    public void attackRoundWithTwoPlayersPlayerOneDominatesTwoCountriesOfPlayerTwo() throws InvalidNumberOfPlayers, IOException, NonExistentCountry, EmptyCountryParameterException, NonExistentPlayer, InvalidAttack {
+        Integer numberOfPlayers = 2;
+        Game game = new Game(numberOfPlayers);
+
+        Country francia = new Country("Francia");Country granBretania = new Country("Gran Bretania");Country tartaria = new Country("Tartaria");Country mongolia = new Country("Mongolia");Country zaire = new Country("Zaire");Country polonia = new Country("Polonia");Country oregon = new Country("Oregon");Country etiopia = new Country("Etiopia");Country chile = new Country("Chile");Country australia = new Country("Australia");Country kamtchatka = new Country("Kamtchatka");Country egipto = new Country("Egipto");
+        Country turquia = new Country("Turquia");Country nuevaYork = new Country("Nueva York");Country terranova = new Country("Terranova");Country iran = new Country("Iran");Country madagascar = new Country("Madagascar");Country argentina = new Country("Argentina");
+        Country israel = new Country("Israel");Country rusia = new Country("Rusia");Country borneo = new Country("Borneo");Country california = new Country("California");Country taymir = new Country("Taymir");Country aral = new Country("Aral");Country siberia = new Country("Siberia");Country canada = new Country("Canada");
+        Country sahara = new Country("Sahara");Country yukon = new Country("Yukon");Country uruguay = new Country("Uruguay");Country groenlandia  = new Country("Groenlandia");Country japon = new Country("Japon");Country sumatra = new Country("Sumatra");
+        Country alaska = new Country("Alaska");Country brasil = new Country("Brasil");Country gobi = new Country("Gobi");Country italia = new Country("Italia");Country espania = new Country("Espania");Country colombia = new Country("Colombia");
+        Country suecia = new Country("Suecia");Country sudafrica = new Country("Sudafrica");Country arabia = new Country("Arabia");Country india = new Country("India");Country java = new Country("Java");Country mexico = new Country("Mexico");
+        Country peru = new Country("Peru");Country alemania = new Country("Alemania");Country china = new Country("China");Country labrador = new Country("Labrador");Country islandia = new Country("Islandia");Country malasia = new Country("Malasia");
+
+        ArrayList<Country> allCountries = new ArrayList<>()
+        {{ add(francia); add(granBretania); add(tartaria);add(mongolia);add(zaire);add(polonia);add(oregon);add(etiopia);add(chile);add(australia);add(kamtchatka);
+            add(egipto);add(turquia);add(nuevaYork);add(iran);add(madagascar);add(argentina);add(israel);add(rusia);add(borneo);add(california);add(taymir);add(aral);add(siberia);add(canada);
+            add(sahara);add(yukon);add(uruguay);add(groenlandia);add(japon);add(sumatra);add(alaska);add(brasil);add(gobi);add(italia);
+            add(espania);add(colombia);add(suecia);add(sudafrica);add(arabia);add(india);add(java);add(mexico);add(peru);add(alemania);add(china);add(labrador);add(islandia);add(malasia);add(terranova); }};
+
+        for(int i = 0 ; i < (allCountries.size()/2); i++){
+            game.addCountryToPlayer(allCountries.get(i), firstPlayerNumber);
+        }
+        for(int i = (allCountries.size()/2) ; i < (allCountries.size()); i++){
+            game.addCountryToPlayer(allCountries.get(i), secondPlayerNumber);
+        }
+
+        game.playerSetArmies(firstPlayerNumber,5,francia);
+        game.playerSetArmies(secondPlayerNumber,1,alemania);
+
+        game.playerSetArmies(firstPlayerNumber,5,etiopia);
+        game.playerSetArmies(secondPlayerNumber,1,sudafrica);
+
+        game.attack(firstPlayerNumber,francia,alemania,3);
+        game.attack(firstPlayerNumber,etiopia,sudafrica,3);
+
+        assertTrue(game.playerDominatedCountry(firstPlayerNumber, alemania));
+        assertFalse(game.playerDominatedCountry(secondPlayerNumber, alemania));
+
+        assertTrue(game.playerDominatedCountry(firstPlayerNumber, sudafrica));
+        assertFalse(game.playerDominatedCountry(secondPlayerNumber, sudafrica));
+    }
+
+    @Test
+    public void playerTriesToAttackWithoutEnoughArmiesInAttackerCountry() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
+        Integer numberOfPlayers = 2;
+        Game game = new Game(numberOfPlayers);
+
+        Country francia = new Country("Francia");Country granBretania = new Country("Gran Bretania");Country tartaria = new Country("Tartaria");Country mongolia = new Country("Mongolia");Country zaire = new Country("Zaire");Country polonia = new Country("Polonia");Country oregon = new Country("Oregon");Country etiopia = new Country("Etiopia");Country chile = new Country("Chile");Country australia = new Country("Australia");Country kamtchatka = new Country("Kamtchatka");Country egipto = new Country("Egipto");
+        Country turquia = new Country("Turquia");Country nuevaYork = new Country("Nueva York");Country terranova = new Country("Terranova");Country iran = new Country("Iran");Country madagascar = new Country("Madagascar");Country argentina = new Country("Argentina");
+        Country israel = new Country("Israel");Country rusia = new Country("Rusia");Country borneo = new Country("Borneo");Country california = new Country("California");Country taymir = new Country("Taymir");Country aral = new Country("Aral");Country siberia = new Country("Siberia");Country canada = new Country("Canada");
+        Country sahara = new Country("Sahara");Country yukon = new Country("Yukon");Country uruguay = new Country("Uruguay");Country groenlandia  = new Country("Groenlandia");Country japon = new Country("Japon");Country sumatra = new Country("Sumatra");
+        Country alaska = new Country("Alaska");Country brasil = new Country("Brasil");Country gobi = new Country("Gobi");Country italia = new Country("Italia");Country espania = new Country("Espania");Country colombia = new Country("Colombia");
+        Country suecia = new Country("Suecia");Country sudafrica = new Country("Sudafrica");Country arabia = new Country("Arabia");Country india = new Country("India");Country java = new Country("Java");Country mexico = new Country("Mexico");
+        Country peru = new Country("Peru");Country alemania = new Country("Alemania");Country china = new Country("China");Country labrador = new Country("Labrador");Country islandia = new Country("Islandia");Country malasia = new Country("Malasia");
+
+        ArrayList<Country> allCountries = new ArrayList<>()
+        {{ add(francia); add(granBretania); add(tartaria);add(mongolia);add(zaire);add(polonia);add(oregon);add(etiopia);add(chile);add(australia);add(kamtchatka);
+            add(egipto);add(turquia);add(nuevaYork);add(iran);add(madagascar);add(argentina);add(israel);add(rusia);add(borneo);add(california);add(taymir);add(aral);add(siberia);add(canada);
+            add(sahara);add(yukon);add(uruguay);add(groenlandia);add(japon);add(sumatra);add(alaska);add(brasil);add(gobi);add(italia);
+            add(espania);add(colombia);add(suecia);add(sudafrica);add(arabia);add(india);add(java);add(mexico);add(peru);add(alemania);add(china);add(labrador);add(islandia);add(malasia);add(terranova); }};
+
+        for(int i = 0 ; i < (allCountries.size()/2); i++){
+            game.addCountryToPlayer(allCountries.get(i), firstPlayerNumber);
+        }
+        for(int i = (allCountries.size()/2) ; i < (allCountries.size()); i++){
+            game.addCountryToPlayer(allCountries.get(i), secondPlayerNumber);
+        }
+        game.playerSetArmies(secondPlayerNumber,1,alemania);
+        assertThrows(InvalidAttack.class, () -> game.attack(firstPlayerNumber,francia,alemania,1));
+    }
+
+    @Test
+    public void playerTriesToAttackWithoutEnoughArmiesInDefenderCountry() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
+        Integer numberOfPlayers = 2;
+        Game game = new Game(numberOfPlayers);
+
+        Country francia = new Country("Francia");Country granBretania = new Country("Gran Bretania");Country tartaria = new Country("Tartaria");Country mongolia = new Country("Mongolia");Country zaire = new Country("Zaire");Country polonia = new Country("Polonia");Country oregon = new Country("Oregon");Country etiopia = new Country("Etiopia");Country chile = new Country("Chile");Country australia = new Country("Australia");Country kamtchatka = new Country("Kamtchatka");Country egipto = new Country("Egipto");
+        Country turquia = new Country("Turquia");Country nuevaYork = new Country("Nueva York");Country terranova = new Country("Terranova");Country iran = new Country("Iran");Country madagascar = new Country("Madagascar");Country argentina = new Country("Argentina");
+        Country israel = new Country("Israel");Country rusia = new Country("Rusia");Country borneo = new Country("Borneo");Country california = new Country("California");Country taymir = new Country("Taymir");Country aral = new Country("Aral");Country siberia = new Country("Siberia");Country canada = new Country("Canada");
+        Country sahara = new Country("Sahara");Country yukon = new Country("Yukon");Country uruguay = new Country("Uruguay");Country groenlandia  = new Country("Groenlandia");Country japon = new Country("Japon");Country sumatra = new Country("Sumatra");
+        Country alaska = new Country("Alaska");Country brasil = new Country("Brasil");Country gobi = new Country("Gobi");Country italia = new Country("Italia");Country espania = new Country("Espania");Country colombia = new Country("Colombia");
+        Country suecia = new Country("Suecia");Country sudafrica = new Country("Sudafrica");Country arabia = new Country("Arabia");Country india = new Country("India");Country java = new Country("Java");Country mexico = new Country("Mexico");
+        Country peru = new Country("Peru");Country alemania = new Country("Alemania");Country china = new Country("China");Country labrador = new Country("Labrador");Country islandia = new Country("Islandia");Country malasia = new Country("Malasia");
+
+        ArrayList<Country> allCountries = new ArrayList<>()
+        {{ add(francia); add(granBretania); add(tartaria);add(mongolia);add(zaire);add(polonia);add(oregon);add(etiopia);add(chile);add(australia);add(kamtchatka);
+            add(egipto);add(turquia);add(nuevaYork);add(iran);add(madagascar);add(argentina);add(israel);add(rusia);add(borneo);add(california);add(taymir);add(aral);add(siberia);add(canada);
+            add(sahara);add(yukon);add(uruguay);add(groenlandia);add(japon);add(sumatra);add(alaska);add(brasil);add(gobi);add(italia);
+            add(espania);add(colombia);add(suecia);add(sudafrica);add(arabia);add(india);add(java);add(mexico);add(peru);add(alemania);add(china);add(labrador);add(islandia);add(malasia);add(terranova); }};
+
+        for(int i = 0 ; i < (allCountries.size()/2); i++){
+            game.addCountryToPlayer(allCountries.get(i), firstPlayerNumber);
+        }
+        for(int i = (allCountries.size()/2) ; i < (allCountries.size()); i++){
+            game.addCountryToPlayer(allCountries.get(i), secondPlayerNumber);
+        }
+        game.playerSetArmies(firstPlayerNumber,5,francia);
+
+        assertThrows(InvalidAttack.class, () -> game.attack(firstPlayerNumber,francia,alemania,1));
+    }
+
+    @Test
+    public void playerTriesToAttackANonBorderingCoutry() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
+        Integer numberOfPlayers = 2;
+        Game game = new Game(numberOfPlayers);
+
+        Country francia = new Country("Francia");Country granBretania = new Country("Gran Bretania");Country tartaria = new Country("Tartaria");Country mongolia = new Country("Mongolia");Country zaire = new Country("Zaire");Country polonia = new Country("Polonia");Country oregon = new Country("Oregon");Country etiopia = new Country("Etiopia");Country chile = new Country("Chile");Country australia = new Country("Australia");Country kamtchatka = new Country("Kamtchatka");Country egipto = new Country("Egipto");
+        Country turquia = new Country("Turquia");Country nuevaYork = new Country("Nueva York");Country terranova = new Country("Terranova");Country iran = new Country("Iran");Country madagascar = new Country("Madagascar");Country argentina = new Country("Argentina");
+        Country israel = new Country("Israel");Country rusia = new Country("Rusia");Country borneo = new Country("Borneo");Country california = new Country("California");Country taymir = new Country("Taymir");Country aral = new Country("Aral");Country siberia = new Country("Siberia");Country canada = new Country("Canada");
+        Country sahara = new Country("Sahara");Country yukon = new Country("Yukon");Country uruguay = new Country("Uruguay");Country groenlandia  = new Country("Groenlandia");Country japon = new Country("Japon");Country sumatra = new Country("Sumatra");
+        Country alaska = new Country("Alaska");Country brasil = new Country("Brasil");Country gobi = new Country("Gobi");Country italia = new Country("Italia");Country espania = new Country("Espania");Country colombia = new Country("Colombia");
+        Country suecia = new Country("Suecia");Country sudafrica = new Country("Sudafrica");Country arabia = new Country("Arabia");Country india = new Country("India");Country java = new Country("Java");Country mexico = new Country("Mexico");
+        Country peru = new Country("Peru");Country alemania = new Country("Alemania");Country china = new Country("China");Country labrador = new Country("Labrador");Country islandia = new Country("Islandia");Country malasia = new Country("Malasia");
+
+        ArrayList<Country> allCountries = new ArrayList<>()
+        {{ add(francia); add(granBretania); add(tartaria);add(mongolia);add(zaire);add(polonia);add(oregon);add(etiopia);add(chile);add(australia);add(kamtchatka);
+            add(egipto);add(turquia);add(nuevaYork);add(iran);add(madagascar);add(argentina);add(israel);add(rusia);add(borneo);add(california);add(taymir);add(aral);add(siberia);add(canada);
+            add(sahara);add(yukon);add(uruguay);add(groenlandia);add(japon);add(sumatra);add(alaska);add(brasil);add(gobi);add(italia);
+            add(espania);add(colombia);add(suecia);add(sudafrica);add(arabia);add(india);add(java);add(mexico);add(peru);add(alemania);add(china);add(labrador);add(islandia);add(malasia);add(terranova); }};
+
+        for(int i = 0 ; i < (allCountries.size()/2); i++){
+            game.addCountryToPlayer(allCountries.get(i), firstPlayerNumber);
+        }
+        for(int i = (allCountries.size()/2) ; i < (allCountries.size()); i++){
+            game.addCountryToPlayer(allCountries.get(i), secondPlayerNumber);
+        }
+        game.playerSetArmies(firstPlayerNumber,5,francia);
+        game.playerSetArmies(secondPlayerNumber,5,terranova);
+
+        assertThrows(InvalidAttack.class, () -> game.attack(firstPlayerNumber,francia,terranova,1));
+    }
+
+    @Test
+    public void playerTriesToAttackWithAWrongAmountOfDices() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
+        Integer numberOfPlayers = 2;
+        Game game = new Game(numberOfPlayers);
+
+        Country francia = new Country("Francia");Country granBretania = new Country("Gran Bretania");Country tartaria = new Country("Tartaria");Country mongolia = new Country("Mongolia");Country zaire = new Country("Zaire");Country polonia = new Country("Polonia");Country oregon = new Country("Oregon");Country etiopia = new Country("Etiopia");Country chile = new Country("Chile");Country australia = new Country("Australia");Country kamtchatka = new Country("Kamtchatka");Country egipto = new Country("Egipto");
+        Country turquia = new Country("Turquia");Country nuevaYork = new Country("Nueva York");Country terranova = new Country("Terranova");Country iran = new Country("Iran");Country madagascar = new Country("Madagascar");Country argentina = new Country("Argentina");
+        Country israel = new Country("Israel");Country rusia = new Country("Rusia");Country borneo = new Country("Borneo");Country california = new Country("California");Country taymir = new Country("Taymir");Country aral = new Country("Aral");Country siberia = new Country("Siberia");Country canada = new Country("Canada");
+        Country sahara = new Country("Sahara");Country yukon = new Country("Yukon");Country uruguay = new Country("Uruguay");Country groenlandia  = new Country("Groenlandia");Country japon = new Country("Japon");Country sumatra = new Country("Sumatra");
+        Country alaska = new Country("Alaska");Country brasil = new Country("Brasil");Country gobi = new Country("Gobi");Country italia = new Country("Italia");Country espania = new Country("Espania");Country colombia = new Country("Colombia");
+        Country suecia = new Country("Suecia");Country sudafrica = new Country("Sudafrica");Country arabia = new Country("Arabia");Country india = new Country("India");Country java = new Country("Java");Country mexico = new Country("Mexico");
+        Country peru = new Country("Peru");Country alemania = new Country("Alemania");Country china = new Country("China");Country labrador = new Country("Labrador");Country islandia = new Country("Islandia");Country malasia = new Country("Malasia");
+
+        ArrayList<Country> allCountries = new ArrayList<>()
+        {{ add(francia); add(granBretania); add(tartaria);add(mongolia);add(zaire);add(polonia);add(oregon);add(etiopia);add(chile);add(australia);add(kamtchatka);
+            add(egipto);add(turquia);add(nuevaYork);add(iran);add(madagascar);add(argentina);add(israel);add(rusia);add(borneo);add(california);add(taymir);add(aral);add(siberia);add(canada);
+            add(sahara);add(yukon);add(uruguay);add(groenlandia);add(japon);add(sumatra);add(alaska);add(brasil);add(gobi);add(italia);
+            add(espania);add(colombia);add(suecia);add(sudafrica);add(arabia);add(india);add(java);add(mexico);add(peru);add(alemania);add(china);add(labrador);add(islandia);add(malasia);add(terranova); }};
+
+        for(int i = 0 ; i < (allCountries.size()/2); i++){
+            game.addCountryToPlayer(allCountries.get(i), firstPlayerNumber);
+        }
+        for(int i = (allCountries.size()/2) ; i < (allCountries.size()); i++){
+            game.addCountryToPlayer(allCountries.get(i), secondPlayerNumber);
+        }
+        game.playerSetArmies(firstPlayerNumber,2,francia);
+        game.playerSetArmies(secondPlayerNumber,5,alemania);
+
+        assertThrows(InvalidAttack.class, () -> game.attack(firstPlayerNumber,francia,alemania,6));
+    }
+    //terminan las pruebas de attack
+
+    //pruebas de regroup
+    @Test
+    public void playerRegroupOneArmy() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException, InvalidRegroup {
         Integer numberOfPlayers = 2;
         Integer armyToRegroup = 1;
-        Integer expectedAmountGermany = 5;
-        Integer expectedAmountPoland = 2;
-
+        Integer expectedAmountTartaria= 2;
+        Integer expectedAmountSiberia = 2;
         Game game = new Game(numberOfPlayers);
 
-        Country francia = new Country("Francia");
-        Country polonia = new Country("Polonia");
-        Country alemania = new Country("Alemania");
+        Country francia = new Country("Francia");Country granBretania = new Country("Gran Bretania");Country tartaria = new Country("Tartaria");Country mongolia = new Country("Mongolia");Country zaire = new Country("Zaire");Country polonia = new Country("Polonia");Country oregon = new Country("Oregon");Country etiopia = new Country("Etiopia");Country chile = new Country("Chile");Country australia = new Country("Australia");Country kamtchatka = new Country("Kamtchatka");Country egipto = new Country("Egipto");
+        Country turquia = new Country("Turquia");Country nuevaYork = new Country("Nueva York");Country terranova = new Country("Terranova");Country iran = new Country("Iran");Country madagascar = new Country("Madagascar");Country argentina = new Country("Argentina");
+        Country israel = new Country("Israel");Country rusia = new Country("Rusia");Country borneo = new Country("Borneo");Country california = new Country("California");Country taymir = new Country("Taymir");Country aral = new Country("Aral");Country siberia = new Country("Siberia");Country canada = new Country("Canada");
+        Country sahara = new Country("Sahara");Country yukon = new Country("Yukon");Country uruguay = new Country("Uruguay");Country groenlandia  = new Country("Groenlandia");Country japon = new Country("Japon");Country sumatra = new Country("Sumatra");
+        Country alaska = new Country("Alaska");Country brasil = new Country("Brasil");Country gobi = new Country("Gobi");Country italia = new Country("Italia");Country espania = new Country("Espania");Country colombia = new Country("Colombia");
+        Country suecia = new Country("Suecia");Country sudafrica = new Country("Sudafrica");Country arabia = new Country("Arabia");Country india = new Country("India");Country java = new Country("Java");Country mexico = new Country("Mexico");
+        Country peru = new Country("Peru");Country alemania = new Country("Alemania");Country china = new Country("China");Country labrador = new Country("Labrador");Country islandia = new Country("Islandia");Country malasia = new Country("Malasia");
 
-        game.addCountryToPlayer(alemania,firstPlayerNumber);
-        game.addCountryToPlayer(polonia,firstPlayerNumber);
+        ArrayList<Country> allCountries = new ArrayList<>()
+        {{ add(francia); add(granBretania); add(tartaria);add(mongolia);add(zaire);add(polonia);add(oregon);add(etiopia);add(chile);add(australia);add(kamtchatka);
+            add(egipto);add(turquia);add(nuevaYork);add(iran);add(madagascar);add(argentina);add(israel);add(rusia);add(borneo);add(california);add(taymir);add(aral);add(siberia);add(canada);
+            add(sahara);add(yukon);add(uruguay);add(groenlandia);add(japon);add(sumatra);add(alaska);add(brasil);add(gobi);add(italia);
+            add(espania);add(colombia);add(suecia);add(sudafrica);add(arabia);add(india);add(java);add(mexico);add(peru);add(alemania);add(china);add(labrador);add(islandia);add(malasia);add(terranova); }};
 
-        game.addCountryToPlayer(francia,secondPlayerNumber);
+        for(int i = 0 ; i < (allCountries.size()/2); i++){
+            game.addCountryToPlayer(allCountries.get(i), firstPlayerNumber);
+        }
+        for(int i = (allCountries.size()/2) ; i < (allCountries.size()); i++){
+            game.addCountryToPlayer(allCountries.get(i), secondPlayerNumber);
+        }
 
-        game.playersSetArmies(5, alemania);
-        game.regroup(firstPlayerNumber, alemania, polonia, armyToRegroup);
+        game.playerSetArmies(firstPlayerNumber,2,tartaria);
 
-        assertEquals(true, game.playerDominatedCountry(firstPlayerNumber,alemania));
-        assertEquals(true, game.playerDominatedCountry(firstPlayerNumber,polonia));
-        assertEquals(true, game.correctAmountOfArmyInCountry(firstPlayerNumber, alemania, expectedAmountGermany));
-        assertEquals(true, game.correctAmountOfArmyInCountry(firstPlayerNumber, polonia, expectedAmountPoland));
+        game.regroup(firstPlayerNumber, tartaria, siberia, armyToRegroup);
+
+        assertTrue(game.playerDominatedCountry(firstPlayerNumber, tartaria));
+        assertTrue(game.playerDominatedCountry(firstPlayerNumber, siberia));
+
+        assertTrue(game.correctAmountOfArmyInCountry(tartaria, expectedAmountTartaria));
+        assertTrue(game.correctAmountOfArmyInCountry(siberia, expectedAmountSiberia));
     }
 
     @Test
-    public void incorrectRegroupOfPlayer() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
+    public void playerTriesToRegroupNonBorderingCountries() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException{
         Integer numberOfPlayers = 2;
         Integer armyToRegroup = 1;
-
-        Integer expectedAmountIslandia = 5;
-        Integer expectedAmountPoland = 2;
-
         Game game = new Game(numberOfPlayers);
 
-        Country islandia = new Country("Islandia");
-        Country suecia = new Country("Suecia");
-        Country rusia = new Country("Rusia");
-        Country polonia = new Country("Polonia");
-        Country alemania = new Country("Alemania");
+        Country francia = new Country("Francia");Country granBretania = new Country("Gran Bretania");Country tartaria = new Country("Tartaria");Country mongolia = new Country("Mongolia");Country zaire = new Country("Zaire");Country polonia = new Country("Polonia");Country oregon = new Country("Oregon");Country etiopia = new Country("Etiopia");Country chile = new Country("Chile");Country australia = new Country("Australia");Country kamtchatka = new Country("Kamtchatka");Country egipto = new Country("Egipto");
+        Country turquia = new Country("Turquia");Country nuevaYork = new Country("Nueva York");Country terranova = new Country("Terranova");Country iran = new Country("Iran");Country madagascar = new Country("Madagascar");Country argentina = new Country("Argentina");
+        Country israel = new Country("Israel");Country rusia = new Country("Rusia");Country borneo = new Country("Borneo");Country california = new Country("California");Country taymir = new Country("Taymir");Country aral = new Country("Aral");Country siberia = new Country("Siberia");Country canada = new Country("Canada");
+        Country sahara = new Country("Sahara");Country yukon = new Country("Yukon");Country uruguay = new Country("Uruguay");Country groenlandia  = new Country("Groenlandia");Country japon = new Country("Japon");Country sumatra = new Country("Sumatra");
+        Country alaska = new Country("Alaska");Country brasil = new Country("Brasil");Country gobi = new Country("Gobi");Country italia = new Country("Italia");Country espania = new Country("Espania");Country colombia = new Country("Colombia");
+        Country suecia = new Country("Suecia");Country sudafrica = new Country("Sudafrica");Country arabia = new Country("Arabia");Country india = new Country("India");Country java = new Country("Java");Country mexico = new Country("Mexico");
+        Country peru = new Country("Peru");Country alemania = new Country("Alemania");Country china = new Country("China");Country labrador = new Country("Labrador");Country islandia = new Country("Islandia");Country malasia = new Country("Malasia");
 
-        game.addCountryToPlayer(islandia,firstPlayerNumber);
-        game.addCountryToPlayer(suecia,firstPlayerNumber);
-        game.addCountryToPlayer(rusia,firstPlayerNumber);
-        game.addCountryToPlayer(polonia,firstPlayerNumber);
+        ArrayList<Country> allCountries = new ArrayList<>()
+        {{ add(francia); add(granBretania); add(tartaria);add(mongolia);add(zaire);add(polonia);add(oregon);add(etiopia);add(chile);add(australia);add(kamtchatka);
+            add(egipto);add(turquia);add(nuevaYork);add(iran);add(madagascar);add(argentina);add(israel);add(rusia);add(borneo);add(california);add(taymir);add(aral);add(siberia);add(canada);
+            add(sahara);add(yukon);add(uruguay);add(groenlandia);add(japon);add(sumatra);add(alaska);add(brasil);add(gobi);add(italia);
+            add(espania);add(colombia);add(suecia);add(sudafrica);add(arabia);add(india);add(java);add(mexico);add(peru);add(alemania);add(china);add(labrador);add(islandia);add(malasia);add(terranova); }};
 
-        game.addCountryToPlayer(alemania,secondPlayerNumber);
+        for(int i = 0 ; i < (allCountries.size()/2); i++){
+            game.addCountryToPlayer(allCountries.get(i), firstPlayerNumber);
+        }
+        for(int i = (allCountries.size()/2) ; i < (allCountries.size()); i++){
+            game.addCountryToPlayer(allCountries.get(i), secondPlayerNumber);
+        }
 
-        game.playersSetArmies(5, islandia);
-        game.regroup(firstPlayerNumber, islandia, polonia, armyToRegroup);
-
-        assertEquals(false, game.correctAmountOfArmyInCountry(firstPlayerNumber, islandia, expectedAmountIslandia));
-        assertEquals(false, game.correctAmountOfArmyInCountry(firstPlayerNumber, polonia, expectedAmountPoland));
+        game.playerSetArmies(firstPlayerNumber,2,tartaria);
+        assertThrows(InvalidRegroup.class, () -> game.regroup(firstPlayerNumber, tartaria, turquia, armyToRegroup));
     }
 
     @Test
-    public void correctRegroupOfPlayer() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
+    public void playerTriesToRegroupMoreArmiesThanTheAmountOfTheCountry() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
         Integer numberOfPlayers = 2;
-        Integer armyToRegroup = 3;
+        Integer armyToRegroup = 2;
+        Game game = new Game(numberOfPlayers);
 
-        Integer expectedAmountIslandia = 3;
-        Integer expectedAmountSuecia = 4;
+        Country francia = new Country("Francia");Country granBretania = new Country("Gran Bretania");Country tartaria = new Country("Tartaria");Country mongolia = new Country("Mongolia");Country zaire = new Country("Zaire");Country polonia = new Country("Polonia");Country oregon = new Country("Oregon");Country etiopia = new Country("Etiopia");Country chile = new Country("Chile");Country australia = new Country("Australia");Country kamtchatka = new Country("Kamtchatka");Country egipto = new Country("Egipto");
+        Country turquia = new Country("Turquia");Country nuevaYork = new Country("Nueva York");Country terranova = new Country("Terranova");Country iran = new Country("Iran");Country madagascar = new Country("Madagascar");Country argentina = new Country("Argentina");
+        Country israel = new Country("Israel");Country rusia = new Country("Rusia");Country borneo = new Country("Borneo");Country california = new Country("California");Country taymir = new Country("Taymir");Country aral = new Country("Aral");Country siberia = new Country("Siberia");Country canada = new Country("Canada");
+        Country sahara = new Country("Sahara");Country yukon = new Country("Yukon");Country uruguay = new Country("Uruguay");Country groenlandia  = new Country("Groenlandia");Country japon = new Country("Japon");Country sumatra = new Country("Sumatra");
+        Country alaska = new Country("Alaska");Country brasil = new Country("Brasil");Country gobi = new Country("Gobi");Country italia = new Country("Italia");Country espania = new Country("Espania");Country colombia = new Country("Colombia");
+        Country suecia = new Country("Suecia");Country sudafrica = new Country("Sudafrica");Country arabia = new Country("Arabia");Country india = new Country("India");Country java = new Country("Java");Country mexico = new Country("Mexico");
+        Country peru = new Country("Peru");Country alemania = new Country("Alemania");Country china = new Country("China");Country labrador = new Country("Labrador");Country islandia = new Country("Islandia");Country malasia = new Country("Malasia");
+
+        ArrayList<Country> allCountries = new ArrayList<>()
+        {{ add(francia); add(granBretania); add(tartaria);add(mongolia);add(zaire);add(polonia);add(oregon);add(etiopia);add(chile);add(australia);add(kamtchatka);
+            add(egipto);add(turquia);add(nuevaYork);add(iran);add(madagascar);add(argentina);add(israel);add(rusia);add(borneo);add(california);add(taymir);add(aral);add(siberia);add(canada);
+            add(sahara);add(yukon);add(uruguay);add(groenlandia);add(japon);add(sumatra);add(alaska);add(brasil);add(gobi);add(italia);
+            add(espania);add(colombia);add(suecia);add(sudafrica);add(arabia);add(india);add(java);add(mexico);add(peru);add(alemania);add(china);add(labrador);add(islandia);add(malasia);add(terranova); }};
+
+        for(int i = 0 ; i < (allCountries.size()/2); i++){
+            game.addCountryToPlayer(allCountries.get(i), firstPlayerNumber);
+        }
+        for(int i = (allCountries.size()/2) ; i < (allCountries.size()); i++){
+            game.addCountryToPlayer(allCountries.get(i), secondPlayerNumber);
+        }
+        assertThrows(InvalidRegroup.class, () -> game.regroup(firstPlayerNumber, tartaria, turquia, armyToRegroup));
+    }
+
+    @Test
+    public void playerTriesToRegroupWithACountryNotDominatedByThem() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
+        Integer numberOfPlayers = 2;
+
+        Integer armyToRegroup = 2;
 
         Game game = new Game(numberOfPlayers);
 
-        Country islandia = new Country("Islandia");
-        Country suecia = new Country("Suecia");
-        Country polonia = new Country("Polonia");
+        Country francia = new Country("Francia");Country granBretania = new Country("Gran Bretania");Country tartaria = new Country("Tartaria");Country mongolia = new Country("Mongolia");Country zaire = new Country("Zaire");Country polonia = new Country("Polonia");Country oregon = new Country("Oregon");Country etiopia = new Country("Etiopia");Country chile = new Country("Chile");Country australia = new Country("Australia");Country kamtchatka = new Country("Kamtchatka");Country egipto = new Country("Egipto");
+        Country turquia = new Country("Turquia");Country nuevaYork = new Country("Nueva York");Country terranova = new Country("Terranova");Country iran = new Country("Iran");Country madagascar = new Country("Madagascar");Country argentina = new Country("Argentina");
+        Country israel = new Country("Israel");Country rusia = new Country("Rusia");Country borneo = new Country("Borneo");Country california = new Country("California");Country taymir = new Country("Taymir");Country aral = new Country("Aral");Country siberia = new Country("Siberia");Country canada = new Country("Canada");
+        Country sahara = new Country("Sahara");Country yukon = new Country("Yukon");Country uruguay = new Country("Uruguay");Country groenlandia  = new Country("Groenlandia");Country japon = new Country("Japon");Country sumatra = new Country("Sumatra");
+        Country alaska = new Country("Alaska");Country brasil = new Country("Brasil");Country gobi = new Country("Gobi");Country italia = new Country("Italia");Country espania = new Country("Espania");Country colombia = new Country("Colombia");
+        Country suecia = new Country("Suecia");Country sudafrica = new Country("Sudafrica");Country arabia = new Country("Arabia");Country india = new Country("India");Country java = new Country("Java");Country mexico = new Country("Mexico");
+        Country peru = new Country("Peru");Country alemania = new Country("Alemania");Country china = new Country("China");Country labrador = new Country("Labrador");Country islandia = new Country("Islandia");Country malasia = new Country("Malasia");
 
-        game.addCountryToPlayer(islandia,firstPlayerNumber);
-        game.addCountryToPlayer(suecia,firstPlayerNumber);
-        game.addCountryToPlayer(polonia,firstPlayerNumber);
+        ArrayList<Country> allCountries = new ArrayList<>()
+        {{ add(francia); add(granBretania); add(tartaria);add(mongolia);add(zaire);add(polonia);add(oregon);add(etiopia);add(chile);add(australia);add(kamtchatka);
+            add(egipto);add(turquia);add(nuevaYork);add(iran);add(madagascar);add(argentina);add(israel);add(rusia);add(borneo);add(california);add(taymir);add(aral);add(siberia);add(canada);
+            add(sahara);add(yukon);add(uruguay);add(groenlandia);add(japon);add(sumatra);add(alaska);add(brasil);add(gobi);add(italia);
+            add(espania);add(colombia);add(suecia);add(sudafrica);add(arabia);add(india);add(java);add(mexico);add(peru);add(alemania);add(china);add(labrador);add(islandia);add(malasia);add(terranova); }};
 
-        game.playersSetArmies(5, islandia);
-        game.regroup(firstPlayerNumber, islandia, suecia, armyToRegroup);
-
-        assertEquals(true, game.correctAmountOfArmyInCountry(firstPlayerNumber, islandia, expectedAmountIslandia));
-        assertEquals(true, game.correctAmountOfArmyInCountry(firstPlayerNumber, suecia, expectedAmountSuecia));
-
-
+        for(int i = 0 ; i < (allCountries.size()/2); i++){
+            game.addCountryToPlayer(allCountries.get(i), firstPlayerNumber);
+        }
+        for(int i = (allCountries.size()/2) ; i < (allCountries.size()); i++){
+            game.addCountryToPlayer(allCountries.get(i), secondPlayerNumber);
+        }
+        assertThrows(InvalidRegroup.class, () -> game.regroup(firstPlayerNumber, tartaria, italia, armyToRegroup));
     }
+
     @Test
-    public void withRounds() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
+    public void playerDominatesAContinentAndAddsArmyToIt() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException, InvalidAttack, InvalidPlacement {
         Integer numberOfPlayers = 2;
         Game game = new Game(numberOfPlayers);
 
-        game.play();
+        Country francia = new Country("Francia");Country granBretania = new Country("Gran Bretania");Country tartaria = new Country("Tartaria");Country mongolia = new Country("Mongolia");Country zaire = new Country("Zaire");Country polonia = new Country("Polonia");Country oregon = new Country("Oregon");Country etiopia = new Country("Etiopia");Country chile = new Country("Chile");Country australia = new Country("Australia");Country kamtchatka = new Country("Kamtchatka");Country egipto = new Country("Egipto");
+        Country turquia = new Country("Turquia");Country nuevaYork = new Country("Nueva York");Country terranova = new Country("Terranova");Country iran = new Country("Iran");Country madagascar = new Country("Madagascar");Country argentina = new Country("Argentina");
+        Country israel = new Country("Israel");Country rusia = new Country("Rusia");Country borneo = new Country("Borneo");Country california = new Country("California");Country taymir = new Country("Taymir");Country aral = new Country("Aral");Country siberia = new Country("Siberia");Country canada = new Country("Canada");
+        Country sahara = new Country("Sahara");Country yukon = new Country("Yukon");Country uruguay = new Country("Uruguay");Country groenlandia  = new Country("Groenlandia");Country japon = new Country("Japon");Country sumatra = new Country("Sumatra");
+        Country alaska = new Country("Alaska");Country brasil = new Country("Brasil");Country gobi = new Country("Gobi");Country italia = new Country("Italia");Country espania = new Country("Espania");Country colombia = new Country("Colombia");
+        Country suecia = new Country("Suecia");Country sudafrica = new Country("Sudafrica");Country arabia = new Country("Arabia");Country india = new Country("India");Country java = new Country("Java");Country mexico = new Country("Mexico");
+        Country peru = new Country("Peru");Country alemania = new Country("Alemania");Country china = new Country("China");Country labrador = new Country("Labrador");Country islandia = new Country("Islandia");Country malasia = new Country("Malasia");
 
-        assertNotEquals(null, game.winner());
-        assertEquals(true, game.isWinner(firstPlayerNumber));
+        ArrayList<Country> allCountries = new ArrayList<>()
+        {{ add(francia); add(granBretania); add(tartaria);add(mongolia);add(zaire);add(polonia);add(oregon);add(etiopia);add(chile);add(australia);add(kamtchatka);
+            add(egipto);add(turquia);add(nuevaYork);add(iran);add(madagascar);add(argentina);add(israel);add(rusia);add(borneo);add(california);add(taymir);add(aral);add(siberia);add(canada);
+            add(sahara);add(yukon);add(uruguay);add(groenlandia);add(japon);add(sumatra);add(alaska);add(brasil);add(gobi);add(italia);
+            add(espania);add(colombia);add(suecia);add(sudafrica);add(arabia);add(india);add(java);add(mexico);add(peru);add(alemania);add(china);add(labrador);add(islandia);add(malasia);add(terranova); }};
+
+        for(int i = 0 ; i < (allCountries.size()/2); i++){
+            game.addCountryToPlayer(allCountries.get(i), firstPlayerNumber);
+        }
+        for(int i = (allCountries.size()/2) ; i < (allCountries.size()); i++){
+            game.addCountryToPlayer(allCountries.get(i), secondPlayerNumber);
+        }
+        Integer numberOfArmy = 34;
+        game.playerSetArmies(firstPlayerNumber,7,australia);
+        game.playerSetArmies(secondPlayerNumber,1,sumatra);
+        game.playerSetArmies(secondPlayerNumber,1,java);
+
+
+        game.attack(firstPlayerNumber,australia,sumatra,3);
+        game.attack(firstPlayerNumber,australia,java,3);
+
+        HashMap<Country,Integer> armiesToAdd = new HashMap<>();
+        armiesToAdd.put(francia,2);
+
+        game.playerDominatedContinent(firstPlayerNumber,armiesToAdd);
+
+        assertTrue(game.correctAmountOfArmy(firstPlayerNumber,numberOfArmy));
     }
-/*
+    //terminan test de regroup
+
     @Test
-    public void anotherWithRounds() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
-        Integer numberOfPlayers = 3;
-        Game game = new Game(numberOfPlayers);
-
-        game.play();
-        assertNotEquals(null, game.winner());
-        //assertEquals(true, game.winner() == null); //es que un jugador se quedo sin fichas
-    }
-*/
-    @Test
-    public void playerDominatesAContinentAndAddsArmyToIt() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
-        Country zaire = new Country("Zaire");
-        Country etiopia = new Country("Etiopia");
-        Country egipto = new Country("Egipto");
-        Country madagascar = new Country("Madagascar");
-        Country sahara = new Country("Sahara");
-        Country sudafrica = new Country("Sudafrica");
-
-        Integer numberOfArmy = 9;
-
+    public void onlyFirstPlayerAttacksAndWinsGame() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException, InvalidAttack {
         Integer numberOfPlayers = 2;
         Game game = new Game(numberOfPlayers);
 
-        game.addCountryToPlayer(zaire,firstPlayerNumber);
-        game.addCountryToPlayer(etiopia,firstPlayerNumber);
-        game.addCountryToPlayer(egipto,firstPlayerNumber);
-        game.addCountryToPlayer(madagascar,firstPlayerNumber);
-        game.addCountryToPlayer(sahara,firstPlayerNumber);
-        game.addCountryToPlayer(sudafrica,firstPlayerNumber);
+        Country francia = new Country("Francia");Country granBretania = new Country("Gran Bretania");Country tartaria = new Country("Tartaria");Country mongolia = new Country("Mongolia");Country zaire = new Country("Zaire");Country polonia = new Country("Polonia");Country oregon = new Country("Oregon");Country etiopia = new Country("Etiopia");Country chile = new Country("Chile");Country australia = new Country("Australia");Country kamtchatka = new Country("Kamtchatka");Country egipto = new Country("Egipto");
+        Country turquia = new Country("Turquia");Country nuevaYork = new Country("Nueva York");Country terranova = new Country("Terranova");Country iran = new Country("Iran");Country madagascar = new Country("Madagascar");Country argentina = new Country("Argentina");
+        Country israel = new Country("Israel");Country rusia = new Country("Rusia");Country borneo = new Country("Borneo");Country california = new Country("California");Country taymir = new Country("Taymir");Country aral = new Country("Aral");Country siberia = new Country("Siberia");Country canada = new Country("Canada");
+        Country sahara = new Country("Sahara");Country yukon = new Country("Yukon");Country uruguay = new Country("Uruguay");Country groenlandia  = new Country("Groenlandia");Country japon = new Country("Japon");Country sumatra = new Country("Sumatra");
+        Country alaska = new Country("Alaska");Country brasil = new Country("Brasil");Country gobi = new Country("Gobi");Country italia = new Country("Italia");Country espania = new Country("Espania");Country colombia = new Country("Colombia");
+        Country suecia = new Country("Suecia");Country sudafrica = new Country("Sudafrica");Country arabia = new Country("Arabia");Country india = new Country("India");Country java = new Country("Java");Country mexico = new Country("Mexico");
+        Country peru = new Country("Peru");Country alemania = new Country("Alemania");Country china = new Country("China");Country labrador = new Country("Labrador");Country islandia = new Country("Islandia");Country malasia = new Country("Malasia");
 
-        Continent africa = game.continentDominatedByPlayer(game.getPlayer(firstPlayerNumber));
-        assertTrue(africa.correctAmountOfArmyInCountries(numberOfArmy));
+        ArrayList<Country> allCountries = new ArrayList<>()
+        {{ add(francia); add(granBretania); add(tartaria);add(mongolia);add(zaire);add(polonia);add(oregon);add(etiopia);add(chile);add(australia);add(kamtchatka);
+            add(egipto);add(turquia);add(nuevaYork);add(iran);add(madagascar);add(argentina);add(israel);add(rusia);add(borneo);add(california);add(taymir);add(aral);add(siberia);add(canada);
+            add(sahara);add(yukon);add(uruguay);add(groenlandia);add(japon);add(sumatra);add(alaska);add(brasil);add(gobi);add(italia);
+            add(espania);add(colombia);add(suecia);add(sudafrica);add(arabia);add(india);add(java);add(mexico);add(peru);add(alemania);add(china);add(labrador);add(islandia);add(malasia);add(terranova); }};
+
+        for(int i = 0 ; i < (allCountries.size()/2); i++){
+            game.addCountryToPlayer(allCountries.get(i), firstPlayerNumber);
+        }
+        for(int i = (allCountries.size()/2) ; i < (allCountries.size()); i++){
+            game.addCountryToPlayer(allCountries.get(i), secondPlayerNumber);
+        }
+
+        game.playerSetArmies(firstPlayerNumber,7,australia);
+        game.playerSetArmies(secondPlayerNumber,1,sumatra);
+        game.playerSetArmies(secondPlayerNumber,1,java);
+
+        game.playerSetArmies(firstPlayerNumber,7,nuevaYork);
+        game.playerSetArmies(secondPlayerNumber,1,groenlandia);
+        game.playerSetArmies(secondPlayerNumber,1,terranova);
+
+        game.playerSetArmies(firstPlayerNumber,7,mongolia);
+        game.playerSetArmies(secondPlayerNumber,1,china);
+
+        game.attack(firstPlayerNumber,australia,sumatra,3);
+        game.attack(firstPlayerNumber,australia,java,3);
+
+        game.attack(firstPlayerNumber,nuevaYork,groenlandia,3);
+        game.attack(firstPlayerNumber,nuevaYork,terranova,3);
+
+        game.attack(firstPlayerNumber,mongolia,china,3);
+
+        assertEquals(game.getPlayer(firstPlayerNumber), game.winner());
     }
+
+    @Test
+    public void playerAddsArmiesInRegroupRound() throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException, InvalidNumberOfPlayers, IOException, InvalidRegroup {
+        Integer numberOfPlayers = 2;
+        Integer expectedAmount = 36;
+        Game game = new Game(numberOfPlayers);
+
+        Country francia = new Country("Francia");Country granBretania = new Country("Gran Bretania");Country tartaria = new Country("Tartaria");Country mongolia = new Country("Mongolia");Country zaire = new Country("Zaire");Country polonia = new Country("Polonia");Country oregon = new Country("Oregon");Country etiopia = new Country("Etiopia");Country chile = new Country("Chile");Country australia = new Country("Australia");Country kamtchatka = new Country("Kamtchatka");Country egipto = new Country("Egipto");
+        Country turquia = new Country("Turquia");Country nuevaYork = new Country("Nueva York");Country terranova = new Country("Terranova");Country iran = new Country("Iran");Country madagascar = new Country("Madagascar");Country argentina = new Country("Argentina");
+        Country israel = new Country("Israel");Country rusia = new Country("Rusia");Country borneo = new Country("Borneo");Country california = new Country("California");Country taymir = new Country("Taymir");Country aral = new Country("Aral");Country siberia = new Country("Siberia");Country canada = new Country("Canada");
+        Country sahara = new Country("Sahara");Country yukon = new Country("Yukon");Country uruguay = new Country("Uruguay");Country groenlandia  = new Country("Groenlandia");Country japon = new Country("Japon");Country sumatra = new Country("Sumatra");
+        Country alaska = new Country("Alaska");Country brasil = new Country("Brasil");Country gobi = new Country("Gobi");Country italia = new Country("Italia");Country espania = new Country("Espania");Country colombia = new Country("Colombia");
+        Country suecia = new Country("Suecia");Country sudafrica = new Country("Sudafrica");Country arabia = new Country("Arabia");Country india = new Country("India");Country java = new Country("Java");Country mexico = new Country("Mexico");
+        Country peru = new Country("Peru");Country alemania = new Country("Alemania");Country china = new Country("China");Country labrador = new Country("Labrador");Country islandia = new Country("Islandia");Country malasia = new Country("Malasia");
+
+        ArrayList<Country> allCountries = new ArrayList<>()
+        {{ add(francia); add(granBretania); add(tartaria);add(mongolia);add(zaire);add(polonia);add(oregon);add(etiopia);add(chile);add(australia);add(kamtchatka);
+            add(egipto);add(turquia);add(nuevaYork);add(iran);add(madagascar);add(argentina);add(israel);add(rusia);add(borneo);add(california);add(taymir);add(aral);add(siberia);add(canada);
+            add(sahara);add(yukon);add(uruguay);add(groenlandia);add(japon);add(sumatra);add(alaska);add(brasil);add(gobi);add(italia);
+            add(espania);add(colombia);add(suecia);add(sudafrica);add(arabia);add(india);add(java);add(mexico);add(peru);add(alemania);add(china);add(labrador);add(islandia);add(malasia);add(terranova); }};
+
+        for(int i = 0 ; i < (allCountries.size()/2); i++){
+            game.addCountryToPlayer(allCountries.get(i), firstPlayerNumber);
+        }
+        for(int i = (allCountries.size()/2) ; i < (allCountries.size()); i++){
+            game.addCountryToPlayer(allCountries.get(i), secondPlayerNumber);
+        }
+
+        HashMap<Country,Integer> armiesToAdd = new HashMap<>();
+        armiesToAdd.put(francia,9);
+        armiesToAdd.put(tartaria,1);
+        armiesToAdd.put(zaire,1);
+
+        game.addArmiesInRegroupRound(firstPlayerNumber,armiesToAdd);
+        assertTrue(game.correctAmountOfArmy(firstPlayerNumber, expectedAmount));
+    }
+
 }

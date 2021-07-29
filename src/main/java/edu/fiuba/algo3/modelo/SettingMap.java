@@ -17,7 +17,7 @@ public class SettingMap {
         addedArmies.add(new Continent("America del norte",5));
         addedArmies.add(new Continent("America del sur",3));
         addedArmies.add(new Continent("Africa",3));
-        addedArmies.add(new Continent("Oceania",3));
+        addedArmies.add(new Continent("Oceania",2));
     }
 
     public void addContinent(Continent addingContinent, Country newCountry) {

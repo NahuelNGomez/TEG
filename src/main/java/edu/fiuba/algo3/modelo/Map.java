@@ -12,7 +12,6 @@ public class Map {
     private ArrayList<Continent> continents;
     private static Map map;
     private SettingMap set;
-    private ArmyMover armyMover;
 
     private Map() throws IOException {
         countries = new HashMap<Country, ArrayList<Country>>();
@@ -97,7 +96,7 @@ public class Map {
         return (newContinent.sameNumberOfCountries(expectedAmount));
     }
 
-    public void getCountriesAndBorders() throws IOException {
+    public void getCountriesAndBorders(){
         countries = set.getCountriesAndBorders();
         continents = set.getContinents();
     }
@@ -108,18 +107,11 @@ public class Map {
         }
     }
 
-    public void regroup(Country country1, Country country2, Integer armyToRegroup) throws NonExistentCountry {
-        Country mapCountry1 = searchKeyCountryInMap(country1);
-        Country mapCountry2 = searchKeyCountryInMap(country2);
-
-        ArmyMover.moveArmy(mapCountry1, mapCountry2, armyToRegroup);
-    }
-
-    public boolean checkIfAttackerDominatedAContinent(Player player) throws EmptyCountryParameterException {
+    public boolean checkIfAttackerDominatedAContinent(Player player){
         return (continentDominatedByPlayer(player) != null);
     }
 
-    public Continent continentDominatedByPlayer(Player player) throws EmptyCountryParameterException {
+    public Continent continentDominatedByPlayer(Player player){
         return player.dominatedContinent(continents);
     }
 }

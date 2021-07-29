@@ -3,12 +3,11 @@ package edu.fiuba.algo3.modelo;
 import edu.fiuba.algo3.modelo.exceptions.*;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class Player {
     private Color color;
     private ArrayList <Country>dominatedCountries;
-    private static ArrayList<CountryCard> ownCountryCards;
+    private ArrayList<CountryCard> ownCountryCards;
 
     public Player(Color color) {
         this.color = color;
@@ -16,9 +15,8 @@ public class Player {
         ownCountryCards= new ArrayList();
     }
 
-    public static void addCountryCard(CountryCard countryCard) {
+    public void addCountryCard(CountryCard countryCard) {
         ownCountryCards.add(countryCard);
-
     }
 
     private void checkValidCountryParameter(Country country) throws EmptyCountryParameterException {
@@ -31,15 +29,6 @@ public class Player {
         if(!dominatedCountries.contains(country)){
             throw new NonExistentCountry();
         }
-    }
-
-    public Country getRandomOwnCountry(){
-        Random random = new Random();
-        return (dominatedCountries.get(random.nextInt(dominatedCountries.size())));
-    }
-
-    public Integer amountOfDominatedCountries(){
-        return dominatedCountries.size();
     }
 
     public void addCountry(Country country) throws EmptyCountryParameterException {
@@ -81,48 +70,15 @@ public class Player {
     public boolean canInvade(Country country, int amountDice) throws EmptyCountryParameterException, NonExistentCountry {
         checkValidCountryParameter(country);
         checkPlayerOwnsCountry(country);
-
-        if(country.canInvade(amountDice)){
-            return true;
-        }
-        return false;
+        return (country.canInvade(amountDice));
     }
 
     public void removeCountry(Country country){
         dominatedCountries.remove(country);
     }
 
-    public void firstPlacementRound(Integer maxPlacement) { //adding to the first country all the army
-        //Random rand = new Random();
-
-        Country countryToAdd = dominatedCountries.get(0);
-        countryToAdd.addArmy(maxPlacement);
-
-        /*while(maxPlacement > 0){ //Countries and amount of army is chosen randomly
-
-            Integer randIndex = rand.nextInt(dominatedCountries.size());
-            Integer randIndex2 = rand.nextInt(maxPlacement) + 1;
-
-            Country countryToAdd = dominatedCountries.get(randIndex);
-            countryToAdd.addArmy(randIndex2);
-
-            maxPlacement -= randIndex2;
-        }*/
-    }
-
     public boolean correctAmountOfCountryCards(int expectedAmount){
         return (expectedAmount == ownCountryCards.size());
-    }
-
-
-    public void setDominatedCountries(ArrayList<Country> continent) throws EmptyCountryParameterException {
-        for(Country country : continent){
-            addCountry(country);
-        }
-    }
-
-    public Country getADominatedCountry() {
-        return(dominatedCountries.get(0));
     }
 
     public boolean correctAmountOfCountries( Integer expectedAmount){
@@ -138,7 +94,7 @@ public class Player {
         for(Country eachCountry: dominatedCountries){
             amount = amount + eachCountry.getArmyAmount();
         }
-        return (amount == expectedAmount);
+        return (amount.equals(expectedAmount));
     }
 
     public boolean dominatedCountry(Country country) throws EmptyCountryParameterException {
@@ -165,7 +121,14 @@ public class Player {
         return null;
     }
 
-    public boolean hasCountriesLeft() {
-        return (amountOfDominatedCountries() != 0);
+    public Integer amountOfDominatedCountries(){
+        return dominatedCountries.size();
+    }
+
+    public Integer amountOfArmiesToAddInRegroupRound() {
+        if((1 <= dominatedCountries.size()) && (dominatedCountries.size() <= 6)){
+            return 3;
+        }
+        return (dominatedCountries.size() / 2);
     }
 }

@@ -5,26 +5,27 @@ import edu.fiuba.algo3.modelo.exceptions.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Random;
-
 
 public class Game {
     private Map map;
     //private Battlefield battlefield = new Battlefield();
     private MockBattlefield battlefield = new MockBattlefield(); //Battlefield Mock for the Dice
-
     private ArrayList<Player> players = new ArrayList<Player>();
-    private static ArrayList<ObjectiveCard> objectiveCardsCards = new ArrayList<ObjectiveCard>();
-    private static ArrayList<CountryCard> countryCards = new ArrayList<CountryCard>();
+    private Player winner;
+    private SettingGame set;
 
-    private ArrayList<Round> rounds;
-    private Round placementRound = new PlacementRound(players,map);
-    private Player winner = null;
-    private SettingGame set = new SettingGame();
+    private PlacementRound placementRound;
+    private AttackRound attackRound;
+    private RegroupRound regroupRound;
+
+    private ArrayList<CountryCard> countryCards = new ArrayList<CountryCard>();
 
     private ArrayList<Color> colorsArray;
-    private static String[] colors = {"07bb", "cc3311", "ee7733", "009988", "ee3377", "000000"};
+    private String[] colors = {"07bb", "cc3311", "ee7733", "009988", "ee3377", "000000"};
 
+    //private static ArrayList<ObjectiveCard> objectiveCardsCards = new ArrayList<ObjectiveCard>();
 
     public Game(int numberOfPlayers) throws InvalidNumberOfPlayers, IOException {
         if(numberOfPlayers <= 1 || numberOfPlayers > 6){
@@ -40,13 +41,12 @@ public class Game {
         }
         map = Map.get();
         map.clean();
+        set = new SettingGame();
+        if(countryCards.size() < 50) setCountryCards();
 
-        rounds = new ArrayList<>();
-
-        rounds.add(new AttackRound(players,map));
-        rounds.add(new RegroupRound(players,map));
-
-        if(countryCards.size() < 50) getCountryCards();
+        placementRound = new PlacementRound(players,map);
+        attackRound = new AttackRound(players,map,countryCards);
+        regroupRound = new RegroupRound(players,map);
     }
 
     private void checkValidCountryParameter(Country country) throws EmptyCountryParameterException {
@@ -55,39 +55,25 @@ public class Game {
         }
     }
 
-    private void checkSearchedPlayer(Integer playerNumber) throws NonExistentPlayer {
+    public Player getPlayer(Integer playerNumber) throws NonExistentPlayer {
         if( (playerNumber > players.size()) || (playerNumber < 1) ) {
             throw new NonExistentPlayer();
         }
-    }
-
-    public Player getPlayer(Integer playerNumber) throws NonExistentPlayer {
-        checkSearchedPlayer(playerNumber);
         return players.get(playerNumber - 1);
     }
 
-    public void addCountryToPlayer(Country country , Integer playerNumber) throws NonExistentPlayer, EmptyCountryParameterException, NonExistentCountry {
-        checkValidCountryParameter(country);
-        Country mapCountry = map.searchKeyCountryInMap(country);
-        Player player =  getPlayer(playerNumber);
-        player.addCountry(mapCountry);
-
-        if (checkIfAttackerDominatedAContinent(player)) {
-            Continent dominatedByPlayer = map.continentDominatedByPlayer(player);
-            player.addArmyInCountry(dominatedByPlayer.getAmountOfArmyWhenDominated(), mapCountry);
-        }
-    }
 
     private boolean checkIfAttackerDominatedAContinent(Player player) throws EmptyCountryParameterException {
         return map.checkIfAttackerDominatedAContinent(player);
     }
 
-    public Continent continentDominatedByPlayer(Player player) throws EmptyCountryParameterException {
-        return map.continentDominatedByPlayer(player);
+    public void playerSetArmies(Integer numberPlayer, int amount, Country country) throws EmptyCountryParameterException, NonExistentPlayer, NonExistentCountry {
+        Country mapCountry = map.searchKeyCountryInMap(country);
+        Player player = getPlayer(numberPlayer);
+        player.addArmyInCountry(amount, mapCountry);
     }
 
-
-    private void getCountryCards(){
+    private void setCountryCards(){
         countryCards = set.getCountryCards();
     }
 
@@ -121,109 +107,47 @@ public class Game {
     }
 
 
-    private Player searchCountryOwner(Country country) throws EmptyCountryParameterException, NonExistentPlayer, NonExistentCountry {
-        Country mapCountry = map.searchKeyCountryInMap(country);
-
-        checkValidCountryParameter(mapCountry);
-        Player owner = null;
-        for( Player player : players ){
-            if(player.isSearchedCountry(mapCountry)){
-                owner = player;
-            }
-        }
-        if(owner == null) throw new NonExistentPlayer();
-        return owner;
-    }
-
-
-    public void playersSetArmies(int amount, Country country) throws EmptyCountryParameterException, NonExistentPlayer, NonExistentCountry {
-        Country mapCountry = map.searchKeyCountryInMap(country);
-        Player player = searchCountryOwner(mapCountry);
-        player.addArmyInCountry(amount, mapCountry);
-    }
-
-    private boolean validateBorderingCountry(Country attackingCountry, Country defendingCountry) throws EmptyCountryParameterException, NonExistentCountry {
-        Country attackCountry = map.searchKeyCountryInMap(attackingCountry);
-        Country defendCountry = map.searchKeyCountryInMap(defendingCountry);
-
-        return map.validateBorderingCountry(attackCountry, defendCountry);
-    }
-
     //ROUNDS
+
+    public void addArmiesInRegroupRound(Integer playerNumber, HashMap<Country, Integer> armiesToAdd) throws NonExistentPlayer, InvalidRegroup, NonExistentCountry, EmptyCountryParameterException {
+        regroupRound.addArmiesInRound(getPlayer(playerNumber),armiesToAdd);
+    }
+
+    public void regroup(Integer playerNumber, Country firstCountry, Country secondCountry, Integer armyToRegroup) throws EmptyCountryParameterException, NonExistentCountry, NonExistentPlayer, InvalidRegroup {
+        checkValidCountryParameter(firstCountry);
+        checkValidCountryParameter(secondCountry);
+
+        Player player = getPlayer(playerNumber);
+        regroupRound.regroup(player,firstCountry,secondCountry,armyToRegroup);
+    }
+
+    public void attack(Integer numberAttackerPlayer, Country attackerCountry, Country defenderCountry, Integer amountOfAttackerDice) throws NonExistentPlayer, EmptyCountryParameterException, NonExistentCountry, InvalidAttack {
+        checkValidCountryParameter(attackerCountry);
+        checkValidCountryParameter(defenderCountry);
+        winner = attackRound.attack(getPlayer(numberAttackerPlayer),attackerCountry,defenderCountry,amountOfAttackerDice,numberAttackerPlayer-1);
+    }
+
+    public void playerDominatedContinent(Integer playerNumber,HashMap<Country,Integer> armiesToAdd) throws NonExistentPlayer, EmptyCountryParameterException, InvalidPlacement, NonExistentCountry {
+        Player player = getPlayer(playerNumber);
+        attackRound.playerDominatedAContinent(player,armiesToAdd);
+    }
+
+    public void placingFiveArmiesInPlacementRound(Integer numberPlayer, HashMap<Country,Integer> armiesToAdd) throws InvalidPlacement, NonExistentCountry, EmptyCountryParameterException, NonExistentPlayer {
+        placementRound.placingFiveArmiesInPlacementRound(getPlayer(numberPlayer),armiesToAdd);
+    }
+
+    public void placingThreeArmiesInPlacementRound(Integer numberPlayer, HashMap<Country, Integer> armiesToAdd) throws InvalidPlacement, NonExistentCountry, EmptyCountryParameterException, NonExistentPlayer {
+        placementRound.placingThreeArmiesInPlacementRound(getPlayer(numberPlayer),armiesToAdd);
+    }
+
+
+    ///////////////////////////////////////////////////// PARA PRUEBAS  /////////////////////////////////////////////
     public Player winner(){
         return winner;
     }
 
-    public boolean isWinner(Integer playerNumber) throws NonExistentPlayer {
-        return (winner == getPlayer(playerNumber));
-    }
-
-    public Player play() throws NonExistentCountry, EmptyCountryParameterException, NonExistentPlayer, IOException {
-        int firstPlacement = 5;
-        int secondPlacement = 3;
-
-        dealCountryCards();
-        placementRound(firstPlacement);
-        placementRound(secondPlacement);
-
-        int i = 0;
-        //Player loser = null;
-
-        while (winner == null && playersStillHaveCountries()) {
-            if (i >= (rounds.size())) {
-                i = 0;
-            }
-            winner = rounds.get(i).startRound();
-            /*winner = attackRound();
-            regroupRound();*/
-
-            /*for(Player player: players){
-                if(player.correctAmountOfCountries(0)){
-                    loser = player;
-                }
-            }*/
-            i++;
-        }
-        //if(loser != null) players.remove(loser);
-        return winner;
-    }
-
-    private void setUpRound() {
-
-    }
-
-    public void regroup(Integer playerNumber, Country country1, Country country2, Integer armyToRegroup) throws EmptyCountryParameterException, NonExistentCountry, NonExistentPlayer {
-        checkValidCountryParameter(country1);
-        checkValidCountryParameter(country2);
-
-        Country mapCountry1 = map.searchKeyCountryInMap(country1);
-        Country mapCountry2 = map.searchKeyCountryInMap(country2);
-
-        if(checkRegroup(mapCountry1, mapCountry2, playerNumber)){
-            mapCountry1.removeArmy(armyToRegroup);
-            mapCountry2.addArmy(armyToRegroup);
-        }
-    }
-
-    private boolean checkRegroup(Country country1, Country country2, Integer firstPlayerNumber) throws NonExistentCountry, EmptyCountryParameterException, NonExistentPlayer {
-        Player player = getPlayer(firstPlayerNumber);
-        return (player.dominatedCountry(country1) && player.dominatedCountry(country2) && map.validateBorderingCountry(country1,country2));
-    }
-
-
-    public Player attackRound() throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
-        return rounds.get(0).startRound();
-    }
-
-    public void placementRound(int maxPlacement) throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
-        placementRound.firstRounds(maxPlacement);
-    }
-
-    public boolean playersStillHaveCountries(){
-        for( Player player : players){
-            if(player.amountOfDominatedCountries() == 0) return false;
-        }
-        return true;
+    public Continent continentDominatedByPlayer(Integer playerNumber) throws EmptyCountryParameterException, NonExistentPlayer {
+        return map.continentDominatedByPlayer(getPlayer(playerNumber));
     }
 
     public boolean playerDominatedCountry(Integer playerNumber, Country country) throws NonExistentPlayer, EmptyCountryParameterException, NonExistentCountry {
@@ -238,34 +162,30 @@ public class Game {
     public boolean correctAmountOfArmy(Integer firstPlayerNumber, Integer expectedAmount) throws NonExistentPlayer {
         Player player = getPlayer(firstPlayerNumber);
         return (player.correctAmountOfArmy(expectedAmount));
-
-    }
-
-    public void addContinentToPlayer(Integer firstPlayerNumber, Continent continent) throws NonExistentPlayer, NonExistentContinent, EmptyCountryParameterException, EmptyContinentParameterException {
-        checkValidContinentParameter(continent);
-        getPlayer(firstPlayerNumber).setDominatedCountries(map.getContinent(continent));
-    }
-
-    private void checkValidContinentParameter(Continent continent) throws EmptyContinentParameterException {
-        if(continent == null){
-            throw new EmptyContinentParameterException();
-        }
     }
 
     public boolean correctAmountOfCountryCards(Integer firstPlayerNumber, Integer expectedAmount) throws NonExistentPlayer {
        return getPlayer(firstPlayerNumber).correctAmountOfCountryCards(expectedAmount);
     }
 
-    public boolean correctRemainingNumberOfCountryCards(int expected) {
-        return (expected == countryCards.size());
+    public boolean correctAmountOfArmyInCountry(Country country, Integer expectedAmount) throws NonExistentCountry {
+        Country mapCountry = map.searchKeyCountryInMap(country);
+        return (mapCountry.correctAmountOfArmyInCountry(expectedAmount));
     }
 
-    public boolean correctAmountOfArmyInCountry(Integer firstPlayerNumber, Country polonia, Integer expectedAmountPoland) throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
-        Player player = getPlayer(firstPlayerNumber);
-        Country mapCountry = map.searchKeyCountryInMap(polonia);
-       return( player.correctAmountOfArmyInCountry(mapCountry, expectedAmountPoland));
+    public void addCountryToPlayer(Country country , Integer playerNumber) throws NonExistentPlayer, EmptyCountryParameterException, NonExistentCountry {
+        checkValidCountryParameter(country);
+        Country mapCountry = map.searchKeyCountryInMap(country);
+        Player player =  getPlayer(playerNumber);
+        player.addCountry(mapCountry);
 
+        if (checkIfAttackerDominatedAContinent(player)) {
+            Continent dominatedByPlayer = map.continentDominatedByPlayer(player);
+            player.addArmyInCountry(dominatedByPlayer.getAmountOfArmyWhenDominated(), mapCountry);
+        }
     }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     //AttackRoundTests
     public ArrayList<Player> getPlayers() {
         return players;
@@ -273,5 +193,9 @@ public class Game {
 
     public Map getMap() {
         return map;
+    }
+
+    public ArrayList<CountryCard> getCountryCards(){
+        return countryCards;
     }
 }

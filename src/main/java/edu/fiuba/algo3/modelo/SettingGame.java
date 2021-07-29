@@ -1,7 +1,6 @@
 package edu.fiuba.algo3.modelo;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class SettingGame {
     private CSVReader buffer = new CSVReader("src/main/java/edu/fiuba/algo3/archivos/Teg - Cartas.csv");

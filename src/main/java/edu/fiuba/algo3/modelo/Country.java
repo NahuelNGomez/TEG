@@ -20,7 +20,7 @@ public class Country {
         return this.armyAmount;
     }
 
-    public boolean correctAmountOfArmyInCountry(Integer expectedAmount){
+    public boolean correctAmountOfArmyInCountry(Integer expectedAmount) {
         return this.armyAmount == expectedAmount;
     }
 
@@ -37,6 +37,10 @@ public class Country {
             }
         }
         return false;
+    }
+
+    public boolean validArmiesToAttack(){
+        return (armyAmount > 1);
     }
 
     public void addArmy(int amount){
