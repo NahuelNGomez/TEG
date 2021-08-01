@@ -1,6 +1,12 @@
 package edu.fiuba.algo3.view;
 
+import edu.fiuba.algo3.modelo.Country;
 import edu.fiuba.algo3.modelo.Game;
+import edu.fiuba.algo3.modelo.Player;
+import edu.fiuba.algo3.modelo.exceptions.EmptyCountryParameterException;
+import edu.fiuba.algo3.modelo.exceptions.InvalidNumberOfPlayers;
+import edu.fiuba.algo3.modelo.exceptions.NonExistentCountry;
+import edu.fiuba.algo3.modelo.exceptions.NonExistentPlayer;
 import edu.fiuba.algo3.view.handlers.StartButtonHandler;
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -19,10 +25,12 @@ import javafx.stage.Stage;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 
 public class Main extends Application {
-    Game game = null;
+    Game game;
+    Integer actualPlayer = 1;
 
     private void setArch(Rectangle rectangle, double height, double width){
         rectangle.setArcHeight(height);
@@ -53,20 +61,25 @@ public class Main extends Application {
                 + "-fx-border-radius: 5;" + "-fx-border-color: darkred;");
 
 
-        ComboBox players = new ComboBox();
+        /*ComboBox players = new ComboBox();
 
         //Set text of the ComboBox
-        Text numberOfPlayers = new Text();
-        numberOfPlayers.setFont(font);
+        String numberOfPlayers = new String();
+        //numberOfPlayers.setFont(font);
 
         for(int i = 2; i <= 6 ; i ++){
             players.getItems().add(i);
         }
-        mainBox.getChildren().add(players);
+        mainBox.getChildren().add(players);*/
 
         Button button = new Button("Jugar");
+        try {
+            game = new Game(2);
+        } catch (InvalidNumberOfPlayers invalidNumberOfPlayers) {
+            invalidNumberOfPlayers.printStackTrace();
+        }
 
-        StartButtonHandler sendButtonEventHandler = new StartButtonHandler(players, changeScene() ,primaryStage,game);
+        StartButtonHandler sendButtonEventHandler = new StartButtonHandler(changeScene() ,primaryStage);
         button.setOnAction(sendButtonEventHandler);
 
         button.setDefaultButton(true);
@@ -84,7 +97,7 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-    private Scene changeScene() throws FileNotFoundException {
+    private Scene changeScene() throws FileNotFoundException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
         StackPane canvas = new StackPane();
         canvas.setStyle("-fx-background-color: rgb(242,204,133)");
 
@@ -161,7 +174,7 @@ public class Main extends Application {
         return map;
     }
 
-    private VBox viewDataTurn(Font font) {
+    private VBox viewDataTurn(Font font) throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
         VBox dataTurn = new VBox(15);
         dataTurn.setMaxWidth(200);
         dataTurn.setPrefHeight(500);
@@ -173,46 +186,62 @@ public class Main extends Application {
 
         //Set text of the ComboBox
         Text attackCountry = new Text();
-        //textAttack.setText("pais atacante:");
-
         textAttack.setFont(font);
-        /*for(int i = 0; i <= 3 ; i ++){
-            game.
 
-            countries.getItems().add("choice" + i);
+        ArrayList<Country> playerCountries = game.getPlayer(actualPlayer).getDominatedCountries();
 
-        }*/
-        Text choice2 = new Text();
-        choice2.setText("choice2");
-        choice2.setFont(font);
+        for(int i = 0; i < playerCountries.size() ; i ++){
+            countries.getItems().add(playerCountries.get(i).getName());
+        }
 
-        Text choice3 = new Text();
-        choice3.setText("choice3");
-        choice3.setFont(font);
+        ComboBox borderingCountries = new ComboBox();
 
         // countries.setPromptText(String.valueOf(attackCountry));
         countries.setOnAction((event) -> {
+            Country selectedCountry = null;
+            for(Country country : playerCountries){
+                if(country.getName().equals((String) countries.getValue())){
+                    selectedCountry = country;
+                }
+            }
+            ArrayList<Country> borderCountries = null;
+            try {
+                borderCountries = game.getOtherPlayersBorderingCountries(actualPlayer,selectedCountry);
+                for( Country pais : borderCountries) {
+                    System.out.println(pais.getName());
+                }
+            } catch (NonExistentPlayer nonExistentPlayer) {
+                nonExistentPlayer.printStackTrace();
+            } catch (NonExistentCountry nonExistentCountry) {
+                nonExistentCountry.printStackTrace();
+            } catch (EmptyCountryParameterException e) {
+                e.printStackTrace();
+            }
+
+            for(int i = 0; i < borderCountries.size() ; i ++){
+                borderingCountries.getItems().add(borderCountries.get(i).getName());
+            }
+
             int selectedIndex = countries.getSelectionModel().getSelectedIndex();
             Object selectedItem = countries.getSelectionModel().getSelectedItem();
 
             System.out.println("Selection made: [" + selectedIndex + "] " + selectedItem);
             System.out.println("   ComboBox.getValue(): " + countries.getValue());
         });
-        //countries.getItems().add(choice2);
-        //countries.getItems().add(choice3);
+
+
+
+        Text defendCountry = new Text();
+        //textAttack.setText("pais atacante:");
+
+        textAttack.setFont(font);
+
 
         Text attacked = new Text();
         attacked.setText("Hacia:");
         attacked.setFont(font);
 
-        ComboBox availableCountries = new ComboBox();
-
-        //availableCountries.setPromptText("Elige un pais para atacar");
-
-        availableCountries.getItems().add(choice2);
-        availableCountries.getItems().add(choice3);
-
-        dataTurn.getChildren().addAll(textAttack, countries, attacked, availableCountries);
+        dataTurn.getChildren().addAll(textAttack, countries, attacked, borderingCountries);
 
         dataTurn.setStyle("-fx-border-style: solid inside;"
                 + "-fx-border-width: 2;" + "-fx-border-insets: 5;"

@@ -27,26 +27,27 @@ public class Game {
 
     //private static ArrayList<ObjectiveCard> objectiveCardsCards = new ArrayList<ObjectiveCard>();
 
-    public Game(int numberOfPlayers) throws InvalidNumberOfPlayers, IOException {
-        if(numberOfPlayers <= 1 || numberOfPlayers > 6){
+    public Game(int numberOfPlayers) throws InvalidNumberOfPlayers, IOException, NonExistentCountry, EmptyCountryParameterException {
+        if (numberOfPlayers <= 1 || numberOfPlayers > 6) {
             throw new InvalidNumberOfPlayers();
         }
         colorsArray = new ArrayList<>();
-        for(int i = 0 ; i < colors.length; i++){
+        for (int i = 0; i < colors.length; i++) {
             colorsArray.add(new Color(colors[i]));
         }
-        for(int i = 0; i < numberOfPlayers; i++){
+        for (int i = 0; i < numberOfPlayers; i++) {
             Player player = new Player(colorsArray.get(i));
             players.add(player);
         }
         map = Map.get();
         map.clean();
         set = new SettingGame();
-        if(countryCards.size() < 50) setCountryCards();
+        if (countryCards.size() < 50) setCountryCards();
 
-        placementRound = new PlacementRound(players,map);
-        attackRound = new AttackRound(players,map,countryCards);
-        regroupRound = new RegroupRound(players,map);
+        placementRound = new PlacementRound(players, map);
+        attackRound = new AttackRound(players, map, countryCards);
+        regroupRound = new RegroupRound(players, map);
+        dealCountryCards();
     }
 
     private void checkValidCountryParameter(Country country) throws EmptyCountryParameterException {
@@ -140,6 +141,27 @@ public class Game {
         placementRound.placingThreeArmiesInPlacementRound(getPlayer(numberPlayer),armiesToAdd);
     }
 
+    public ArrayList<Country> getOtherPlayersBorderingCountries(Integer playerNumber, Country country) throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
+        Player player = getPlayer(playerNumber);
+
+        ArrayList<Country> playersCountries = player.getDominatedCountries();
+        ArrayList<Country> borderingCountries = new ArrayList<>();
+
+        /*for(Country pais : playersCountries){
+            System.out.println(pais.getName());
+        }*/
+
+        for(CountryCard card : countryCards){
+            System.out.println(card.getCountryCard().getName());
+            System.out.println(!playersCountries.contains(card.getCountryCard()));
+            System.out.println(map.validateBorderingCountry(country,card.getCountryCard()));
+
+            if( (country != card.getCountryCard()) && (!playersCountries.contains(card.getCountryCard())) && (map.validateBorderingCountry(country,card.getCountryCard())) ){
+                borderingCountries.add(card.getCountryCard());
+            }
+        }
+        return borderingCountries;
+    }
 
     ///////////////////////////////////////////////////// PARA PRUEBAS  /////////////////////////////////////////////
     public Player winner(){

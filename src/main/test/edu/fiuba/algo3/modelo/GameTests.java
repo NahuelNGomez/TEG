@@ -56,7 +56,7 @@ public class GameTests {
     }
 
     @Test
-    public void nonExistentPlayerRaisesException() throws InvalidNumberOfPlayers, IOException {
+    public void nonExistentPlayerRaisesException() throws InvalidNumberOfPlayers, IOException, NonExistentCountry, EmptyCountryParameterException {
         Integer numberOfPlayers = 2;
 
         Game game = new Game(numberOfPlayers);
@@ -66,7 +66,7 @@ public class GameTests {
     }
 
     @Test
-    public void nonExistentCountryRaisesException() throws InvalidNumberOfPlayers, IOException {
+    public void nonExistentCountryRaisesException() throws InvalidNumberOfPlayers, IOException, NonExistentCountry, EmptyCountryParameterException {
         Integer numberOfPlayers = 2;
 
         Game game = new Game(numberOfPlayers);

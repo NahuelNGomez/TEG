@@ -17,7 +17,7 @@ public class AttackRoundTests {
     Integer firstPlayerNumber = 1;
     Integer secondPlayerNumber = 2;
 
-    public AttackRoundTests() throws IOException, InvalidNumberOfPlayers {
+    public AttackRoundTests() throws IOException, InvalidNumberOfPlayers, NonExistentCountry, EmptyCountryParameterException {
     }
 
     @Test
