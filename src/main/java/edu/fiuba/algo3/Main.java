@@ -1,8 +1,11 @@
 package edu.fiuba.algo3;
 
+import edu.fiuba.algo3.modelo.Game;
+import edu.fiuba.algo3.view.handlers.StartButtonHandler;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,6 +22,7 @@ import java.io.FileNotFoundException;
 
 
 public class Main extends Application {
+    Game game = null;
 
     private void setArch(Rectangle rectangle, double height, double width){
         rectangle.setArcHeight(height);
@@ -28,6 +32,59 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
 
+        StackPane canvas = new StackPane();
+        canvas.setStyle("-fx-background-color: rgb(242,204,133)");
+
+        VBox mainBox = new VBox(100);
+        mainBox.setAlignment(Pos.CENTER);
+        mainBox.setPrefSize(200,50);
+
+        Scene scene = new Scene(canvas, 1050, 690);
+
+        Text name = new Text();
+        Font font = new Font("verdana", 25);
+        name.setText("Marque la cantidad de jugadores");
+        name.setFont(font);
+
+        mainBox.getChildren().addAll(name);
+
+        mainBox.setStyle("-fx-border-style: solid inside;"
+                + "-fx-border-width: 2;" + "-fx-border-insets: 5;"
+                + "-fx-border-radius: 5;" + "-fx-border-color: darkred;");
+
+
+        ComboBox players = new ComboBox();
+
+        //Set text of the ComboBox
+        Text numberOfPlayers = new Text();
+        numberOfPlayers.setFont(font);
+
+        for(int i = 2; i <= 6 ; i ++){
+            players.getItems().add(i);
+        }
+        mainBox.getChildren().add(players);
+
+        Button button = new Button("Jugar");
+
+        StartButtonHandler sendButtonEventHandler = new StartButtonHandler(players, changeScene() ,primaryStage,game);
+        button.setOnAction(sendButtonEventHandler);
+
+        button.setDefaultButton(true);
+        button.setPrefSize(100, 50);
+        button.setLayoutX(105);
+        button.setLayoutY(110);
+        mainBox.getChildren().add(button);
+
+        canvas.getChildren().add(mainBox);
+
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("T.E.G.");
+        primaryStage.setResizable(false);
+
+        primaryStage.show();
+    }
+
+    private Scene changeScene() throws FileNotFoundException {
         StackPane canvas = new StackPane();
         canvas.setStyle("-fx-background-color: rgb(242,204,133)");
 
@@ -65,11 +122,8 @@ public class Main extends Application {
         dataBox.setAlignment(Pos.CENTER);
 
         HBox firstHBox = new HBox();
-
         firstHBox.setMaxHeight(100);
-
         firstHBox.setAlignment(Pos.TOP_RIGHT);
-
         firstHBox.getChildren().addAll(nameBox,dataBox);
 
         VBox dataTurn = viewDataTurn(font);
@@ -77,26 +131,16 @@ public class Main extends Application {
         HBox map = viewMap(font);
 
         HBox secondHBox = new HBox();
-
         secondHBox.getChildren().addAll(dataTurn, map);
 
         VBox mainBox = new VBox(20);
-
         mainBox.getChildren().addAll(firstHBox, secondHBox);
 
         canvas.getChildren().add(mainBox);
-
         canvas.setAlignment(Pos.TOP_CENTER);
 
         Scene scene = new Scene(canvas, 1050, 690);
-
-        primaryStage.setScene(scene);
-
-        primaryStage.setTitle("T.E.G.");
-        primaryStage.setResizable(false);
-
-        primaryStage.show();
-
+        return scene;
     }
 
     private HBox viewMap(Font font) throws FileNotFoundException {
@@ -118,7 +162,7 @@ public class Main extends Application {
     }
 
     private VBox viewDataTurn(Font font) {
-        VBox dataTurn = new VBox();
+        VBox dataTurn = new VBox(15);
         dataTurn.setMaxWidth(200);
         dataTurn.setPrefHeight(500);
         dataTurn.setAlignment(Pos.CENTER);
@@ -132,13 +176,12 @@ public class Main extends Application {
         //textAttack.setText("pais atacante:");
 
         textAttack.setFont(font);
-        for(int i = 1; i <= 3 ; i ++){
-            //Text choice = new Text();
-            //choice.setText("choice" + i);
-            //choice.setFont(font);
+        /*for(int i = 0; i <= 3 ; i ++){
+            game.
+
             countries.getItems().add("choice" + i);
 
-        }
+        }*/
         Text choice2 = new Text();
         choice2.setText("choice2");
         choice2.setFont(font);
