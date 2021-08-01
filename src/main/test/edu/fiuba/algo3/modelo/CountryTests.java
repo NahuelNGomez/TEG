@@ -1,4 +1,5 @@
 package edu.fiuba.algo3.modelo;
+
 import edu.fiuba.algo3.modelo.exceptions.EmptyCountryParameterException;
 import edu.fiuba.algo3.modelo.exceptions.NonExistentCountry;
 import org.junit.jupiter.api.Test;

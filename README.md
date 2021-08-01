@@ -9,7 +9,6 @@ Trabajo Práctico número 2 de la materia Algoritmos y Programación III de FIUB
 * **Camila Stahl** - [CammSt](https://github.com/CammSt)
 * **Nahuel Gomez** - [NahuelNGomez](https://github.com/NahuelNGomez)
 * **Lucia Liceri Martinez** - [lucialiceri](https://github.com/lucialiceri)
-* **Integrante 4** - [integrante4](https://github.com/integrante4)
 
 Corrector: **Pablo Rodríguez Massuh**
 
