@@ -102,7 +102,9 @@ public class PlacementButtonHandler implements EventHandler<ActionEvent> {
                 num = 3;
                 if(player == game.amountOfPlayers()){
                     //cambiarDeEscena
+                    player = 1;
                     primaryStage.setScene(changeScene());
+
                     System.out.println("DEBERIA TERMINAR");
 
 
@@ -265,7 +267,7 @@ public class PlacementButtonHandler implements EventHandler<ActionEvent> {
 
         Text information = new Text();
 
-        information.setText("*Datos del jugador nro. " + player);
+        information.setText("Posee "+ game.getPlayer(player).amountOfDominatedCountries()+" paises - * Datos del jugador nro. " + player);
         information.setFont(font);
         dataBox.getChildren().add(information);
         dataBox.setPrefSize(860,50);
@@ -338,7 +340,10 @@ public class PlacementButtonHandler implements EventHandler<ActionEvent> {
         });
 
         Button attackButton = new Button("ATACAR");
-        attackButton.setOnAction((event) -> {
+
+        AttackButtonHandler attackButtonHandler = new AttackButtonHandler(borderingCountries, countries, amountDice, game, player, primaryStage, null);
+        attackButton.setOnAction(attackButtonHandler);
+       // attackButton.setOnAction((event) -> {
             /*try {
                 Country firstCountry = selectedCountryInComboBox(borderingCountries.getValue(),game.getCountries());
                 Country secondCountry =selectedCountryInComboBox(countries.getValue(),game.getCountries());
@@ -346,7 +351,7 @@ public class PlacementButtonHandler implements EventHandler<ActionEvent> {
             } catch (NonExistentPlayer | InvalidAttack | NonExistentCountry | EmptyCountryParameterException nonExistentPlayer) {
                 nonExistentPlayer.printStackTrace();
             }*/
-        });
+        //}
 
         dataTurn.getChildren().addAll(textAttack, countries,armiesAttack, attacked, borderingCountries,armiesDefend,amountDice,attackButton);
         dataTurn.setStyle("-fx-border-style: solid inside;"
@@ -362,6 +367,8 @@ public class PlacementButtonHandler implements EventHandler<ActionEvent> {
         Country attackerCountry = selectedCountryInComboBox(countries.getValue(),game.getCountries());
 
         if(attackerCountry.getArmyAmount() >= 3){
+            amountDice.getItems().add(1);
+            amountDice.getItems().add(2);
             amountDice.getItems().add(3);
         } else {
             for(int i = 1; i <= attackerCountry.getArmyAmount(); i++ ){

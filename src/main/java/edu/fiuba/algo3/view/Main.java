@@ -131,7 +131,7 @@ public class Main extends Application {
         return scene;
     }
 
-    private VBox viewPlacementTurn(Integer num, Stage primaryStage, Scene scene) throws NonExistentPlayer, FileNotFoundException, NonExistentCountry, EmptyCountryParameterException {
+    private VBox viewPlacementTurn(Integer num, Stage primaryStage) throws NonExistentPlayer, FileNotFoundException, NonExistentCountry, EmptyCountryParameterException {
         Font font = new Font("verdana", 15);
         VBox dataTurn = new VBox(15);
         dataTurn.setMaxWidth(200);
@@ -165,7 +165,7 @@ public class Main extends Application {
 
         Button acceptButton = new Button("ACEPTAR");
 
-        PlacementButtonHandler PlacementButtonHandler = new PlacementButtonHandler(amount ,amountArmy, countries,textAmount, game, num,actualPlayer, primaryStage, changeScene());
+        PlacementButtonHandler PlacementButtonHandler = new PlacementButtonHandler(amount ,amountArmy, countries,textAmount, game, num,actualPlayer, primaryStage, null);
 
 
         acceptButton.setOnAction(PlacementButtonHandler);
@@ -177,7 +177,7 @@ public class Main extends Application {
 
         return dataTurn;
     }
-
+/*
     private Scene changeScene() throws FileNotFoundException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
         StackPane canvas = new StackPane();
         canvas.setStyle("-fx-background-color: rgb(242,204,133)");
@@ -218,12 +218,12 @@ public class Main extends Application {
         firstHBox.setAlignment(Pos.TOP_RIGHT);
         firstHBox.getChildren().addAll(nameBox,dataBox);
 
-        VBox dataTurn = viewDataTurn(font);
+     //   VBox dataTurn = viewDataTurn(font);
 
         HBox map = viewMap(font);
 
         HBox secondHBox = new HBox();
-        secondHBox.getChildren().addAll(dataTurn, map);
+       // secondHBox.getChildren().addAll(dataTurn, map);
 
         VBox mainBox = new VBox(20);
         mainBox.getChildren().addAll(firstHBox, secondHBox);
@@ -234,7 +234,7 @@ public class Main extends Application {
         Scene scene = new Scene(canvas, 1050, 690);
         return scene;
     }
-
+*/
     private HBox viewMap(Font font) throws FileNotFoundException {
         HBox map = new HBox();
 
@@ -253,7 +253,7 @@ public class Main extends Application {
 
         return map;
     }
-
+/*
     private VBox viewDataTurn(Font font, Stage primaryStage) throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException, FileNotFoundException {
         actualPlayer = 1;
         VBox dataTurn = new VBox(15);
@@ -303,7 +303,7 @@ public class Main extends Application {
 
         return dataTurn;
     }
-
+*/
     private void comboBoxEventBorderingCountries(ComboBox borderingCountries, ComboBox countries, ComboBox amountDice, Text armiesDefend) {
         Font newFont = new Font("verdana", 10);
 

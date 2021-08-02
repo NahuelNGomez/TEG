@@ -81,8 +81,8 @@ public class AttackRound{
     public boolean checkValidAttack(Country attackingCountry,Country defendingCountry,Player attackerPlayer,Player defenderPlayer) throws NonExistentCountry, EmptyCountryParameterException, NonExistentPlayer {
         boolean isBordering = this.validateBorderingCountry(attackingCountry, defendingCountry);
         boolean validArmiesInAttacker = attackingCountry.validArmiesToAttack();
-        boolean validArmiesInDefender = defendingCountry.validArmiesToAttack();
-        return (isBordering && (defenderPlayer != attackerPlayer) && validArmiesInAttacker && validArmiesInDefender);
+       // boolean validArmiesInDefender = defendingCountry.validArmiesToAttack();
+        return (isBordering && (defenderPlayer != attackerPlayer) && validArmiesInAttacker/* && validArmiesInDefender*/);
     }
 
     public Player attack(Player attackerPlayer,Country attackingCountry, Country defendingCountry, Integer amountDice,Integer winner) throws EmptyCountryParameterException, NonExistentPlayer, NonExistentCountry, InvalidAttack {
@@ -100,6 +100,7 @@ public class AttackRound{
             this.invade(defenderPlayer, mapAttackingCountry, mapDefendingCountry);
         }
         if(defenderPlayer.removeArmy(result[0], mapDefendingCountry)){
+            System.out.println("El jugador atacante invadio");
             this.invade(attackerPlayer, mapDefendingCountry, mapAttackingCountry);
         }
 
