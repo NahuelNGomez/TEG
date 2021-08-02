@@ -3,11 +3,10 @@ package edu.fiuba.algo3.view;
 import edu.fiuba.algo3.modelo.Country;
 import edu.fiuba.algo3.modelo.Game;
 import edu.fiuba.algo3.modelo.exceptions.*;
+import edu.fiuba.algo3.view.handlers.AttackButtonHandler;
 import edu.fiuba.algo3.view.handlers.PlacementButtonHandler;
 import edu.fiuba.algo3.view.handlers.StartButtonHandler;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -25,8 +24,6 @@ import javafx.stage.Stage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class Main extends Application {
@@ -78,7 +75,7 @@ public class Main extends Application {
             invalidNumberOfPlayers.printStackTrace();
         }
 
-        StartButtonHandler sendButtonEventHandler = new StartButtonHandler(firstplacementScene(primaryStage) ,primaryStage, game);
+        StartButtonHandler sendButtonEventHandler = new StartButtonHandler(firstPlacementScene(primaryStage) ,primaryStage, game);
         button.setOnAction(sendButtonEventHandler);
 
         button.setDefaultButton(true);
@@ -96,7 +93,7 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-    private Scene firstplacementScene(Stage primaryStage) throws FileNotFoundException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
+    private Scene firstPlacementScene(Stage primaryStage) throws FileNotFoundException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
         StackPane canvas = new StackPane();
         canvas.setStyle("-fx-background-color: rgb(242,204,133)");
 
@@ -134,7 +131,7 @@ public class Main extends Application {
         return scene;
     }
 
-    private VBox viewPlacementTurn(Integer num, Stage primaryStage) throws NonExistentPlayer, FileNotFoundException, NonExistentCountry, EmptyCountryParameterException {
+    private VBox viewPlacementTurn(Integer num, Stage primaryStage, Scene scene) throws NonExistentPlayer, FileNotFoundException, NonExistentCountry, EmptyCountryParameterException {
         Font font = new Font("verdana", 15);
         VBox dataTurn = new VBox(15);
         dataTurn.setMaxWidth(200);
@@ -257,7 +254,8 @@ public class Main extends Application {
         return map;
     }
 
-    private VBox viewDataTurn(Font font) throws NonExistentPlayer {
+    private VBox viewDataTurn(Font font, Stage primaryStage) throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException, FileNotFoundException {
+        actualPlayer = 1;
         VBox dataTurn = new VBox(15);
         dataTurn.setMaxWidth(200);
         dataTurn.setPrefHeight(500);
@@ -269,19 +267,17 @@ public class Main extends Application {
 
         ComboBox countries = new ComboBox();
         ArrayList<Country> playerCountries = game.getPlayer(actualPlayer).getDominatedCountries();
-
-        for (Country playerCountry : playerCountries) {
-            if(!playerCountry.correctAmountOfArmyInCountry(1)){
-                countries.getItems().add(playerCountry.getName());
-            }
-        }
-
         ComboBox borderingCountries = new ComboBox();
         borderingCountries.setPromptText("Elija un pais");
         countries.setPromptText("Elija un pais");
 
         Text armiesAttack = new Text();
         Text armiesDefend = new Text();
+        for (Country playerCountry : playerCountries) {
+            if(!playerCountry.correctAmountOfArmyInCountry(1)){
+                countries.getItems().add(playerCountry.getName());
+            }
+        }
 
         countries.setOnAction((event) -> eventComboBoxFilterCountries(playerCountries,countries,borderingCountries,armiesAttack));
 
@@ -297,15 +293,8 @@ public class Main extends Application {
         });
 
         Button attackButton = new Button("ATACAR");
-        attackButton.setOnAction((event) -> {
-            /*try {
-                Country firstCountry = selectedCountryInComboBox(borderingCountries.getValue(),game.getCountries());
-                Country secondCountry =selectedCountryInComboBox(countries.getValue(),game.getCountries());
-                game.attack(actualPlayer,firstCountry,secondCountry,(Integer)amountDice.getValue());
-            } catch (NonExistentPlayer | InvalidAttack | NonExistentCountry | EmptyCountryParameterException nonExistentPlayer) {
-                nonExistentPlayer.printStackTrace();
-            }*/
-        });
+        AttackButtonHandler attackButtonHandler = new AttackButtonHandler(borderingCountries, countries, amountDice, game, actualPlayer, primaryStage, changeScene());
+        attackButton.setOnAction(attackButtonHandler);
 
         dataTurn.getChildren().addAll(textAttack, countries,armiesAttack, attacked, borderingCountries,armiesDefend,amountDice,attackButton);
         dataTurn.setStyle("-fx-border-style: solid inside;"
@@ -321,7 +310,10 @@ public class Main extends Application {
         Country attackerCountry = selectedCountryInComboBox(countries.getValue(),game.getCountries());
 
         if(attackerCountry.getArmyAmount() >= 3){
-            amountDice.getItems().add(3);
+            //amountDice.getItems().removeAll(amountDice.getItems());
+            for(int i = 1; i <= 3; i++ ){
+                amountDice.getItems().add(i);
+            }
         } else {
             for(int i = 1; i <= attackerCountry.getArmyAmount(); i++ ){
                 amountDice.getItems().add(i);

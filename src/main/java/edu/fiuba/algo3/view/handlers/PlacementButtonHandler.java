@@ -108,7 +108,6 @@ public class PlacementButtonHandler implements EventHandler<ActionEvent> {
 
                 } else{
                     player++;
-
                     primaryStage.setScene(firstplacementScene(primaryStage, num));
 
                 };
