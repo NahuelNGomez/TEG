@@ -1,11 +1,12 @@
-package edu.fiuba.algo3.view;
+package edu.fiuba.algo3.view.handlers;
 
 import edu.fiuba.algo3.modelo.Country;
 import edu.fiuba.algo3.modelo.Game;
-import edu.fiuba.algo3.modelo.exceptions.*;
-import edu.fiuba.algo3.view.handlers.PlacementButtonHandler;
-import edu.fiuba.algo3.view.handlers.StartButtonHandler;
-import javafx.application.Application;
+import edu.fiuba.algo3.modelo.Player;
+import edu.fiuba.algo3.modelo.exceptions.EmptyCountryParameterException;
+import edu.fiuba.algo3.modelo.exceptions.InvalidPlacement;
+import edu.fiuba.algo3.modelo.exceptions.NonExistentCountry;
+import edu.fiuba.algo3.modelo.exceptions.NonExistentPlayer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -17,7 +18,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -26,77 +26,119 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
-
-public class Main extends Application {
+public class PlacementButtonHandler implements EventHandler<ActionEvent> {
+    Integer num;
+    ComboBox amount;
+    Text textAmount;
+    ComboBox countries;
     Game game;
-    Integer actualPlayer = 1;
+    private HashMap<Country, Integer> playerCountries;
+    Integer initialAmount;
+    Integer player;
+    Scene nextScene;
 
-    private void setArch(Rectangle rectangle, double height, double width){
-        rectangle.setArcHeight(height);
-        rectangle.setArcWidth(width);
+    Stage primaryStage;
+
+    public PlacementButtonHandler(Integer num, ComboBox amount, ComboBox countries,Text textAmount, Game game, Integer initialAmount, Integer actualPlayer,  Stage primaryStage, Scene nextScene) {
+        this.num = num;
+        this.amount = amount;
+        this.textAmount = textAmount;
+        this.game = game;
+        this.countries = countries;
+        playerCountries = new HashMap<Country, Integer>();
+        this.initialAmount = initialAmount;
+        player = actualPlayer;
+        this.nextScene = nextScene;
+
+        this.primaryStage = primaryStage;
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
-        StackPane canvas = new StackPane();
-        canvas.setStyle("-fx-background-color: rgb(242,204,133)");
+    public void handle(ActionEvent actionEvent) {
 
-        VBox mainBox = new VBox(100);
-        mainBox.setAlignment(Pos.CENTER);
-        mainBox.setPrefSize(200,50);
+        System.out.println(amount.getValue().getClass());
+        num = num - (Integer)amount.getValue();
 
-        Scene scene = new Scene(canvas, 1050, 690);
+        textAmount.setText(String.valueOf (num));
+        System.out.println(num);
+        Country country = selectedCountryInComboBox(countries.getValue(), game.getCountries());
 
-        Text name = new Text();
-        Font font = new Font("verdana", 25);
-        name.setText("Marque la cantidad de jugadores");
-        name.setFont(font);
+        playerCountries.put(country, (Integer)amount.getValue());
 
-        mainBox.getChildren().addAll(name);
+        if(num == 0 && initialAmount == 5){
+            try {
+                game.placingFiveArmiesInPlacementRound(player,playerCountries);
+                System.out.println( game.getPlayer(1).correctAmountOfArmy(30));
+                num = 5;
+                if(player == game.amountOfPlayers()){
+                    player = 1;
+                    num = 3;
+                    initialAmount = 3;
+                    primaryStage.setScene(firstplacementScene(primaryStage, num));
 
-        mainBox.setStyle("-fx-border-style: solid inside;"
-                + "-fx-border-width: 2;" + "-fx-border-insets: 5;"
-                + "-fx-border-radius: 5;" + "-fx-border-color: darkred;");
+                } else{
+                    player++;
+                    textAmount.setText(String.valueOf (num));
+                    primaryStage.setScene(firstplacementScene(primaryStage, num));
 
-        /*ComboBox players = new ComboBox();
+                };
 
-        //Set text of the ComboBox
-        String numberOfPlayers = new String();
-        //numberOfPlayers.setFont(font);
+            } catch (InvalidPlacement invalidPlacement) {
+                invalidPlacement.printStackTrace();
+            } catch (NonExistentCountry nonExistentCountry) {
+                nonExistentCountry.printStackTrace();
+            } catch (EmptyCountryParameterException e) {
+                e.printStackTrace();
+            } catch (NonExistentPlayer nonExistentPlayer) {
+                nonExistentPlayer.printStackTrace();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else if(num == 0 && initialAmount == 3){
+            try {
+                game.placingThreeArmiesInPlacementRound(player,playerCountries);
+                System.out.println(game.getPlayer(1).amountOfDominatedCountries());
+                num = 3;
+                if(player == game.amountOfPlayers()){
+                    //cambiarDeEscena
+                    primaryStage.setScene(changeScene());
+                    System.out.println("DEBERIA TERMINAR");
 
-        for(int i = 2; i <= 6 ; i ++){
-            players.getItems().add(i);
+
+                } else{
+                    player++;
+
+                    primaryStage.setScene(firstplacementScene(primaryStage, num));
+
+                };
+                //CAMBIAR ESCENA PARA JUGADOR 2
+            } catch (InvalidPlacement invalidPlacement) {
+                invalidPlacement.printStackTrace();
+            } catch (NonExistentCountry nonExistentCountry) {
+                nonExistentCountry.printStackTrace();
+            } catch (EmptyCountryParameterException e) {
+                e.printStackTrace();
+            } catch (NonExistentPlayer nonExistentPlayer) {
+                nonExistentPlayer.printStackTrace();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
-        mainBox.getChildren().add(players);*/
 
-        Button button = new Button("Jugar");
-        try {
-            game = new Game(2);
-        } catch (InvalidNumberOfPlayers invalidNumberOfPlayers) {
-            invalidNumberOfPlayers.printStackTrace();
-        }
-
-        StartButtonHandler sendButtonEventHandler = new StartButtonHandler(firstplacementScene(primaryStage) ,primaryStage, game);
-        button.setOnAction(sendButtonEventHandler);
-
-        button.setDefaultButton(true);
-        button.setPrefSize(100, 50);
-        button.setLayoutX(105);
-        button.setLayoutY(110);
-        mainBox.getChildren().add(button);
-
-        canvas.getChildren().add(mainBox);
-
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("T.E.G.");
-        primaryStage.setResizable(false);
-
-        primaryStage.show();
     }
 
-    private Scene firstplacementScene(Stage primaryStage) throws FileNotFoundException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
+    private Country selectedCountryInComboBox(Object country, ArrayList<Country> list){
+        Country selectedCountry = null;
+        for(Country aCountry : list){
+            if(aCountry.getName().equals(country)){
+                selectedCountry = aCountry;
+            }
+        }
+        return selectedCountry;
+    }
+
+    private Scene firstplacementScene(Stage primaryStage, Integer num) throws FileNotFoundException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
         StackPane canvas = new StackPane();
         canvas.setStyle("-fx-background-color: rgb(242,204,133)");
 
@@ -107,7 +149,7 @@ public class Main extends Application {
         Text name = new Text();
 
         Font font = new Font("verdana", 25);
-        name.setText("Jugador n° " + actualPlayer);
+        name.setText("Jugador n° " + player);
         name.setFont(font);
 
         nameBox.getChildren().addAll(name);
@@ -117,7 +159,7 @@ public class Main extends Application {
         firstHBox.setAlignment(Pos.TOP_RIGHT);
         firstHBox.getChildren().addAll(nameBox);
 
-        VBox dataTurn = viewPlacementTurn(5, primaryStage);
+        VBox dataTurn = viewPlacementTurn(num, primaryStage);
 
         HBox map = viewMap(font);
 
@@ -140,7 +182,7 @@ public class Main extends Application {
         dataTurn.setMaxWidth(200);
         dataTurn.setPrefHeight(500);
         dataTurn.setAlignment(Pos.CENTER);
-        Integer amount = 5;
+        Integer amount = num;
 
 
         Text textPlacement = new Text();
@@ -149,7 +191,7 @@ public class Main extends Application {
 
         ComboBox countries = new ComboBox();
         countries.setPromptText("Elija un pais");
-        ArrayList<Country> playerCountries = game.getPlayer(actualPlayer).getDominatedCountries();
+        ArrayList<Country> playerCountries = game.getPlayer(player).getDominatedCountries();
 
         for (Country playerCountry : playerCountries) {
             countries.getItems().add(playerCountry.getName());
@@ -168,7 +210,7 @@ public class Main extends Application {
 
         Button acceptButton = new Button("ACEPTAR");
 
-        PlacementButtonHandler PlacementButtonHandler = new PlacementButtonHandler(amount ,amountArmy, countries,textAmount, game, num,actualPlayer, primaryStage, changeScene());
+        PlacementButtonHandler PlacementButtonHandler = new PlacementButtonHandler(amount ,amountArmy, countries,textAmount, game, num,player, primaryStage, changeScene());
 
 
         acceptButton.setOnAction(PlacementButtonHandler);
@@ -179,6 +221,25 @@ public class Main extends Application {
                 + "-fx-border-radius: 5;" + "-fx-border-color: darkred;");
 
         return dataTurn;
+    }
+
+    private HBox viewMap(Font font) throws FileNotFoundException {
+        HBox map = new HBox();
+
+        map.setStyle("-fx-border-style: solid inside;"
+                + "-fx-border-width: 2;" + "-fx-border-insets: 5;"
+                + "-fx-border-radius: 5;" + "-fx-border-color: darkred;");
+
+        FileInputStream mapFile = new FileInputStream("src/main/java/edu/fiuba/algo3/archivos/tableroTeg.png");
+        Image mapImage = new Image(mapFile);
+        ImageView mapImageView = new ImageView(mapImage);
+        map.getChildren().add(mapImageView);
+
+        map.setAlignment(Pos.CENTER);
+        map.setPrefWidth(500);
+        map.setPrefHeight(500);
+
+        return map;
     }
 
     private Scene changeScene() throws FileNotFoundException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
@@ -192,7 +253,7 @@ public class Main extends Application {
         Text name = new Text();
 
         Font font = new Font("verdana", 25);
-        name.setText("Jugador n° " + actualPlayer);
+        name.setText("Jugador n° " + player);
         name.setFont(font);
 
         nameBox.getChildren().addAll(name);
@@ -205,7 +266,7 @@ public class Main extends Application {
 
         Text information = new Text();
 
-        information.setText("*Datos del jugador nro. " + actualPlayer);
+        information.setText("*Datos del jugador nro. " + player);
         information.setFont(font);
         dataBox.getChildren().add(information);
         dataBox.setPrefSize(860,50);
@@ -238,25 +299,6 @@ public class Main extends Application {
         return scene;
     }
 
-    private HBox viewMap(Font font) throws FileNotFoundException {
-        HBox map = new HBox();
-
-        map.setStyle("-fx-border-style: solid inside;"
-                + "-fx-border-width: 2;" + "-fx-border-insets: 5;"
-                + "-fx-border-radius: 5;" + "-fx-border-color: darkred;");
-
-        FileInputStream mapFile = new FileInputStream("src/main/java/edu/fiuba/algo3/archivos/tableroTeg.png");
-        Image mapImage = new Image(mapFile);
-        ImageView mapImageView = new ImageView(mapImage);
-        map.getChildren().add(mapImageView);
-
-        map.setAlignment(Pos.CENTER);
-        map.setPrefWidth(500);
-        map.setPrefHeight(500);
-
-        return map;
-    }
-
     private VBox viewDataTurn(Font font) throws NonExistentPlayer {
         VBox dataTurn = new VBox(15);
         dataTurn.setMaxWidth(200);
@@ -268,7 +310,7 @@ public class Main extends Application {
         textAttack.setFont(font);
 
         ComboBox countries = new ComboBox();
-        ArrayList<Country> playerCountries = game.getPlayer(actualPlayer).getDominatedCountries();
+        ArrayList<Country> playerCountries = game.getPlayer(player).getDominatedCountries();
 
         for (Country playerCountry : playerCountries) {
             if(!playerCountry.correctAmountOfArmyInCountry(1)){
@@ -333,18 +375,6 @@ public class Main extends Application {
         armiesDefend.setFont(newFont);
     }
 
-    private Country selectedCountryInComboBox(Object country, ArrayList<Country> list){
-        Country selectedCountry = null;
-        for(Country aCountry : list){
-            if(aCountry.getName().equals(country)){
-                selectedCountry = aCountry;
-            }
-        }
-        return selectedCountry;
-    }
-
-
-
     private void eventComboBoxFilterCountries(ArrayList<Country> playerCountries, ComboBox countries, ComboBox borderingCountries,Text armiesAttack){
         Font newFont = new Font("verdana", 10);
 
@@ -356,7 +386,7 @@ public class Main extends Application {
         ArrayList<Country> borderCountries = null;
 
         try {
-            borderCountries = game.getOtherPlayersBorderingCountries(actualPlayer,selectedCountry);
+            borderCountries = game.getOtherPlayersBorderingCountries(player,selectedCountry);
         } catch (NonExistentPlayer | EmptyCountryParameterException | NonExistentCountry nonExistentPlayer) {
             nonExistentPlayer.printStackTrace();
         }
@@ -367,7 +397,5 @@ public class Main extends Application {
 
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
 }
+

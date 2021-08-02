@@ -1,11 +1,13 @@
 package edu.fiuba.algo3.modelo;
 
+
 import edu.fiuba.algo3.modelo.exceptions.*;
 
 import java.io.IOException;
 import java.util.*;
 
 public class Game {
+
     private Map map;
     //private Battlefield battlefield = new Battlefield();
     private MockBattlefield battlefield = new MockBattlefield(); //Battlefield Mock for the Dice
@@ -211,5 +213,10 @@ public class Game {
 
     public ArrayList<CountryCard> getCountryCards(){
         return countryCards;
+    }
+
+    public Integer amountOfPlayers() {
+
+        return players.size();
     }
 }
