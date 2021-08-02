@@ -2,11 +2,7 @@ package edu.fiuba.algo3.view;
 
 import edu.fiuba.algo3.modelo.Country;
 import edu.fiuba.algo3.modelo.Game;
-import edu.fiuba.algo3.modelo.Player;
-import edu.fiuba.algo3.modelo.exceptions.EmptyCountryParameterException;
-import edu.fiuba.algo3.modelo.exceptions.InvalidNumberOfPlayers;
-import edu.fiuba.algo3.modelo.exceptions.NonExistentCountry;
-import edu.fiuba.algo3.modelo.exceptions.NonExistentPlayer;
+import edu.fiuba.algo3.modelo.exceptions.*;
 import edu.fiuba.algo3.view.handlers.StartButtonHandler;
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -39,7 +35,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-
         StackPane canvas = new StackPane();
         canvas.setStyle("-fx-background-color: rgb(242,204,133)");
 
@@ -60,7 +55,6 @@ public class Main extends Application {
                 + "-fx-border-width: 2;" + "-fx-border-insets: 5;"
                 + "-fx-border-radius: 5;" + "-fx-border-color: darkred;");
 
-
         /*ComboBox players = new ComboBox();
 
         //Set text of the ComboBox
@@ -79,7 +73,7 @@ public class Main extends Application {
             invalidNumberOfPlayers.printStackTrace();
         }
 
-        StartButtonHandler sendButtonEventHandler = new StartButtonHandler(changeScene() ,primaryStage);
+        StartButtonHandler sendButtonEventHandler = new StartButtonHandler(firstplacementScene() ,primaryStage);
         button.setOnAction(sendButtonEventHandler);
 
         button.setDefaultButton(true);
@@ -97,6 +91,86 @@ public class Main extends Application {
         primaryStage.show();
     }
 
+    private Scene firstplacementScene() throws FileNotFoundException, NonExistentPlayer {
+        StackPane canvas = new StackPane();
+        canvas.setStyle("-fx-background-color: rgb(242,204,133)");
+
+        HBox nameBox = new HBox(100);
+        nameBox.setAlignment(Pos.CENTER);
+        nameBox.setPrefSize(200,50);
+
+        Text name = new Text();
+
+        Font font = new Font("verdana", 25);
+        name.setText("Jugador n° " + actualPlayer);
+        name.setFont(font);
+
+        nameBox.getChildren().addAll(name);
+
+        HBox firstHBox = new HBox();
+        firstHBox.setMaxHeight(100);
+        firstHBox.setAlignment(Pos.TOP_RIGHT);
+        firstHBox.getChildren().addAll(nameBox);
+
+        VBox dataTurn = viewPlacementTurn(5);
+
+        HBox map = viewMap(font);
+
+        HBox secondHBox = new HBox();
+        secondHBox.getChildren().addAll(dataTurn, map);
+
+        VBox mainBox = new VBox(20);
+        mainBox.getChildren().addAll(firstHBox, secondHBox);
+
+        canvas.getChildren().add(mainBox);
+        canvas.setAlignment(Pos.TOP_CENTER);
+
+        Scene scene = new Scene(canvas, 1050, 690);
+        return scene;
+    }
+
+    private VBox viewPlacementTurn(Integer num) throws NonExistentPlayer {
+        Font font = new Font("verdana", 15);
+        VBox dataTurn = new VBox(15);
+        dataTurn.setMaxWidth(200);
+        dataTurn.setPrefHeight(500);
+        dataTurn.setAlignment(Pos.CENTER);
+
+        Text textPlacement = new Text();
+        textPlacement.setText("Agregue " + num + " ejercitos");
+        textPlacement.setFont(font);
+
+        ComboBox countries = new ComboBox();
+        countries.setPromptText("Elija un pais");
+        ArrayList<Country> playerCountries = game.getPlayer(actualPlayer).getDominatedCountries();
+
+        for (Country playerCountry : playerCountries) {
+            countries.getItems().add(playerCountry.getName());
+        }
+
+        ComboBox amountArmy = new ComboBox();
+        amountArmy.setPromptText("Cant. de ejercitos");
+
+        for(int i = 1; i <= num; i++){
+            amountArmy.getItems().add(i);
+        }
+
+        amountArmy.setOnAction((event) -> {
+            //num = num - ((Integer) amountArmy.getValue());
+        });
+
+        Button acceptButton = new Button("ACEPTAR");
+        acceptButton.setOnAction((event) -> {
+        });
+
+        dataTurn.getChildren().addAll(textPlacement,countries,amountArmy,acceptButton);
+        dataTurn.setStyle("-fx-border-style: solid inside;"
+                + "-fx-border-width: 2;" + "-fx-border-insets: 5;"
+                + "-fx-border-radius: 5;" + "-fx-border-color: darkred;");
+
+        return dataTurn;
+    }
+
     private Scene changeScene() throws FileNotFoundException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
         StackPane canvas = new StackPane();
         canvas.setStyle("-fx-background-color: rgb(242,204,133)");
@@ -106,16 +180,14 @@ public class Main extends Application {
         nameBox.setPrefSize(200,50);
 
         Text name = new Text();
-        //name.setTextAlignment(TextAlignment.RIGHT);
 
         Font font = new Font("verdana", 25);
-        name.setText("Player1");
+        name.setText("Jugador n° " + actualPlayer);
         name.setFont(font);
 
         nameBox.getChildren().addAll(name);
 
         HBox dataBox = new HBox();
-        //dataBox.setAlignment(Pos.CENTER);
 
         nameBox.setStyle("-fx-border-style: solid inside;"
                 + "-fx-border-width: 2;" + "-fx-border-insets: 5;"
@@ -123,7 +195,7 @@ public class Main extends Application {
 
         Text information = new Text();
 
-        information.setText("*Datos jugador 1 *");
+        information.setText("*Datos del jugador nro. " + actualPlayer);
         information.setFont(font);
         dataBox.getChildren().add(information);
         dataBox.setPrefSize(860,50);
@@ -162,6 +234,7 @@ public class Main extends Application {
         map.setStyle("-fx-border-style: solid inside;"
                 + "-fx-border-width: 2;" + "-fx-border-insets: 5;"
                 + "-fx-border-radius: 5;" + "-fx-border-color: darkred;");
+
         FileInputStream mapFile = new FileInputStream("src/main/java/edu/fiuba/algo3/archivos/tableroTeg.png");
         Image mapImage = new Image(mapFile);
         ImageView mapImageView = new ImageView(mapImage);
@@ -174,79 +247,112 @@ public class Main extends Application {
         return map;
     }
 
-    private VBox viewDataTurn(Font font) throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
+    private VBox viewDataTurn(Font font) throws NonExistentPlayer {
         VBox dataTurn = new VBox(15);
         dataTurn.setMaxWidth(200);
         dataTurn.setPrefHeight(500);
         dataTurn.setAlignment(Pos.CENTER);
+
         Text textAttack = new Text();
         textAttack.setText("Ataca desde:");
         textAttack.setFont(font);
+
         ComboBox countries = new ComboBox();
-
-        //Set text of the ComboBox
-        Text attackCountry = new Text();
-        textAttack.setFont(font);
-
         ArrayList<Country> playerCountries = game.getPlayer(actualPlayer).getDominatedCountries();
 
-        for(int i = 0; i < playerCountries.size() ; i ++){
-            countries.getItems().add(playerCountries.get(i).getName());
+        for (Country playerCountry : playerCountries) {
+            if(!playerCountry.correctAmountOfArmyInCountry(1)){
+                countries.getItems().add(playerCountry.getName());
+            }
         }
 
         ComboBox borderingCountries = new ComboBox();
+        borderingCountries.setPromptText("Elija un pais");
+        countries.setPromptText("Elija un pais");
 
-        // countries.setPromptText(String.valueOf(attackCountry));
-        countries.setOnAction((event) -> {
-            Country selectedCountry = null;
-            for(Country country : playerCountries){
-                if(country.getName().equals((String) countries.getValue())){
-                    selectedCountry = country;
-                }
-            }
-            ArrayList<Country> borderCountries = null;
-            try {
-                borderCountries = game.getOtherPlayersBorderingCountries(actualPlayer,selectedCountry);
-                for( Country pais : borderCountries) {
-                    System.out.println(pais.getName());
-                }
-            } catch (NonExistentPlayer nonExistentPlayer) {
-                nonExistentPlayer.printStackTrace();
-            } catch (NonExistentCountry nonExistentCountry) {
-                nonExistentCountry.printStackTrace();
-            } catch (EmptyCountryParameterException e) {
-                e.printStackTrace();
-            }
+        Text armiesAttack = new Text();
+        Text armiesDefend = new Text();
 
-            for(int i = 0; i < borderCountries.size() ; i ++){
-                borderingCountries.getItems().add(borderCountries.get(i).getName());
-            }
-
-            int selectedIndex = countries.getSelectionModel().getSelectedIndex();
-            Object selectedItem = countries.getSelectionModel().getSelectedItem();
-
-            System.out.println("Selection made: [" + selectedIndex + "] " + selectedItem);
-            System.out.println("   ComboBox.getValue(): " + countries.getValue());
-        });
-
-
-
-        Text defendCountry = new Text();
-        //textAttack.setText("pais atacante:");
-
-        textAttack.setFont(font);
-
+        countries.setOnAction((event) -> eventComboBoxFilterCountries(playerCountries,countries,borderingCountries,armiesAttack));
 
         Text attacked = new Text();
         attacked.setText("Hacia:");
         attacked.setFont(font);
 
-        dataTurn.getChildren().addAll(textAttack, countries, attacked, borderingCountries);
+        ComboBox amountDice = new ComboBox();
+        amountDice.setPromptText("Cant. de dados");
 
+        borderingCountries.setOnAction((event) -> {
+            comboBoxEventBorderingCountries(borderingCountries,countries,amountDice,armiesDefend);
+        });
+
+        Button attackButton = new Button("ATACAR");
+        attackButton.setOnAction((event) -> {
+            /*try {
+                Country firstCountry = selectedCountryInComboBox(borderingCountries.getValue(),game.getCountries());
+                Country secondCountry =selectedCountryInComboBox(countries.getValue(),game.getCountries());
+                game.attack(actualPlayer,firstCountry,secondCountry,(Integer)amountDice.getValue());
+            } catch (NonExistentPlayer | InvalidAttack | NonExistentCountry | EmptyCountryParameterException nonExistentPlayer) {
+                nonExistentPlayer.printStackTrace();
+            }*/
+        });
+
+        dataTurn.getChildren().addAll(textAttack, countries,armiesAttack, attacked, borderingCountries,armiesDefend,amountDice,attackButton);
         dataTurn.setStyle("-fx-border-style: solid inside;"
                 + "-fx-border-width: 2;" + "-fx-border-insets: 5;"
                 + "-fx-border-radius: 5;" + "-fx-border-color: darkred;");
+
         return dataTurn;
+    }
+
+    private void comboBoxEventBorderingCountries(ComboBox borderingCountries, ComboBox countries, ComboBox amountDice, Text armiesDefend) {
+        Font newFont = new Font("verdana", 10);
+
+        Country attackerCountry = selectedCountryInComboBox(countries.getValue(),game.getCountries());
+
+        if(attackerCountry.getArmyAmount() >= 3){
+            amountDice.getItems().add(3);
+        } else {
+            for(int i = 1; i <= attackerCountry.getArmyAmount(); i++ ){
+                amountDice.getItems().add(i);
+            }
+        }
+
+        Country anotherCountry = selectedCountryInComboBox(borderingCountries.getValue(),game.getCountries());
+        armiesDefend.setText(" Cant. ejércitos "+ anotherCountry.getArmyAmount());
+        armiesDefend.setFont(newFont);
+    }
+
+    private Country selectedCountryInComboBox(Object country, ArrayList<Country> list){
+        Country selectedCountry = null;
+        for(Country aCountry : list){
+            if(aCountry.getName().equals(country)){
+                selectedCountry = aCountry;
+            }
+        }
+        return selectedCountry;
+    }
+
+    private void eventComboBoxFilterCountries(ArrayList<Country> playerCountries, ComboBox countries, ComboBox borderingCountries,Text armiesAttack){
+        Font newFont = new Font("verdana", 10);
+
+        Country selectedCountry = selectedCountryInComboBox(countries.getValue(),game.getCountries());
+
+        armiesAttack.setText(" Cant. ejércitos "+ selectedCountry.getArmyAmount());
+        armiesAttack.setFont(newFont);
+
+        ArrayList<Country> borderCountries = null;
+
+        try {
+            borderCountries = game.getOtherPlayersBorderingCountries(actualPlayer,selectedCountry);
+        } catch (NonExistentPlayer | EmptyCountryParameterException | NonExistentCountry nonExistentPlayer) {
+            nonExistentPlayer.printStackTrace();
+        }
+
+        for(Country borderCountry : borderCountries) {
+            borderingCountries.getItems().add(borderCountry.getName());
+        }
+
     }
 
     public static void main(String[] args) {

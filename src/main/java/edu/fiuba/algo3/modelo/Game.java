@@ -3,10 +3,7 @@ package edu.fiuba.algo3.modelo;
 import edu.fiuba.algo3.modelo.exceptions.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Random;
+import java.util.*;
 
 public class Game {
     private Map map;
@@ -25,7 +22,6 @@ public class Game {
     private ArrayList<Color> colorsArray;
     private String[] colors = {"07bb", "cc3311", "ee7733", "009988", "ee3377", "000000"};
 
-    //private static ArrayList<ObjectiveCard> objectiveCardsCards = new ArrayList<ObjectiveCard>();
 
     public Game(int numberOfPlayers) throws InvalidNumberOfPlayers, IOException, NonExistentCountry, EmptyCountryParameterException {
         if (numberOfPlayers <= 1 || numberOfPlayers > 6) {
@@ -147,20 +143,16 @@ public class Game {
         ArrayList<Country> playersCountries = player.getDominatedCountries();
         ArrayList<Country> borderingCountries = new ArrayList<>();
 
-        /*for(Country pais : playersCountries){
-            System.out.println(pais.getName());
-        }*/
-
         for(CountryCard card : countryCards){
-            System.out.println(card.getCountryCard().getName());
-            System.out.println(!playersCountries.contains(card.getCountryCard()));
-            System.out.println(map.validateBorderingCountry(country,card.getCountryCard()));
-
-            if( (country != card.getCountryCard()) && (!playersCountries.contains(card.getCountryCard())) && (map.validateBorderingCountry(country,card.getCountryCard())) ){
+            if( (!country.correctAmountOfArmyInCountry(1)) && (country != card.getCountryCard()) && (!playersCountries.contains(card.getCountryCard())) && (map.validateBorderingCountry(country,card.getCountryCard())) ){
                 borderingCountries.add(card.getCountryCard());
             }
         }
         return borderingCountries;
+    }
+
+    public ArrayList<Country> getCountries(){
+        return map.getCountries();
     }
 
     ///////////////////////////////////////////////////// PARA PRUEBAS  /////////////////////////////////////////////

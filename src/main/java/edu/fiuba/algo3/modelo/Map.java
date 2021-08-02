@@ -107,6 +107,14 @@ public class Map {
         }
     }
 
+    public ArrayList<Country> getCountries(){
+        ArrayList<Country> returnCountries = new ArrayList<>();
+        for( Country country : countries.keySet()){
+            returnCountries.add(country);
+        }
+        return returnCountries;
+    }
+
     public boolean checkIfAttackerDominatedAContinent(Player player){
         return (continentDominatedByPlayer(player) != null);
     }
