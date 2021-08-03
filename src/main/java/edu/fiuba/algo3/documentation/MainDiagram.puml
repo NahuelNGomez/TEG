@@ -1,9 +1,10 @@
+  
 @startuml
 title "Main Diagram"
 class Game{
-- objectiveCardsCards : ArrayList
-- countriesNames: ArrayList
-+ play()
++ regroup(Integer playerNumber, Country firstCountry, Country secondCountry, Integer armyToRegroup)
++ attack(Integer numberAttackerPlayer, Country attackerCountry, Country defenderCountry, Integer amountOfAttackerDice)
++
 }
 class Player{
 -color: Color
@@ -35,11 +36,14 @@ abstract Round{
 # countryCards : ArrayList
 }
 
-
+class CountryCard{
+- image : String
+}
 
 Game "1"--> "2..6" Player
 Game "1  "--> "1" Map
 Game "1" --> "3...*" Round
+Game "1" --> "50" CountryCard
 
 Round --> Map
 Round "1" --> "2..6" Player
@@ -51,6 +55,7 @@ Continent "1"-->"1..*" Country
 
 Player "1" --> "1..50" Country
 
+CountryCard --> Country
 
 
 @enduml

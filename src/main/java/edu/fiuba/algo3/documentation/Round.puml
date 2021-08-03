@@ -1,35 +1,41 @@
+
 @startuml
 title "Round Class"
 
 class Game {
 }
 
-abstract Round{
-# players : ArrayList
-# map : Map
-# countryCards : ArrayList
-}
-
-class SetUpRound{
-+ startRound()
-+ dealCountryCards()
-}
-
 class AttackRound{
 - battlefield : Battlefield
-- winnerDefiner : winnerDefiner
+- players : ArrayList<Player>
+- map : Map
+- countryCards : ArrayList<CountryCard>
 + startRound() : Player
 + attack(Country: attackingCountry, int: amountDice, Country: defendingCountry)
 - invade(Player: attacker, Country: countryDefender, Country: countryAttacker)
 }
 
+class WinnerDefiner{
++ theresAWinner() : boolean
++ winner() : Player
+}
+
 class PlacementRound {
-+ firstRounds(Integer: maxPlacement)
+- players : ArrayList<Player>
+- map : Map
+# maxArmiesFirstRound : Integer;
+# maxArmiesSecondRound : Integer;
++ placingFiveArmiesInPlacementRound(Player player, HashMap armiesToAdd)
++ placingThreeArmiesInPlacementRound(Player player, HashMap<Country,Integer> armiesToAdd)
 }
 
 class RegroupRound{
+- players : ArrayList<Player>
+- map : Map
+- armyMover : ArmyMover
 + startRound()
-+ regroup(Integer: firstPlayerNumber, Country: country1, Country: country2, Integer: armyToRegroup)
++ regroup(Player player, Country firstCountry, Country secondCountry, Integer armyToRegroup)
++ addArmiesInRound(Player player, HashMap<Country, Integer> armiesToAdd)
 }
 
 class Battlefield{
@@ -46,14 +52,12 @@ class DiceRoll{
 + addResult(Integer oneResult)
 }
 
-Game --> Round
-Round <|-- AttackRound
+Game --> AttackRound
+AttackRound --> WinnerDefiner
 AttackRound "1" -->"1" Battlefield
 Battlefield "1"--> "1" Dice
 Dice ...> DiceRoll
-Round <|--left PlacementRound
-Round <|-- RegroupRound
-Round <|--right SetUpRound
-@enduml
+Game -left-> PlacementRound
+Game -right-> RegroupRound
 
 @enduml

@@ -6,10 +6,10 @@ class SettingGame{
 
 class SettingMap{
 + getCountriesAndBorders() : HashMap
++ addContinent(Continent addingContinent, Country newCountry)
 }
 
-abstract Round{
-- getCountryCards()
+class Game{
 }
 
 class Map{
@@ -19,8 +19,8 @@ class CVSReader{
 + readCSV() : ArrayList
 }
 
-Round --> SettingGame
-Round --> Map
+Game --> SettingGame
+Game --> Map
 
 SettingGame --> CVSReader
 SettingMap --> CVSReader
