@@ -116,7 +116,7 @@ public class Main extends Application {
 
         VBox dataTurn = viewPlacementTurn(5, primaryStage);
 
-        HBox map = viewMap(font);
+        HBox map = viewMap();
 
         HBox secondHBox = new HBox();
         secondHBox.getChildren().addAll(dataTurn, map);
@@ -164,78 +164,18 @@ public class Main extends Application {
         textAmount.setText(String.valueOf(amount));
 
         Button acceptButton = new Button("ACEPTAR");
-
-        PlacementButtonHandler PlacementButtonHandler = new PlacementButtonHandler(amount ,amountArmy, countries,textAmount, game, num,actualPlayer, primaryStage, null);
-
-
+        PlacementButtonHandler PlacementButtonHandler = new PlacementButtonHandler(amount,num,amountArmy,countries,textAmount,game,actualPlayer,primaryStage,null);
         acceptButton.setOnAction(PlacementButtonHandler);
 
         dataTurn.getChildren().addAll(textAmount ,textPlacement,countries,amountArmy,acceptButton);
+
         dataTurn.setStyle("-fx-border-style: solid inside;"
                 + "-fx-border-width: 2;" + "-fx-border-insets: 5;"
                 + "-fx-border-radius: 5;" + "-fx-border-color: darkred;");
 
         return dataTurn;
     }
-/*
-    private Scene changeScene() throws FileNotFoundException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
-        StackPane canvas = new StackPane();
-        canvas.setStyle("-fx-background-color: rgb(242,204,133)");
-
-        HBox nameBox = new HBox(100);
-        nameBox.setAlignment(Pos.CENTER);
-        nameBox.setPrefSize(200,50);
-
-        Text name = new Text();
-
-        Font font = new Font("verdana", 25);
-        name.setText("Jugador n° " + actualPlayer);
-        name.setFont(font);
-
-        nameBox.getChildren().addAll(name);
-
-        HBox dataBox = new HBox();
-
-        nameBox.setStyle("-fx-border-style: solid inside;"
-                + "-fx-border-width: 2;" + "-fx-border-insets: 5;"
-                + "-fx-border-radius: 5;" + "-fx-border-color: darkred;");
-
-        Text information = new Text();
-
-        information.setText("*Datos del jugador nro. " + actualPlayer);
-        information.setFont(font);
-        dataBox.getChildren().add(information);
-        dataBox.setPrefSize(860,50);
-
-        dataBox.setStyle("-fx-border-style: solid inside;"
-                + "-fx-border-width: 2;" + "-fx-border-insets: 5;"
-                + "-fx-border-radius: 5;" + "-fx-border-color: darkred;");
-
-        dataBox.setAlignment(Pos.CENTER);
-
-        HBox firstHBox = new HBox();
-        firstHBox.setMaxHeight(100);
-        firstHBox.setAlignment(Pos.TOP_RIGHT);
-        firstHBox.getChildren().addAll(nameBox,dataBox);
-
-     //   VBox dataTurn = viewDataTurn(font);
-
-        HBox map = viewMap(font);
-
-        HBox secondHBox = new HBox();
-       // secondHBox.getChildren().addAll(dataTurn, map);
-
-        VBox mainBox = new VBox(20);
-        mainBox.getChildren().addAll(firstHBox, secondHBox);
-
-        canvas.getChildren().add(mainBox);
-        canvas.setAlignment(Pos.TOP_CENTER);
-
-        Scene scene = new Scene(canvas, 1050, 690);
-        return scene;
-    }
-*/
-    private HBox viewMap(Font font) throws FileNotFoundException {
+    private HBox viewMap() throws FileNotFoundException {
         HBox map = new HBox();
 
         map.setStyle("-fx-border-style: solid inside;"
@@ -253,57 +193,7 @@ public class Main extends Application {
 
         return map;
     }
-/*
-    private VBox viewDataTurn(Font font, Stage primaryStage) throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException, FileNotFoundException {
-        actualPlayer = 1;
-        VBox dataTurn = new VBox(15);
-        dataTurn.setMaxWidth(200);
-        dataTurn.setPrefHeight(500);
-        dataTurn.setAlignment(Pos.CENTER);
 
-        Text textAttack = new Text();
-        textAttack.setText("Ataca desde:");
-        textAttack.setFont(font);
-
-        ComboBox countries = new ComboBox();
-        ArrayList<Country> playerCountries = game.getPlayer(actualPlayer).getDominatedCountries();
-        ComboBox borderingCountries = new ComboBox();
-        borderingCountries.setPromptText("Elija un pais");
-        countries.setPromptText("Elija un pais");
-
-        Text armiesAttack = new Text();
-        Text armiesDefend = new Text();
-        for (Country playerCountry : playerCountries) {
-            if(!playerCountry.correctAmountOfArmyInCountry(1)){
-                countries.getItems().add(playerCountry.getName());
-            }
-        }
-
-        countries.setOnAction((event) -> eventComboBoxFilterCountries(playerCountries,countries,borderingCountries,armiesAttack));
-
-        Text attacked = new Text();
-        attacked.setText("Hacia:");
-        attacked.setFont(font);
-
-        ComboBox amountDice = new ComboBox();
-        amountDice.setPromptText("Cant. de dados");
-
-        borderingCountries.setOnAction((event) -> {
-            comboBoxEventBorderingCountries(borderingCountries,countries,amountDice,armiesDefend);
-        });
-
-        Button attackButton = new Button("ATACAR");
-        AttackButtonHandler attackButtonHandler = new AttackButtonHandler(borderingCountries, countries, amountDice, game, actualPlayer, primaryStage, changeScene());
-        attackButton.setOnAction(attackButtonHandler);
-
-        dataTurn.getChildren().addAll(textAttack, countries,armiesAttack, attacked, borderingCountries,armiesDefend,amountDice,attackButton);
-        dataTurn.setStyle("-fx-border-style: solid inside;"
-                + "-fx-border-width: 2;" + "-fx-border-insets: 5;"
-                + "-fx-border-radius: 5;" + "-fx-border-color: darkred;");
-
-        return dataTurn;
-    }
-*/
     private void comboBoxEventBorderingCountries(ComboBox borderingCountries, ComboBox countries, ComboBox amountDice, Text armiesDefend) {
         Font newFont = new Font("verdana", 10);
 
@@ -362,4 +252,117 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
+
+    /*
+    private Scene changeScene() throws FileNotFoundException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
+        StackPane canvas = new StackPane();
+        canvas.setStyle("-fx-background-color: rgb(242,204,133)");
+
+        HBox nameBox = new HBox(100);
+        nameBox.setAlignment(Pos.CENTER);
+        nameBox.setPrefSize(200,50);
+
+        Text name = new Text();
+
+        Font font = new Font("verdana", 25);
+        name.setText("Jugador n° " + actualPlayer);
+        name.setFont(font);
+
+        nameBox.getChildren().addAll(name);
+
+        HBox dataBox = new HBox();
+
+        nameBox.setStyle("-fx-border-style: solid inside;"
+                + "-fx-border-width: 2;" + "-fx-border-insets: 5;"
+                + "-fx-border-radius: 5;" + "-fx-border-color: darkred;");
+
+        Text information = new Text();
+
+        information.setText("*Datos del jugador nro. " + actualPlayer);
+        information.setFont(font);
+        dataBox.getChildren().add(information);
+        dataBox.setPrefSize(860,50);
+
+        dataBox.setStyle("-fx-border-style: solid inside;"
+                + "-fx-border-width: 2;" + "-fx-border-insets: 5;"
+                + "-fx-border-radius: 5;" + "-fx-border-color: darkred;");
+
+        dataBox.setAlignment(Pos.CENTER);
+
+        HBox firstHBox = new HBox();
+        firstHBox.setMaxHeight(100);
+        firstHBox.setAlignment(Pos.TOP_RIGHT);
+        firstHBox.getChildren().addAll(nameBox,dataBox);
+
+     //   VBox dataTurn = viewDataTurn(font);
+
+        HBox map = viewMap(font);
+
+        HBox secondHBox = new HBox();
+       // secondHBox.getChildren().addAll(dataTurn, map);
+
+        VBox mainBox = new VBox(20);
+        mainBox.getChildren().addAll(firstHBox, secondHBox);
+
+        canvas.getChildren().add(mainBox);
+        canvas.setAlignment(Pos.TOP_CENTER);
+
+        Scene scene = new Scene(canvas, 1050, 690);
+        return scene;
+    }
+*/
+
+
+    /*
+    private VBox viewDataTurn(Font font, Stage primaryStage) throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException, FileNotFoundException {
+        actualPlayer = 1;
+        VBox dataTurn = new VBox(15);
+        dataTurn.setMaxWidth(200);
+        dataTurn.setPrefHeight(500);
+        dataTurn.setAlignment(Pos.CENTER);
+
+        Text textAttack = new Text();
+        textAttack.setText("Ataca desde:");
+        textAttack.setFont(font);
+
+        ComboBox countries = new ComboBox();
+        ArrayList<Country> playerCountries = game.getPlayer(actualPlayer).getDominatedCountries();
+        ComboBox borderingCountries = new ComboBox();
+        borderingCountries.setPromptText("Elija un pais");
+        countries.setPromptText("Elija un pais");
+
+        Text armiesAttack = new Text();
+        Text armiesDefend = new Text();
+        for (Country playerCountry : playerCountries) {
+            if(!playerCountry.correctAmountOfArmyInCountry(1)){
+                countries.getItems().add(playerCountry.getName());
+            }
+        }
+
+        countries.setOnAction((event) -> eventComboBoxFilterCountries(playerCountries,countries,borderingCountries,armiesAttack));
+
+        Text attacked = new Text();
+        attacked.setText("Hacia:");
+        attacked.setFont(font);
+
+        ComboBox amountDice = new ComboBox();
+        amountDice.setPromptText("Cant. de dados");
+
+        borderingCountries.setOnAction((event) -> {
+            comboBoxEventBorderingCountries(borderingCountries,countries,amountDice,armiesDefend);
+        });
+
+        Button attackButton = new Button("ATACAR");
+        AttackButtonHandler attackButtonHandler = new AttackButtonHandler(borderingCountries, countries, amountDice, game, actualPlayer, primaryStage, changeScene());
+        attackButton.setOnAction(attackButtonHandler);
+
+        dataTurn.getChildren().addAll(textAttack, countries,armiesAttack, attacked, borderingCountries,armiesDefend,amountDice,attackButton);
+        dataTurn.setStyle("-fx-border-style: solid inside;"
+                + "-fx-border-width: 2;" + "-fx-border-insets: 5;"
+                + "-fx-border-radius: 5;" + "-fx-border-color: darkred;");
+
+        return dataTurn;
+    }
+*/
 }

@@ -141,12 +141,22 @@ public class Game {
 
     public ArrayList<Country> getOtherPlayersBorderingCountries(Integer playerNumber, Country country) throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
         Player player = getPlayer(playerNumber);
-
-        ArrayList<Country> playersCountries = player.getDominatedCountries();
         ArrayList<Country> borderingCountries = new ArrayList<>();
 
         for(CountryCard card : countryCards){
-            if( (!country.correctAmountOfArmyInCountry(1)) && (country != card.getCountryCard()) && (!playersCountries.contains(card.getCountryCard())) && (map.validateBorderingCountry(country,card.getCountryCard())) ){
+            if((country != card.getCountryCard()) && (!player.containsCountry(card.getCountryCard())) && (map.validateBorderingCountry(country,card.getCountryCard()))){
+                borderingCountries.add(card.getCountryCard());
+            }
+        }
+        return borderingCountries;
+    }
+
+    public ArrayList<Country> getSamePlayersBorderingCountries(Integer playerNumber, Country country) throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
+        Player player = getPlayer(playerNumber);
+        ArrayList<Country> borderingCountries = new ArrayList<>();
+
+        for(CountryCard card : countryCards){
+            if((country != card.getCountryCard()) && (player.containsCountry(card.getCountryCard())) && (map.validateBorderingCountry(country,card.getCountryCard()))){
                 borderingCountries.add(card.getCountryCard());
             }
         }
@@ -219,4 +229,6 @@ public class Game {
 
         return players.size();
     }
+
+
 }

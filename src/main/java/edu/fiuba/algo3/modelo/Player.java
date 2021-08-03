@@ -131,4 +131,14 @@ public class Player {
         }
         return (dominatedCountries.size() / 2);
     }
+
+    public boolean containsCountry(Country country) {
+        boolean contains = false;
+        for(Country aCountry : dominatedCountries){
+            if(aCountry.getName().equals(country.getName())) {
+                contains = true;
+            }
+        }
+        return contains;
+    }
 }

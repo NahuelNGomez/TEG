@@ -2,11 +2,7 @@ package edu.fiuba.algo3.view.handlers;
 
 import edu.fiuba.algo3.modelo.Country;
 import edu.fiuba.algo3.modelo.Game;
-import edu.fiuba.algo3.modelo.Player;
-import edu.fiuba.algo3.modelo.exceptions.EmptyCountryParameterException;
-import edu.fiuba.algo3.modelo.exceptions.InvalidPlacement;
-import edu.fiuba.algo3.modelo.exceptions.NonExistentCountry;
-import edu.fiuba.algo3.modelo.exceptions.NonExistentPlayer;
+import edu.fiuba.algo3.modelo.exceptions.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -28,19 +24,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class PlacementButtonHandler implements EventHandler<ActionEvent> {
-    Integer num;
-    ComboBox amount;
-    Text textAmount;
-    ComboBox countries;
-    Game game;
+    private Integer num;
+    private ComboBox amount;
+    private Text textAmount;
+    private ComboBox countries;
+    private Game game;
     private HashMap<Country, Integer> playerCountries;
-    Integer initialAmount;
-    Integer player;
-    Scene nextScene;
+    private Integer initialAmount;
+    private Integer player;
+    private Scene nextScene;
+    private Stage primaryStage;
 
-    Stage primaryStage;
-
-    public PlacementButtonHandler(Integer num, ComboBox amount, ComboBox countries,Text textAmount, Game game, Integer initialAmount, Integer actualPlayer,  Stage primaryStage, Scene nextScene) {
+    public PlacementButtonHandler(Integer num,  Integer initialAmount,ComboBox amount,ComboBox countries,Text textAmount,Game game,Integer actualPlayer,Stage primaryStage,Scene nextScene) {
         this.num = num;
         this.amount = amount;
         this.textAmount = textAmount;
@@ -50,18 +45,14 @@ public class PlacementButtonHandler implements EventHandler<ActionEvent> {
         this.initialAmount = initialAmount;
         player = actualPlayer;
         this.nextScene = nextScene;
-
         this.primaryStage = primaryStage;
     }
 
     @Override
     public void handle(ActionEvent actionEvent) {
-
-        System.out.println(amount.getValue().getClass());
         num = num - (Integer)amount.getValue();
 
         textAmount.setText(String.valueOf (num));
-        System.out.println(num);
         Country country = selectedCountryInComboBox(countries.getValue(), game.getCountries());
 
         playerCountries.put(country, (Integer)amount.getValue());
@@ -69,9 +60,8 @@ public class PlacementButtonHandler implements EventHandler<ActionEvent> {
         if(num == 0 && initialAmount == 5){
             try {
                 game.placingFiveArmiesInPlacementRound(player,playerCountries);
-                System.out.println( game.getPlayer(1).correctAmountOfArmy(30));
                 num = 5;
-                if(player == game.amountOfPlayers()){
+                if(player.equals(game.amountOfPlayers())){
                     player = 1;
                     num = 3;
                     initialAmount = 3;
@@ -84,49 +74,25 @@ public class PlacementButtonHandler implements EventHandler<ActionEvent> {
 
                 };
 
-            } catch (InvalidPlacement invalidPlacement) {
+            } catch (InvalidPlacement | NonExistentCountry | EmptyCountryParameterException | NonExistentPlayer | FileNotFoundException invalidPlacement) {
                 invalidPlacement.printStackTrace();
-            } catch (NonExistentCountry nonExistentCountry) {
-                nonExistentCountry.printStackTrace();
-            } catch (EmptyCountryParameterException e) {
-                e.printStackTrace();
-            } catch (NonExistentPlayer nonExistentPlayer) {
-                nonExistentPlayer.printStackTrace();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
             }
         } else if(num == 0 && initialAmount == 3){
             try {
                 game.placingThreeArmiesInPlacementRound(player,playerCountries);
-                System.out.println(game.getPlayer(1).amountOfDominatedCountries());
                 num = 3;
-                if(player == game.amountOfPlayers()){
-                    //cambiarDeEscena
+                if(player.equals(game.amountOfPlayers())){
                     player = 1;
                     primaryStage.setScene(changeScene());
-
-                    System.out.println("DEBERIA TERMINAR");
-
-
+                    //System.out.println("DEBERIA TERMINAR");
                 } else{
                     player++;
                     primaryStage.setScene(firstplacementScene(primaryStage, num));
-
                 };
-                //CAMBIAR ESCENA PARA JUGADOR 2
-            } catch (InvalidPlacement invalidPlacement) {
+            } catch (InvalidPlacement | NonExistentCountry | EmptyCountryParameterException | NonExistentPlayer | FileNotFoundException invalidPlacement) {
                 invalidPlacement.printStackTrace();
-            } catch (NonExistentCountry nonExistentCountry) {
-                nonExistentCountry.printStackTrace();
-            } catch (EmptyCountryParameterException e) {
-                e.printStackTrace();
-            } catch (NonExistentPlayer nonExistentPlayer) {
-                nonExistentPlayer.printStackTrace();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
             }
         }
-
     }
 
     private Country selectedCountryInComboBox(Object country, ArrayList<Country> list){
@@ -162,7 +128,7 @@ public class PlacementButtonHandler implements EventHandler<ActionEvent> {
 
         VBox dataTurn = viewPlacementTurn(num, primaryStage);
 
-        HBox map = viewMap(font);
+        HBox map = viewMap();
 
         HBox secondHBox = new HBox();
         secondHBox.getChildren().addAll(dataTurn, map);
@@ -210,10 +176,7 @@ public class PlacementButtonHandler implements EventHandler<ActionEvent> {
         textAmount.setText(String.valueOf(amount));
 
         Button acceptButton = new Button("ACEPTAR");
-
-        PlacementButtonHandler PlacementButtonHandler = new PlacementButtonHandler(amount ,amountArmy, countries,textAmount, game, num,player, primaryStage, changeScene());
-
-
+        PlacementButtonHandler PlacementButtonHandler = new PlacementButtonHandler(amount,num,amountArmy,countries,textAmount,game,player,primaryStage,changeScene());
         acceptButton.setOnAction(PlacementButtonHandler);
 
         dataTurn.getChildren().addAll(textAmount ,textPlacement,countries,amountArmy,acceptButton);
@@ -224,7 +187,7 @@ public class PlacementButtonHandler implements EventHandler<ActionEvent> {
         return dataTurn;
     }
 
-    private HBox viewMap(Font font) throws FileNotFoundException {
+    private HBox viewMap() throws FileNotFoundException {
         HBox map = new HBox();
 
         map.setStyle("-fx-border-style: solid inside;"
@@ -285,7 +248,7 @@ public class PlacementButtonHandler implements EventHandler<ActionEvent> {
 
         VBox dataTurn = viewDataTurn(font);
 
-        HBox map = viewMap(font);
+        HBox map = viewMap();
 
         HBox secondHBox = new HBox();
         secondHBox.getChildren().addAll(dataTurn, map);
@@ -340,18 +303,8 @@ public class PlacementButtonHandler implements EventHandler<ActionEvent> {
         });
 
         Button attackButton = new Button("ATACAR");
-
         AttackButtonHandler attackButtonHandler = new AttackButtonHandler(borderingCountries, countries, amountDice, game, player, primaryStage, null);
         attackButton.setOnAction(attackButtonHandler);
-       // attackButton.setOnAction((event) -> {
-            /*try {
-                Country firstCountry = selectedCountryInComboBox(borderingCountries.getValue(),game.getCountries());
-                Country secondCountry =selectedCountryInComboBox(countries.getValue(),game.getCountries());
-                game.attack(actualPlayer,firstCountry,secondCountry,(Integer)amountDice.getValue());
-            } catch (NonExistentPlayer | InvalidAttack | NonExistentCountry | EmptyCountryParameterException nonExistentPlayer) {
-                nonExistentPlayer.printStackTrace();
-            }*/
-        //}
 
         dataTurn.getChildren().addAll(textAttack, countries,armiesAttack, attacked, borderingCountries,armiesDefend,amountDice,attackButton);
         dataTurn.setStyle("-fx-border-style: solid inside;"
@@ -366,10 +319,14 @@ public class PlacementButtonHandler implements EventHandler<ActionEvent> {
 
         Country attackerCountry = selectedCountryInComboBox(countries.getValue(),game.getCountries());
 
-        if(attackerCountry.getArmyAmount() >= 3){
-            amountDice.getItems().add(1);
-            amountDice.getItems().add(2);
-            amountDice.getItems().add(3);
+        /*for(Object obj : amountDice.getItems()){
+            System.out.println(obj);
+        }*/
+
+        if(attackerCountry.getArmyAmount() > 3){
+            for(int i = 1; i <= 3; i++ ){
+                amountDice.getItems().add(i);
+            }
         } else {
             for(int i = 1; i <= attackerCountry.getArmyAmount(); i++ ){
                 amountDice.getItems().add(i);
