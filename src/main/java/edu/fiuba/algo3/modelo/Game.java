@@ -9,8 +9,6 @@ import java.util.*;
 public class Game {
 
     private Map map;
-    private Battlefield battlefield = new Battlefield();
-    //private MockBattlefield battlefield = new MockBattlefield(); //Battlefield Mock for the Dice
     private ArrayList<Player> players = new ArrayList<Player>();
     private Player winner;
     private SettingGame set;
@@ -123,7 +121,7 @@ public class Game {
     public void attack(Integer numberAttackerPlayer, Country attackerCountry, Country defenderCountry, Integer amountOfAttackerDice) throws NonExistentPlayer, EmptyCountryParameterException, NonExistentCountry, InvalidAttack {
         checkValidCountryParameter(attackerCountry);
         checkValidCountryParameter(defenderCountry);
-        winner = attackRound.attack(getPlayer(numberAttackerPlayer),attackerCountry,defenderCountry,amountOfAttackerDice,numberAttackerPlayer-1);
+        winner = attackRound.attack(getPlayer(numberAttackerPlayer),attackerCountry,defenderCountry,amountOfAttackerDice);
     }
 
     public void playerDominatedContinent(Integer playerNumber,HashMap<Country,Integer> armiesToAdd) throws NonExistentPlayer, EmptyCountryParameterException, InvalidPlacement, NonExistentCountry {
@@ -170,6 +168,10 @@ public class Game {
     ///////////////////////////////////////////////////// PARA PRUEBAS  /////////////////////////////////////////////
     public Player winner(){
         return winner;
+    }
+
+    public boolean theresAWinner(){
+        return (winner == null);
     }
 
     public Continent continentDominatedByPlayer(Integer playerNumber) throws EmptyCountryParameterException, NonExistentPlayer {
@@ -226,8 +228,15 @@ public class Game {
     }
 
     public Integer amountOfPlayers() {
-
         return players.size();
+    }
+
+    public ArrayList<Continent> getContinents(){
+        return map.getContinents();
+    }
+
+    public Integer armyToAddByDominatedContinent(Continent continent) throws NonExistentContinent {
+        return map.searchContinentInMap(continent).getAmountOfArmyWhenDominated();
     }
 
 

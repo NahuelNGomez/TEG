@@ -122,4 +122,8 @@ public class Map {
     public Continent continentDominatedByPlayer(Player player){
         return player.dominatedContinent(continents);
     }
+
+    public ArrayList<Continent> getContinents() {
+        return continents;
+    }
 }

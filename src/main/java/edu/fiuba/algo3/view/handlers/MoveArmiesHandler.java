@@ -56,24 +56,22 @@ public class MoveArmiesHandler implements EventHandler {
         Country firstCountry = selectedCountryInComboBox(countries.getValue(),game.getCountries());
         Country secondCountry = selectedCountryInComboBox(otherCountry.getValue(),game.getCountries());
 
-        System.out.println(firstCountry.getName());
-        System.out.println(secondCountry.getName());
         try {
             game.regroup(actualPlayer,firstCountry,secondCountry, (Integer) armies.getValue());
         } catch (EmptyCountryParameterException | NonExistentCountry | NonExistentPlayer | InvalidRegroup e) {
             e.printStackTrace();
         }
 
-        if(actualPlayer < game.amountOfPlayers()){
+        if(actualPlayer.equals(game.amountOfPlayers())){
+            actualPlayer = 1;
+            primaryStage.setScene(scene);
+        } else {
             actualPlayer = actualPlayer + 1;
             try {
                 primaryStage.setScene(changeScene());
             } catch (FileNotFoundException | NonExistentPlayer | NonExistentCountry | EmptyCountryParameterException e) {
                 e.printStackTrace();
             }
-        } else {
-            actualPlayer = 1;
-            primaryStage.setScene(scene);
         }
     }
 
@@ -140,12 +138,24 @@ public class MoveArmiesHandler implements EventHandler {
         dataTurn.setPrefHeight(500);
         dataTurn.setAlignment(Pos.CENTER);
 
+
+        ComboBox ownedCountries = new ComboBox();
+        for( Country country : game.getPlayer(actualPlayer).getDominatedCountries()){
+            String name = country.getName();
+            String army = country.getArmyAmount().toString();
+            String newString = name + army;
+            ownedCountries.getItems().add(newString);
+        }
+        ownedCountries.setPromptText("Paises dominados");
+
+
         Text textAttack = new Text();
         textAttack.setText("Mover desde:");
         textAttack.setFont(font);
 
         ComboBox countries = new ComboBox();
         ArrayList<Country> playerCountries = game.getPlayer(actualPlayer).getDominatedCountries();
+
         for (Country playerCountry : playerCountries) {
             if(!playerCountry.correctAmountOfArmyInCountry(1)){
                 countries.getItems().add(playerCountry.getName());
@@ -156,12 +166,11 @@ public class MoveArmiesHandler implements EventHandler {
         receivingCountries.setPromptText("Elija un pais");
         countries.setPromptText("Elija un pais");
 
-        Text amountArmyText = new Text();
-
         ComboBox amountArmy = new ComboBox();
         amountArmy.setPromptText("Cant. de fichas");
 
-        //countries.setOnAction((event) -> eventComboBoxFilterCountries(countries,receivingCountries,amountArmyText,amountArmy));
+        Text amountArmyText = new Text();
+        countries.setOnAction((event) -> eventComboBoxFilterCountries(countries,receivingCountries,amountArmyText,amountArmy));
 
         Text moveToText = new Text();
         moveToText.setText("Hacia:");
@@ -173,10 +182,10 @@ public class MoveArmiesHandler implements EventHandler {
 
         Button moveArmyButton = new Button("REAGRUPAR");
 
-        MoveArmiesHandler moveArmiesHandler = new MoveArmiesHandler(amountArmy,countries,receivingCountries,textAmount,game,actualPlayer,primaryStage,scene);
-        moveArmyButton.setOnAction(moveArmiesHandler);
+        MoveArmiesHandler attackButtonHandler = new MoveArmiesHandler(amountArmy,countries,receivingCountries,textAmount,game,actualPlayer,primaryStage,scene);
+        moveArmyButton.setOnAction(attackButtonHandler);
 
-        dataTurn.getChildren().addAll(textAttack, countries,amountArmyText, moveToText, receivingCountries,amountText,amountArmy,moveArmyButton);
+        dataTurn.getChildren().addAll(textAttack, countries,amountArmyText, moveToText, receivingCountries,amountText,amountArmy,moveArmyButton,ownedCountries);
         dataTurn.setStyle("-fx-border-style: solid inside;"
                 + "-fx-border-width: 2;" + "-fx-border-insets: 5;"
                 + "-fx-border-radius: 5;" + "-fx-border-color: darkred;");
@@ -211,5 +220,40 @@ public class MoveArmiesHandler implements EventHandler {
             }
         }
         return selectedCountry;
+    }
+
+    private void eventComboBoxFilterCountries(ComboBox countries, ComboBox borderingCountries,Text armiesText,ComboBox armies){
+        Font newFont = new Font("verdana", 10);
+
+        Country selectedCountry = selectedCountryInComboBox(countries.getValue(),game.getCountries());
+
+        armiesText.setText(" Cant. ejércitos "+ selectedCountry.getArmyAmount());
+        armiesText.setFont(newFont);
+
+        ArrayList<Country> borderCountries = null;
+
+        try {
+            borderCountries = game.getSamePlayersBorderingCountries(actualPlayer,selectedCountry);
+        } catch (NonExistentPlayer | EmptyCountryParameterException | NonExistentCountry nonExistentPlayer) {
+            nonExistentPlayer.printStackTrace();
+        }
+
+        while(borderingCountries.getItems().size() != 0){
+            for(int i = 0; i < borderingCountries.getItems().size(); i++){
+                borderingCountries.getItems().remove(i);
+            }
+        }
+        for(Country borderCountry : borderCountries) {
+            borderingCountries.getItems().add(borderCountry.getName());
+        }
+
+        while(armies.getItems().size() != 0){
+            for(int i = 0; i < armies.getItems().size(); i++){
+                armies.getItems().remove(i);
+            }
+        }
+        for(int i = 1; i < selectedCountry.getArmyAmount(); i++){
+            armies.getItems().add(i);
+        }
     }
 }

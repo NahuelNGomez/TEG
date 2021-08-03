@@ -9,13 +9,12 @@ import java.util.*;
 public class MockGame {
 
     private Map map;
-    private MockBattlefield battlefield = new MockBattlefield(); //Battlefield Mock for the Dice
     private ArrayList<Player> players = new ArrayList<Player>();
     private Player winner;
     private SettingGame set;
 
     private PlacementRound placementRound;
-    private AttackRound attackRound;
+    private MockAttackRound attackRound;
     private RegroupRound regroupRound;
 
     private ArrayList<CountryCard> countryCards = new ArrayList<CountryCard>();
@@ -42,7 +41,7 @@ public class MockGame {
         if (countryCards.size() < 50) setCountryCards();
 
         placementRound = new PlacementRound(players, map);
-        attackRound = new AttackRound(players, map, countryCards);
+        attackRound = new MockAttackRound(players, map, countryCards);
         regroupRound = new RegroupRound(players, map);
     }
 

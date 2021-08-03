@@ -34,14 +34,7 @@ public class RegroupRound {
         boolean ownsFirstCountry = player.dominatedCountry(firstCountry);
         boolean ownsSecondCountry = player.dominatedCountry(secondCountry);
         boolean areBordering = map.validateBorderingCountry(firstCountry, secondCountry);
-        //System.out.println(armyToRegroup);
         boolean correctAmount = (firstCountry.getArmyAmount()) > armyToRegroup;
-
-        System.out.println(ownsFirstCountry);
-        System.out.println(ownsSecondCountry);
-        System.out.println(areBordering);
-        System.out.println(firstCountry.getArmyAmount() + " -- " + armyToRegroup);
-        System.out.println(correctAmount);
 
         return (ownsFirstCountry && ownsSecondCountry && areBordering && correctAmount);
     }

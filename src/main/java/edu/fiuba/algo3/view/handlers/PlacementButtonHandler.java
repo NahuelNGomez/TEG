@@ -84,7 +84,6 @@ public class PlacementButtonHandler implements EventHandler<ActionEvent> {
                 if(player.equals(game.amountOfPlayers())){
                     player = 1;
                     primaryStage.setScene(changeScene());
-                    //System.out.println("DEBERIA TERMINAR");
                 } else{
                     player++;
                     primaryStage.setScene(firstplacementScene(primaryStage, num));
@@ -151,6 +150,14 @@ public class PlacementButtonHandler implements EventHandler<ActionEvent> {
         dataTurn.setAlignment(Pos.CENTER);
         Integer amount = num;
 
+        ComboBox ownedCountries = new ComboBox();
+        for( Country country : game.getPlayer(player).getDominatedCountries()){
+            String name = country.getName();
+            String army = country.getArmyAmount().toString();
+            String newString = name + army;
+            ownedCountries.getItems().add(newString);
+        }
+        ownedCountries.setPromptText("Paises dominados");
 
         Text textPlacement = new Text();
         textPlacement.setText("Agregue " + num + " ejercitos");
@@ -167,6 +174,12 @@ public class PlacementButtonHandler implements EventHandler<ActionEvent> {
         ComboBox amountArmy = new ComboBox();
         amountArmy.setPromptText("Cant. de ejercitos");
 
+        while(amountArmy.getItems().size() != 0){
+            for(int i = 0; i < amountArmy.getItems().size(); i++){
+                amountArmy.getItems().remove(i);
+            }
+        }
+
         for(int i = 1; i <= num; i++){
             amountArmy.getItems().add(i);
         }
@@ -179,7 +192,7 @@ public class PlacementButtonHandler implements EventHandler<ActionEvent> {
         PlacementButtonHandler PlacementButtonHandler = new PlacementButtonHandler(amount,num,amountArmy,countries,textAmount,game,player,primaryStage,changeScene());
         acceptButton.setOnAction(PlacementButtonHandler);
 
-        dataTurn.getChildren().addAll(textAmount ,textPlacement,countries,amountArmy,acceptButton);
+        dataTurn.getChildren().addAll(textAmount ,textPlacement,countries,amountArmy,acceptButton,ownedCountries);
         dataTurn.setStyle("-fx-border-style: solid inside;"
                 + "-fx-border-width: 2;" + "-fx-border-insets: 5;"
                 + "-fx-border-radius: 5;" + "-fx-border-color: darkred;");
@@ -269,6 +282,15 @@ public class PlacementButtonHandler implements EventHandler<ActionEvent> {
         dataTurn.setPrefHeight(500);
         dataTurn.setAlignment(Pos.CENTER);
 
+        ComboBox ownedCountries = new ComboBox();
+        for( Country country : game.getPlayer(player).getDominatedCountries()){
+            String name = country.getName();
+            String army = country.getArmyAmount().toString();
+            String newString = name + army;
+            ownedCountries.getItems().add(newString);
+        }
+        ownedCountries.setPromptText("Paises dominados");
+
         Text textAttack = new Text();
         textAttack.setText("Ataca desde:");
         textAttack.setFont(font);
@@ -289,7 +311,7 @@ public class PlacementButtonHandler implements EventHandler<ActionEvent> {
         Text armiesAttack = new Text();
         Text armiesDefend = new Text();
 
-        countries.setOnAction((event) -> eventComboBoxFilterCountries(playerCountries,countries,borderingCountries,armiesAttack));
+        countries.setOnAction((event) -> eventComboBoxFilterCountries(countries,borderingCountries,armiesAttack));
 
         Text attacked = new Text();
         attacked.setText("Hacia:");
@@ -306,7 +328,7 @@ public class PlacementButtonHandler implements EventHandler<ActionEvent> {
         AttackButtonHandler attackButtonHandler = new AttackButtonHandler(borderingCountries, countries, amountDice, game, player, primaryStage, null);
         attackButton.setOnAction(attackButtonHandler);
 
-        dataTurn.getChildren().addAll(textAttack, countries,armiesAttack, attacked, borderingCountries,armiesDefend,amountDice,attackButton);
+        dataTurn.getChildren().addAll(textAttack, countries,armiesAttack, attacked, borderingCountries,armiesDefend,amountDice,attackButton,ownedCountries);
         dataTurn.setStyle("-fx-border-style: solid inside;"
                 + "-fx-border-width: 2;" + "-fx-border-insets: 5;"
                 + "-fx-border-radius: 5;" + "-fx-border-color: darkred;");
@@ -319,9 +341,11 @@ public class PlacementButtonHandler implements EventHandler<ActionEvent> {
 
         Country attackerCountry = selectedCountryInComboBox(countries.getValue(),game.getCountries());
 
-        /*for(Object obj : amountDice.getItems()){
-            System.out.println(obj);
-        }*/
+        while(amountDice.getItems().size() != 0){
+            for(int i = 0; i < amountDice.getItems().size(); i++){
+                amountDice.getItems().remove(i);
+            }
+        }
 
         if(attackerCountry.getArmyAmount() > 3){
             for(int i = 1; i <= 3; i++ ){
@@ -338,7 +362,7 @@ public class PlacementButtonHandler implements EventHandler<ActionEvent> {
         armiesDefend.setFont(newFont);
     }
 
-    private void eventComboBoxFilterCountries(ArrayList<Country> playerCountries, ComboBox countries, ComboBox borderingCountries,Text armiesAttack){
+    private void eventComboBoxFilterCountries(ComboBox countries, ComboBox borderingCountries,Text armiesAttack){
         Font newFont = new Font("verdana", 10);
 
         Country selectedCountry = selectedCountryInComboBox(countries.getValue(),game.getCountries());
@@ -354,6 +378,11 @@ public class PlacementButtonHandler implements EventHandler<ActionEvent> {
             nonExistentPlayer.printStackTrace();
         }
 
+        while(borderingCountries.getItems().size() != 0){
+            for(int i = 0; i < borderingCountries.getItems().size(); i++){
+                borderingCountries.getItems().remove(i);
+            }
+        }
         for(Country borderCountry : borderCountries) {
             borderingCountries.getItems().add(borderCountry.getName());
         }

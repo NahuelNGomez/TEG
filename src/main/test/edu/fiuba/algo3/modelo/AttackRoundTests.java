@@ -12,7 +12,7 @@ public class AttackRoundTests {
     int numberOfPlayers = 2;
     MockGame game = new MockGame(numberOfPlayers);
 
-    AttackRound attackRound = new AttackRound(game.getPlayers(), game.getMap(), game.getCountryCards());
+    MockAttackRound attackRound = new MockAttackRound(game.getPlayers(), game.getMap(), game.getCountryCards());
 
     Integer firstPlayerNumber = 1;
     Integer secondPlayerNumber = 2;

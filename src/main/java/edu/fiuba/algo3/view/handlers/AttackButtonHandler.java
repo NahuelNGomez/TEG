@@ -1,12 +1,10 @@
 package edu.fiuba.algo3.view.handlers;
 
+import edu.fiuba.algo3.modelo.Continent;
 import edu.fiuba.algo3.modelo.Country;
 import edu.fiuba.algo3.modelo.Game;
 import edu.fiuba.algo3.modelo.Player;
-import edu.fiuba.algo3.modelo.exceptions.EmptyCountryParameterException;
-import edu.fiuba.algo3.modelo.exceptions.InvalidAttack;
-import edu.fiuba.algo3.modelo.exceptions.NonExistentCountry;
-import edu.fiuba.algo3.modelo.exceptions.NonExistentPlayer;
+import edu.fiuba.algo3.modelo.exceptions.*;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -49,8 +47,16 @@ public class AttackButtonHandler implements EventHandler {
         try {
             Country firstCountry = selectedCountryInComboBox(countries.getValue(),game.getCountries());
             Country secondCountry = selectedCountryInComboBox(borderingCountries.getValue(),game.getCountries());
-            game.attack(actualPlayer,firstCountry,secondCountry,(Integer)amountDice.getValue());
-        } catch (NonExistentPlayer | InvalidAttack | NonExistentCountry | EmptyCountryParameterException nonExistentPlayer) {
+             game.attack(actualPlayer,firstCountry,secondCountry,(Integer)amountDice.getValue());
+
+             if(game.theresAWinner()){
+                 primaryStage.setScene(winnerScene());
+             }
+            Continent continent = game.getPlayer(actualPlayer).dominatedContinent(game.getContinents());
+            if( continent != null){ //domino un pais
+                primaryStage.setScene(dominatedContinentScene(continent));
+            }
+        } catch (NonExistentPlayer | InvalidAttack | NonExistentCountry | EmptyCountryParameterException | FileNotFoundException | NonExistentContinent nonExistentPlayer) {
             nonExistentPlayer.printStackTrace();
         }
         System.out.println("jugador " + actualPlayer + " atacó");
@@ -72,6 +78,151 @@ public class AttackButtonHandler implements EventHandler {
                 e.printStackTrace();
             }
         }
+    }
+
+    private Scene winnerScene() {
+        StackPane canvas = new StackPane();
+        canvas.setStyle("-fx-background-color: rgb(242,204,133)");
+
+        HBox winnerBox = new HBox(100);
+        winnerBox.setAlignment(Pos.CENTER);
+        winnerBox.setPrefSize(200,50);
+
+        Text winner = new Text();
+
+        Font font = new Font("verdana", 15);
+        winner.setText("EL GANADOR ES EL JUGADOR NRO " + actualPlayer);
+        winner.setFont(font);
+
+        winnerBox.getChildren().addAll(winner);
+
+        winnerBox.setStyle("-fx-border-style: solid inside;"
+                + "-fx-border-width: 2;" + "-fx-border-insets: 5;"
+                + "-fx-border-radius: 5;" + "-fx-border-color: darkred;");
+
+        canvas.getChildren().add(winnerBox);
+        canvas.setAlignment(Pos.TOP_CENTER);
+
+        Scene scene = new Scene(canvas, 1050, 690);
+        return scene;
+    }
+
+    private Scene dominatedContinentScene(Continent continent) throws FileNotFoundException, NonExistentPlayer, NonExistentContinent {
+        StackPane canvas = new StackPane();
+        canvas.setStyle("-fx-background-color: rgb(242,204,133)");
+
+        HBox nameBox = new HBox(100);
+        nameBox.setAlignment(Pos.CENTER);
+        nameBox.setPrefSize(200,50);
+
+        Text name = new Text();
+
+        Font font = new Font("verdana", 15);
+        name.setText("Jugador n° " + actualPlayer);
+        name.setFont(font);
+
+        nameBox.getChildren().addAll(name);
+
+        HBox dataBox = new HBox();
+
+        nameBox.setStyle("-fx-border-style: solid inside;"
+                + "-fx-border-width: 2;" + "-fx-border-insets: 5;"
+                + "-fx-border-radius: 5;" + "-fx-border-color: darkred;");
+
+        Text information = new Text();
+
+        information.setText("Posee "+ game.getPlayer(actualPlayer).amountOfDominatedCountries()+" paises - * Datos del jugador nro. " + actualPlayer);
+        information.setFont(font);
+        dataBox.getChildren().add(information);
+        dataBox.setPrefSize(860,50);
+
+        dataBox.setStyle("-fx-border-style: solid inside;"
+                + "-fx-border-width: 2;" + "-fx-border-insets: 5;"
+                + "-fx-border-radius: 5;" + "-fx-border-color: darkred;");
+
+        dataBox.setAlignment(Pos.CENTER);
+
+        HBox firstHBox = new HBox();
+        firstHBox.setMaxHeight(100);
+        firstHBox.setAlignment(Pos.TOP_RIGHT);
+        firstHBox.getChildren().addAll(nameBox,dataBox);
+
+        VBox dataTurn = viewDominatedContinent(font,continent);
+
+        HBox map = viewMap();
+
+        HBox secondHBox = new HBox();
+        secondHBox.getChildren().addAll(dataTurn, map);
+
+        VBox mainBox = new VBox(20);
+        mainBox.getChildren().addAll(firstHBox, secondHBox);
+
+        canvas.getChildren().add(mainBox);
+        canvas.setAlignment(Pos.TOP_CENTER);
+
+        Scene scene = new Scene(canvas, 1050, 690);
+        return scene;
+    }
+
+    private VBox viewDominatedContinent(Font font, Continent continent) throws NonExistentPlayer, NonExistentContinent {
+        VBox dataTurn = new VBox(15);
+        dataTurn.setMaxWidth(100);
+        dataTurn.setPrefHeight(500);
+        dataTurn.setAlignment(Pos.CENTER);
+
+        ComboBox ownedCountries = new ComboBox();
+        for( Country country : game.getPlayer(actualPlayer).getDominatedCountries()){
+            String name = country.getName();
+            String army = country.getArmyAmount().toString();
+            String newString = name + army;
+            ownedCountries.getItems().add(newString);
+        }
+        ownedCountries.setPromptText("Paises dominados");
+
+        Text infoText = new Text();
+        infoText.setText("Se domino un continent");
+        Text textAttack = new Text();
+        textAttack.setText("Agregar fichas a:");
+        textAttack.setFont(font);
+
+        ComboBox countries = new ComboBox();
+        ArrayList<Country> playerCountries = game.getPlayer(actualPlayer).getDominatedCountries();
+        for (Country playerCountry : playerCountries) {
+            countries.getItems().add(playerCountry.getName());
+        }
+
+        ComboBox armies = new ComboBox();
+        armies.setPromptText("Elija una cantidad");
+        countries.setPromptText("Elija un pais");
+
+        Text armyamount = new Text();
+        armyamount.setText("esta cantidad de fichas: ");
+        armyamount.setFont(font);
+
+        while(armies.getItems().size() != 0){
+            for(int i = 0; i < armies.getItems().size(); i++){
+                armies.getItems().remove(i);
+            }
+        }
+
+        for( int i = 1; i <= game.armyToAddByDominatedContinent(continent); i++){
+            armies.getItems().add(i);
+        }
+        Button addButton = new Button("AGREGAR");
+
+        Text textAmount = new Text();
+        Integer initialamount = game.armyToAddByDominatedContinent(continent);
+        textAmount.setText(String.valueOf(initialamount));
+
+        AddButtonHandler addButtonHandler = new AddButtonHandler(initialamount,initialamount,armies,countries,textAmount,game,actualPlayer,primaryStage,scene);
+        addButton.setOnAction(addButtonHandler);
+
+        dataTurn.getChildren().addAll(infoText,textAmount,textAttack,countries,armyamount,armies,addButton,ownedCountries);
+        dataTurn.setStyle("-fx-border-style: solid inside;"
+                + "-fx-border-width: 2;" + "-fx-border-insets: 5;"
+                + "-fx-border-radius: 5;" + "-fx-border-color: darkred;");
+
+        return dataTurn;
     }
 
     private Scene regroupScene() throws FileNotFoundException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
@@ -137,6 +288,15 @@ public class AttackButtonHandler implements EventHandler {
         dataTurn.setPrefHeight(500);
         dataTurn.setAlignment(Pos.CENTER);
 
+        ComboBox ownedCountries = new ComboBox();
+        for( Country country : game.getPlayer(actualPlayer).getDominatedCountries()){
+            String name = country.getName();
+            String army = country.getArmyAmount().toString();
+            String newString = name + army;
+            ownedCountries.getItems().add(newString);
+        }
+        ownedCountries.setPromptText("Paises dominados");
+
         Text textAttack = new Text();
         textAttack.setText("Agregar fichas a:");
         textAttack.setFont(font);
@@ -155,6 +315,12 @@ public class AttackButtonHandler implements EventHandler {
         armyamount.setText("esta cantidad de fichas: ");
         armyamount.setFont(font);
 
+        while(armies.getItems().size() != 0){
+            for(int i = 0; i < armies.getItems().size(); i++){
+                armies.getItems().remove(i);
+            }
+        }
+
         for( int i = 1; i <= game.getPlayer(actualPlayer).amountOfArmiesToAddInRegroupRound(); i++){
             armies.getItems().add(i);
         }
@@ -170,13 +336,12 @@ public class AttackButtonHandler implements EventHandler {
         RegroupButtonHandler regroupButtonHandler = new RegroupButtonHandler(amount,initialamount,countries,armies,textAmount,game,actualPlayer,primaryStage,changeScene());
         regroupButton.setOnAction(regroupButtonHandler);
 
-        dataTurn.getChildren().addAll(textAmount,textAttack,countries,armyamount,armies,regroupButton);
+        dataTurn.getChildren().addAll(textAmount,textAttack,countries,armyamount,armies,regroupButton,ownedCountries);
         dataTurn.setStyle("-fx-border-style: solid inside;"
                 + "-fx-border-width: 2;" + "-fx-border-insets: 5;"
                 + "-fx-border-radius: 5;" + "-fx-border-color: darkred;");
 
         return dataTurn;
-
     }
 
     private Country selectedCountryInComboBox(Object country, ArrayList<Country> list){
@@ -271,6 +436,15 @@ public class AttackButtonHandler implements EventHandler {
         dataTurn.setPrefHeight(500);
         dataTurn.setAlignment(Pos.CENTER);
 
+        ComboBox ownedCountries = new ComboBox();
+        for( Country country : game.getPlayer(actualPlayer).getDominatedCountries()){
+            String name = country.getName();
+            String army = country.getArmyAmount().toString();
+            String newString = name + army;
+            ownedCountries.getItems().add(newString);
+        }
+        ownedCountries.setPromptText("Paises dominados");
+
         Text textAttack = new Text();
         textAttack.setText("Ataca desde:");
         textAttack.setFont(font);
@@ -308,7 +482,7 @@ public class AttackButtonHandler implements EventHandler {
         AttackButtonHandler attackButtonHandler = new AttackButtonHandler(borderingCountries, countries, amountDice, game, actualPlayer, primaryStage, null);
         attackButton.setOnAction(attackButtonHandler);
 
-        dataTurn.getChildren().addAll(textAttack, countries,armiesAttack, attacked, borderingCountries,armiesDefend,amountDice,attackButton);
+        dataTurn.getChildren().addAll(textAttack, countries,armiesAttack, attacked, borderingCountries,armiesDefend,amountDice,attackButton,ownedCountries);
         dataTurn.setStyle("-fx-border-style: solid inside;"
                 + "-fx-border-width: 2;" + "-fx-border-insets: 5;"
                 + "-fx-border-radius: 5;" + "-fx-border-color: darkred;");
@@ -321,8 +495,16 @@ public class AttackButtonHandler implements EventHandler {
 
         Country attackerCountry = selectedCountryInComboBox(countries.getValue(),game.getCountries());
 
-        if(attackerCountry.getArmyAmount() >= 3){
-            amountDice.getItems().add(3);
+        while(amountDice.getItems().size() != 0){
+            for(int i = 0; i < amountDice.getItems().size(); i++){
+                amountDice.getItems().remove(i);
+            }
+        }
+
+        if(attackerCountry.getArmyAmount() > 3){
+            for(int i = 1; i <= 3; i++ ){
+                amountDice.getItems().add(i);
+            }
         } else {
             for(int i = 1; i <= attackerCountry.getArmyAmount(); i++ ){
                 amountDice.getItems().add(i);
@@ -348,6 +530,11 @@ public class AttackButtonHandler implements EventHandler {
             borderCountries = game.getOtherPlayersBorderingCountries(actualPlayer,selectedCountry);
         } catch (NonExistentPlayer | EmptyCountryParameterException | NonExistentCountry nonExistentPlayer) {
             nonExistentPlayer.printStackTrace();
+        }
+        while(borderingCountries.getItems().size() != 0){
+            for(int i = 0; i < borderingCountries.getItems().size(); i++){
+                borderingCountries.getItems().remove(i);
+            }
         }
 
         for(Country borderCountry : borderCountries) {

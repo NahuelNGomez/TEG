@@ -51,7 +51,6 @@ public class RegroupButtonHandler implements EventHandler {
 
     @Override
     public void handle(Event event) {
-        System.out.println("SE APRETO EL BOTON DE AGREGAR FICHAS");
         num = num - (Integer)armies.getValue();
 
         textAmount.setText(String.valueOf (num));
@@ -59,12 +58,9 @@ public class RegroupButtonHandler implements EventHandler {
 
         playerCountries.put(country, (Integer)armies.getValue());
 
-        System.out.println(num);
         if(num == 0){
             try {
                 game.addArmiesInRegroupRound(actualPlayer,playerCountries);
-                System.out.println(country.getName());
-                System.out.println(country.getArmyAmount());
                 if(actualPlayer.equals(game.amountOfPlayers())){
                     actualPlayer = 1;
                     primaryStage.setScene(changeScene());
@@ -153,6 +149,15 @@ public class RegroupButtonHandler implements EventHandler {
         dataTurn.setPrefHeight(500);
         dataTurn.setAlignment(Pos.CENTER);
 
+        ComboBox ownedCountries = new ComboBox();
+        for( Country country : game.getPlayer(actualPlayer).getDominatedCountries()){
+            String name = country.getName();
+            String army = country.getArmyAmount().toString();
+            String newString = name + army;
+            ownedCountries.getItems().add(newString);
+        }
+        ownedCountries.setPromptText("Paises dominados");
+
         Text textAttack = new Text();
         textAttack.setText("Agregar fichas a:");
         textAttack.setFont(font);
@@ -171,6 +176,12 @@ public class RegroupButtonHandler implements EventHandler {
         armyamount.setText("esta cantidad de fichas: ");
         armyamount.setFont(font);
 
+        while(armies.getItems().size() != 0){
+            for(int i = 0; i < armies.getItems().size(); i++){
+                armies.getItems().remove(i);
+            }
+        }
+
         for( int i = 1; i <= game.getPlayer(actualPlayer).amountOfArmiesToAddInRegroupRound(); i++){
             armies.getItems().add(i);
         }
@@ -180,10 +191,10 @@ public class RegroupButtonHandler implements EventHandler {
 
         Button regroupButton = new Button("AGREGAR");
 
-        RegroupButtonHandler regroupButtonHandler = new RegroupButtonHandler(num,initialAmount,countries,armies,textAmount,game,actualPlayer,primaryStage,changeScene());
+        RegroupButtonHandler regroupButtonHandler = new RegroupButtonHandler(num,initialAmount,countries,armies,textAmount,game,actualPlayer,primaryStage,scene);
         regroupButton.setOnAction(regroupButtonHandler);
 
-        dataTurn.getChildren().addAll(textAttack,countries,armies,armyamount,regroupButton);
+        dataTurn.getChildren().addAll(textAmount,textAttack,countries,armies,armyamount,regroupButton,ownedCountries);
         dataTurn.setStyle("-fx-border-style: solid inside;"
                 + "-fx-border-width: 2;" + "-fx-border-insets: 5;"
                 + "-fx-border-radius: 5;" + "-fx-border-color: darkred;");
@@ -273,12 +284,22 @@ public class RegroupButtonHandler implements EventHandler {
         dataTurn.setPrefHeight(500);
         dataTurn.setAlignment(Pos.CENTER);
 
+        ComboBox ownedCountries = new ComboBox();
+        for( Country country : game.getPlayer(actualPlayer).getDominatedCountries()){
+            String name = country.getName();
+            String army = country.getArmyAmount().toString();
+            String newString = name + army;
+            ownedCountries.getItems().add(newString);
+        }
+        ownedCountries.setPromptText("Paises dominados");
+
         Text textAttack = new Text();
         textAttack.setText("Mover desde:");
         textAttack.setFont(font);
 
         ComboBox countries = new ComboBox();
         ArrayList<Country> playerCountries = game.getPlayer(actualPlayer).getDominatedCountries();
+
         for (Country playerCountry : playerCountries) {
             if(!playerCountry.correctAmountOfArmyInCountry(1)){
                 countries.getItems().add(playerCountry.getName());
@@ -289,11 +310,10 @@ public class RegroupButtonHandler implements EventHandler {
         receivingCountries.setPromptText("Elija un pais");
         countries.setPromptText("Elija un pais");
 
-        Text amountArmyText = new Text();
-
         ComboBox amountArmy = new ComboBox();
         amountArmy.setPromptText("Cant. de fichas");
 
+        Text amountArmyText = new Text();
         countries.setOnAction((event) -> eventComboBoxFilterCountries(countries,receivingCountries,amountArmyText,amountArmy));
 
         Text moveToText = new Text();
@@ -306,10 +326,10 @@ public class RegroupButtonHandler implements EventHandler {
 
         Button moveArmyButton = new Button("REAGRUPAR");
 
-        MoveArmiesHandler attackButtonHandler = new MoveArmiesHandler(armies,countries,receivingCountries,textAmount,game,actualPlayer,primaryStage,scene);
+        MoveArmiesHandler attackButtonHandler = new MoveArmiesHandler(amountArmy,countries,receivingCountries,textAmount,game,actualPlayer,primaryStage,scene);
         moveArmyButton.setOnAction(attackButtonHandler);
 
-        dataTurn.getChildren().addAll(textAttack, countries,amountArmyText, moveToText, receivingCountries,amountText,amountArmy,moveArmyButton);
+        dataTurn.getChildren().addAll(textAttack, countries,amountArmyText, moveToText, receivingCountries,amountText,amountArmy,moveArmyButton,ownedCountries);
         dataTurn.setStyle("-fx-border-style: solid inside;"
                 + "-fx-border-width: 2;" + "-fx-border-insets: 5;"
                 + "-fx-border-radius: 5;" + "-fx-border-color: darkred;");
@@ -333,15 +353,22 @@ public class RegroupButtonHandler implements EventHandler {
             nonExistentPlayer.printStackTrace();
         }
 
+        while(borderingCountries.getItems().size() != 0){
+            for(int i = 0; i < borderingCountries.getItems().size(); i++){
+                borderingCountries.getItems().remove(i);
+            }
+        }
         for(Country borderCountry : borderCountries) {
             borderingCountries.getItems().add(borderCountry.getName());
         }
 
+        while(armies.getItems().size() != 0){
+            for(int i = 0; i < armies.getItems().size(); i++){
+                armies.getItems().remove(i);
+            }
+        }
         for(int i = 1; i < selectedCountry.getArmyAmount(); i++){
             armies.getItems().add(i);
         }
-
     }
-
-
 }

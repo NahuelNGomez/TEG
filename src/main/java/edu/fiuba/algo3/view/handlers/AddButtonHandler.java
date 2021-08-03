@@ -1,11 +1,13 @@
-package edu.fiuba.algo3.view;
+package edu.fiuba.algo3.view.handlers;
 
 import edu.fiuba.algo3.modelo.Country;
 import edu.fiuba.algo3.modelo.Game;
-import edu.fiuba.algo3.modelo.exceptions.*;
-import edu.fiuba.algo3.view.handlers.PlacementButtonHandler;
-import edu.fiuba.algo3.view.handlers.StartButtonHandler;
-import javafx.application.Application;
+import edu.fiuba.algo3.modelo.exceptions.EmptyCountryParameterException;
+import edu.fiuba.algo3.modelo.exceptions.InvalidPlacement;
+import edu.fiuba.algo3.modelo.exceptions.NonExistentCountry;
+import edu.fiuba.algo3.modelo.exceptions.NonExistentPlayer;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -22,71 +24,64 @@ import javafx.stage.Stage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
+public class AddButtonHandler implements EventHandler {
+    private Integer num;
+    private ComboBox amount;
+    private Text textAmount;
+    private ComboBox countries;
+    private Game game;
+    private HashMap<Country, Integer> playerCountries;
+    private Integer initialAmount;
+    private Integer player;
+    private Scene nextScene;
+    private Stage primaryStage;
 
-public class Main extends Application {
-    Game game;
-    Integer actualPlayer = 1;
-
-    @Override
-    public void start(Stage primaryStage) throws Exception{
-        StackPane canvas = new StackPane();
-        canvas.setStyle("-fx-background-color: rgb(242,204,133)");
-
-        VBox mainBox = new VBox(100);
-        mainBox.setAlignment(Pos.CENTER);
-        mainBox.setPrefSize(200,50);
-
-        Scene scene = new Scene(canvas, 1050, 690);
-
-        Text name = new Text();
-        Font font = new Font("verdana", 25);
-        name.setText("Marque la cantidad de jugadores");
-        name.setFont(font);
-
-        mainBox.getChildren().addAll(name);
-
-        mainBox.setStyle("-fx-border-style: solid inside;"
-                + "-fx-border-width: 2;" + "-fx-border-insets: 5;"
-                + "-fx-border-radius: 5;" + "-fx-border-color: darkred;");
-
-        /*ComboBox players = new ComboBox();
-
-        //Set text of the ComboBox
-        String numberOfPlayers = new String();
-        //numberOfPlayers.setFont(font);
-
-        for(int i = 2; i <= 6 ; i ++){
-            players.getItems().add(i);
-        }
-        mainBox.getChildren().add(players);*/
-
-        Button button = new Button("Jugar");
-        try {
-            game = new Game(2);
-        } catch (InvalidNumberOfPlayers invalidNumberOfPlayers) {
-            invalidNumberOfPlayers.printStackTrace();
-        }
-
-        StartButtonHandler sendButtonEventHandler = new StartButtonHandler(firstPlacementScene(primaryStage) ,primaryStage, game);
-        button.setOnAction(sendButtonEventHandler);
-
-        button.setDefaultButton(true);
-        button.setPrefSize(100, 50);
-        button.setLayoutX(105);
-        button.setLayoutY(110);
-        mainBox.getChildren().add(button);
-
-        canvas.getChildren().add(mainBox);
-
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("T.E.G.");
-        primaryStage.setResizable(false);
-
-        primaryStage.show();
+    public AddButtonHandler(Integer num,  Integer initialAmount,ComboBox amount,ComboBox countries,Text textAmount,Game game,Integer actualPlayer,Stage primaryStage,Scene nextScene) {
+        this.num = num;
+        this.amount = amount;
+        this.textAmount = textAmount;
+        this.game = game;
+        this.countries = countries;
+        playerCountries = new HashMap<Country, Integer>();
+        this.initialAmount = initialAmount;
+        player = actualPlayer;
+        this.nextScene = nextScene;
+        this.primaryStage = primaryStage;
     }
 
-    private Scene firstPlacementScene(Stage primaryStage) throws FileNotFoundException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
+    @Override
+    public void handle(Event event) {
+        num = num - (Integer)amount.getValue();
+
+        textAmount.setText(String.valueOf (num));
+        Country country = selectedCountryInComboBox(countries.getValue(), game.getCountries());
+
+        playerCountries.put(country, (Integer)amount.getValue());
+
+        if(num == 0) {
+            try {
+                game.playerDominatedContinent(player,playerCountries);
+                num = 5;
+                if (player.equals(game.amountOfPlayers())) {
+                    player = 1;
+                    num = 3;
+                    initialAmount = 3;
+                    //primaryStage.setScene(firstplacementScene(primaryStage, num));
+
+                } else {
+                    player++;
+                    textAmount.setText(String.valueOf(num));
+                    primaryStage.setScene(placementScene(primaryStage, num));
+                }
+            } catch (InvalidPlacement | NonExistentCountry | EmptyCountryParameterException | NonExistentPlayer | FileNotFoundException invalidPlacement) {
+                invalidPlacement.printStackTrace();
+            }
+        }
+    }
+
+    private Scene placementScene(Stage stage, Integer num) throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException, FileNotFoundException {
         StackPane canvas = new StackPane();
         canvas.setStyle("-fx-background-color: rgb(242,204,133)");
 
@@ -97,7 +92,7 @@ public class Main extends Application {
         Text name = new Text();
 
         Font font = new Font("verdana", 25);
-        name.setText("Jugador n° " + actualPlayer);
+        name.setText("Jugador n° " + player);
         name.setFont(font);
 
         nameBox.getChildren().addAll(name);
@@ -107,7 +102,7 @@ public class Main extends Application {
         firstHBox.setAlignment(Pos.TOP_RIGHT);
         firstHBox.getChildren().addAll(nameBox);
 
-        VBox dataTurn = viewPlacementTurn(5, primaryStage);
+        VBox dataTurn = viewPlacementTurn(num, primaryStage);
 
         HBox map = viewMap();
 
@@ -130,11 +125,11 @@ public class Main extends Application {
         dataTurn.setMaxWidth(200);
         dataTurn.setPrefHeight(500);
         dataTurn.setAlignment(Pos.CENTER);
-        Integer amount = 5;
+        Integer amount = num;
 
 
         ComboBox ownedCountries = new ComboBox();
-        for( Country country : game.getPlayer(actualPlayer).getDominatedCountries()){
+        for( Country country : game.getPlayer(player).getDominatedCountries()){
             String name = country.getName();
             String army = country.getArmyAmount().toString();
             String newString = name + army;
@@ -148,12 +143,11 @@ public class Main extends Application {
 
         ComboBox countries = new ComboBox();
         countries.setPromptText("Elija un pais");
-        ArrayList<Country> playerCountries = game.getPlayer(actualPlayer).getDominatedCountries();
+        ArrayList<Country> playerCountries = game.getPlayer(player).getDominatedCountries();
 
         for (Country playerCountry : playerCountries) {
             countries.getItems().add(playerCountry.getName());
         }
-
 
         ComboBox amountArmy = new ComboBox();
         amountArmy.setPromptText("Cant. de ejercitos");
@@ -173,11 +167,10 @@ public class Main extends Application {
         textAmount.setText(String.valueOf(amount));
 
         Button acceptButton = new Button("ACEPTAR");
-        PlacementButtonHandler PlacementButtonHandler = new PlacementButtonHandler(amount,num,amountArmy,countries,textAmount,game,actualPlayer,primaryStage,null);
+        PlacementButtonHandler PlacementButtonHandler = new PlacementButtonHandler(amount,num,amountArmy,countries,textAmount,game,player,primaryStage,null);
         acceptButton.setOnAction(PlacementButtonHandler);
 
         dataTurn.getChildren().addAll(textAmount ,textPlacement,countries,amountArmy,acceptButton,ownedCountries);
-
         dataTurn.setStyle("-fx-border-style: solid inside;"
                 + "-fx-border-width: 2;" + "-fx-border-insets: 5;"
                 + "-fx-border-radius: 5;" + "-fx-border-color: darkred;");
@@ -213,11 +206,5 @@ public class Main extends Application {
             }
         }
         return selectedCountry;
-    }
-
-
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }

@@ -7,15 +7,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-public class AttackRound{
-    //private MockBattlefield battlefield = new MockBattlefield();
-    private Battlefield battlefield = new Battlefield();
+public class MockAttackRound {
+
+    private MockBattlefield battlefield = new MockBattlefield();
     private WinnerDefiner winnerDefiner;
     private ArrayList<Player> players;
     private Map map;
     private ArrayList<CountryCard> countryCards;
 
-    public AttackRound(ArrayList<Player> gamePlayers, Map gameMap, ArrayList<CountryCard> cards) throws IOException {
+    public MockAttackRound(ArrayList<Player> gamePlayers, Map gameMap, ArrayList<CountryCard> cards) throws IOException {
         players = gamePlayers;
         map = gameMap;
         countryCards = cards;
@@ -85,7 +85,7 @@ public class AttackRound{
         return (isBordering && (defenderPlayer != attackerPlayer) && validArmiesInAttacker);
     }
 
-    public Player attack(Player attackerPlayer,Country attackingCountry, Country defendingCountry, Integer amountDice) throws EmptyCountryParameterException, NonExistentPlayer, NonExistentCountry, InvalidAttack {
+    public Player attack(Player attackerPlayer,Country attackingCountry, Country defendingCountry, Integer amountDice,Integer winner) throws EmptyCountryParameterException, NonExistentPlayer, NonExistentCountry, InvalidAttack {
         Country mapAttackingCountry = map.searchKeyCountryInMap(attackingCountry);
         Country mapDefendingCountry = map.searchKeyCountryInMap(defendingCountry);
         Player defenderPlayer = this.searchCountryOwner(mapDefendingCountry);
@@ -94,7 +94,7 @@ public class AttackRound{
                 (!attackerPlayer.canInvade(mapAttackingCountry, amountDice))){
             throw new InvalidAttack();
         }
-        Integer[] result = battlefield.battle(amountDice, mapDefendingCountry);
+        Integer[] result = battlefield.battle(amountDice, mapDefendingCountry,winner);
 
         if(attackerPlayer.removeArmy(result[1], mapAttackingCountry)) {
             this.invade(defenderPlayer, mapAttackingCountry, mapDefendingCountry);

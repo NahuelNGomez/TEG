@@ -5,11 +5,9 @@ import edu.fiuba.algo3.modelo.exceptions.*;
 
 public class Battlefield {
     private Dice dice;
-    private MockDice mockDice;
 
     public Battlefield(){
         dice = dice.create();
-        mockDice = mockDice.create();
     }
 
     private void checkValidCountryParameter(Country country) throws EmptyCountryParameterException {
