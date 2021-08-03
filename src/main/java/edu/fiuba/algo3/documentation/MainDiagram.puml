@@ -1,0 +1,60 @@
+@startuml
+title "Main Diagram"
+class Game{
++ regroup(Integer playerNumber, Country firstCountry, Country secondCountry, Integer armyToRegroup)
++ attack(Integer numberAttackerPlayer, Country attackerCountry, Country defenderCountry, Integer amountOfAttackerDice)
++
+}
+class Player{
+-color: Color
++ dominatedCountry(): Player
++ verifyOwnCountries(): Country
++ removeCountry(Country: country)
+
+}
+
+
+class Map{
+- countries: HashMap<String, ArrayList<String>>
++ validateBorderingCountry(String attackingCountry, String defendingCountry): boolean
+}
+
+class Continent {
+- name : String
++ sameNumberOfCountries(int amount) : boolean
+}
+
+class Country{
+- name: String
+- armyAmount: int
++ addArmy(int: amount)
++ diceAmount(): int
++ canInvade(int: amountDice) : boolean
+}
+abstract Round{
+# countryCards : ArrayList
+}
+
+class CountryCard{
+- image : String
+}
+
+Game "1"--> "2..6" Player
+Game "1  "--> "1" Map
+Game "1" --> "3...*" Round
+Game "1" --> "50" CountryCard
+
+Round --> Map
+Round "1" --> "2..6" Player
+
+Map "1"--> "50" Country
+Map "1"--> "5" Continent
+
+Continent "1"-->"1..*" Country
+
+Player "1" --> "1..50" Country
+
+CountryCard --> Country
+
+
+@enduml
