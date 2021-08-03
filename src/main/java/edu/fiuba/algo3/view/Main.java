@@ -53,10 +53,10 @@ public class Main extends Application {
         /*ComboBox players = new ComboBox();
 
         //Set text of the ComboBox
-        String numberOfPlayers = new String();
+        Text numberOfPlayers = new Text();
         //numberOfPlayers.setFont(font);
 
-        for(int i = 2; i <= 6 ; i ++){
+        for(Integer i = 2; i <= 6 ; i ++){
             players.getItems().add(i);
         }
         mainBox.getChildren().add(players);*/

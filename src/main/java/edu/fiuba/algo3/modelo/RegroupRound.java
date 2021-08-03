@@ -3,7 +3,6 @@ package edu.fiuba.algo3.modelo;
 import edu.fiuba.algo3.modelo.exceptions.EmptyCountryParameterException;
 import edu.fiuba.algo3.modelo.exceptions.InvalidRegroup;
 import edu.fiuba.algo3.modelo.exceptions.NonExistentCountry;
-import edu.fiuba.algo3.modelo.exceptions.NonExistentPlayer;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -59,7 +59,7 @@ public class MockGame {
     }
 
 
-    private boolean checkIfAttackerDominatedAContinent(Player player) throws EmptyCountryParameterException {
+    private boolean checkIfAttackerDominatedAContinent(Player player) {
         return map.checkIfAttackerDominatedAContinent(player);
     }
 
@@ -107,35 +107,12 @@ public class MockGame {
         placementRound.placingThreeArmiesInPlacementRound(getPlayer(numberPlayer),armiesToAdd);
     }
 
-    public ArrayList<Country> getOtherPlayersBorderingCountries(Integer playerNumber, Country country) throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
-        Player player = getPlayer(playerNumber);
-        ArrayList<Country> borderingCountries = new ArrayList<>();
-
-        for(CountryCard card : countryCards){
-            if((country != card.getCountryCard()) && (!player.containsCountry(card.getCountryCard())) && (map.validateBorderingCountry(country,card.getCountryCard()))){
-                borderingCountries.add(card.getCountryCard());
-            }
-        }
-        return borderingCountries;
-    }
-
-    public ArrayList<Country> getSamePlayersBorderingCountries(Integer playerNumber, Country country) throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
-        Player player = getPlayer(playerNumber);
-        ArrayList<Country> borderingCountries = new ArrayList<>();
-
-        for(CountryCard card : countryCards){
-            if((country != card.getCountryCard()) && (player.containsCountry(card.getCountryCard())) && (map.validateBorderingCountry(country,card.getCountryCard()))){
-                borderingCountries.add(card.getCountryCard());
-            }
-        }
-        return borderingCountries;
-    }
-
     public ArrayList<Country> getCountries(){
         return map.getCountries();
     }
 
     ///////////////////////////////////////////////////// PARA PRUEBAS  /////////////////////////////////////////////
+
     public Player winner(){
         return winner;
     }
@@ -185,10 +162,6 @@ public class MockGame {
         return countryCards;
     }
 
-    public Integer amountOfPlayers() {
-
-        return players.size();
-    }
 
 
 }

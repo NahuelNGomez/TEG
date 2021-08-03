@@ -1,6 +1,6 @@
 package edu.fiuba.algo3.modelo;
 
-public class CountryCard extends Card {
+public class CountryCard {
     private Country cardCountry;
     private String image;
 
