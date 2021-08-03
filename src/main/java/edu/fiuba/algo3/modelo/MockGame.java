@@ -6,11 +6,10 @@ import edu.fiuba.algo3.modelo.exceptions.*;
 import java.io.IOException;
 import java.util.*;
 
-public class Game {
+public class MockGame {
 
     private Map map;
-    private Battlefield battlefield = new Battlefield();
-    //private MockBattlefield battlefield = new MockBattlefield(); //Battlefield Mock for the Dice
+    private MockBattlefield battlefield = new MockBattlefield(); //Battlefield Mock for the Dice
     private ArrayList<Player> players = new ArrayList<Player>();
     private Player winner;
     private SettingGame set;
@@ -25,7 +24,7 @@ public class Game {
     private String[] colors = {"07bb", "cc3311", "ee7733", "009988", "ee3377", "000000"};
 
 
-    public Game(int numberOfPlayers) throws InvalidNumberOfPlayers, IOException, NonExistentCountry, EmptyCountryParameterException {
+    public MockGame(int numberOfPlayers) throws InvalidNumberOfPlayers, IOException, NonExistentCountry, EmptyCountryParameterException {
         if (numberOfPlayers <= 1 || numberOfPlayers > 6) {
             throw new InvalidNumberOfPlayers();
         }
@@ -45,7 +44,6 @@ public class Game {
         placementRound = new PlacementRound(players, map);
         attackRound = new AttackRound(players, map, countryCards);
         regroupRound = new RegroupRound(players, map);
-        dealCountryCards();
     }
 
     private void checkValidCountryParameter(Country country) throws EmptyCountryParameterException {
@@ -74,35 +72,6 @@ public class Game {
 
     private void setCountryCards(){
         countryCards = set.getCountryCards();
-    }
-
-    private void shuffleCards(){
-        Collections.shuffle(countryCards);
-    }
-
-    public void dealCountryCards() throws EmptyCountryParameterException, NonExistentCountry {
-        this.shuffleCards();
-
-        int leftCountries = (countryCards.size()) % (this.players.size());
-        int numberOfCountriesPerPlayer = (countryCards.size()) / (this.players.size());
-
-        Random rand = new Random();
-        int i;
-        int k = 0;
-
-        for (i = 0; i < (countryCards.size() - leftCountries); i++) {
-            Player player = players.get(rand.nextInt(players.size()));
-
-            if(player.amountOfDominatedCountries() < numberOfCountriesPerPlayer) {
-                player.addCountry(map.searchKeyCountryInMap(countryCards.get(i).getCountryCard()));
-            } else {
-                i--;
-            }
-        }
-        for(int j = i ; j < this.countryCards.size() ; j++){
-            players.get(k).addCountry(map.searchKeyCountryInMap(countryCards.get(i).getCountryCard()));
-            k++;
-        }
     }
 
 
@@ -191,7 +160,7 @@ public class Game {
     }
 
     public boolean correctAmountOfCountryCards(Integer firstPlayerNumber, Integer expectedAmount) throws NonExistentPlayer {
-       return getPlayer(firstPlayerNumber).correctAmountOfCountryCards(expectedAmount);
+        return getPlayer(firstPlayerNumber).correctAmountOfCountryCards(expectedAmount);
     }
 
     public boolean correctAmountOfArmyInCountry(Country country, Integer expectedAmount) throws NonExistentCountry {
@@ -232,3 +201,4 @@ public class Game {
 
 
 }
+

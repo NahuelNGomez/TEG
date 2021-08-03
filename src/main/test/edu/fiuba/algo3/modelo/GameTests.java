@@ -59,7 +59,7 @@ public class GameTests {
     public void nonExistentPlayerRaisesException() throws InvalidNumberOfPlayers, IOException, NonExistentCountry, EmptyCountryParameterException {
         Integer numberOfPlayers = 2;
 
-        Game game = new Game(numberOfPlayers);
+        MockGame game = new MockGame(numberOfPlayers);
         Country francia = new Country("Francia");
 
         assertThrows(NonExistentPlayer.class, () -> game.addCountryToPlayer(francia, thirdPlayerNumber));
@@ -69,7 +69,7 @@ public class GameTests {
     public void nonExistentCountryRaisesException() throws InvalidNumberOfPlayers, IOException, NonExistentCountry, EmptyCountryParameterException {
         Integer numberOfPlayers = 2;
 
-        Game game = new Game(numberOfPlayers);
+        MockGame game = new MockGame(numberOfPlayers);
         Country croacia = new Country("Croacia");
 
         assertThrows(NonExistentCountry.class, () -> game.addCountryToPlayer(croacia, firstPlayerNumber));
@@ -82,7 +82,7 @@ public class GameTests {
     public void oneRoundGameCountryFirstPlacement() throws InvalidNumberOfPlayers, IOException, NonExistentCountry, EmptyCountryParameterException, NonExistentPlayer, InvalidPlacement {
         Integer numberOfPlayers = 2;
         Integer expectedAmount = 30;
-        Game game = new Game(numberOfPlayers);
+        MockGame game = new MockGame(numberOfPlayers);
 
         Country francia = new Country("Francia");Country granBretania = new Country("Gran Bretania");Country tartaria = new Country("Tartaria");Country mongolia = new Country("Mongolia");Country zaire = new Country("Zaire");Country polonia = new Country("Polonia");Country oregon = new Country("Oregon");Country etiopia = new Country("Etiopia");Country chile = new Country("Chile");Country australia = new Country("Australia");Country kamtchatka = new Country("Kamtchatka");Country egipto = new Country("Egipto");
         Country turquia = new Country("Turquia");Country nuevaYork = new Country("Nueva York");Country terranova = new Country("Terranova");Country iran = new Country("Iran");Country madagascar = new Country("Madagascar");Country argentina = new Country("Argentina");
@@ -128,7 +128,7 @@ public class GameTests {
     public void oneRoundGameCountrySecondPlacement() throws InvalidNumberOfPlayers, IOException, NonExistentCountry, EmptyCountryParameterException, NonExistentPlayer, InvalidPlacement {
         Integer numberOfPlayers = 2;
         Integer expectedAmount = 28;
-        Game game = new Game(numberOfPlayers);
+        MockGame game = new MockGame(numberOfPlayers);
 
         Country francia = new Country("Francia");Country granBretania = new Country("Gran Bretania");Country tartaria = new Country("Tartaria");Country mongolia = new Country("Mongolia");Country zaire = new Country("Zaire");Country polonia = new Country("Polonia");Country oregon = new Country("Oregon");Country etiopia = new Country("Etiopia");Country chile = new Country("Chile");Country australia = new Country("Australia");Country kamtchatka = new Country("Kamtchatka");Country egipto = new Country("Egipto");
         Country turquia = new Country("Turquia");Country nuevaYork = new Country("Nueva York");Country terranova = new Country("Terranova");Country iran = new Country("Iran");Country madagascar = new Country("Madagascar");Country argentina = new Country("Argentina");
@@ -173,7 +173,7 @@ public class GameTests {
     @Test
     public void firstPlacementRoundRaisesExceptionWithMoraThanFiveArmiesToAdd() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
         Integer numberOfPlayers = 2;
-        Game game = new Game(numberOfPlayers);
+        MockGame game = new MockGame(numberOfPlayers);
 
         Country francia = new Country("Francia");Country granBretania = new Country("Gran Bretania");Country tartaria = new Country("Tartaria");Country mongolia = new Country("Mongolia");Country zaire = new Country("Zaire");Country polonia = new Country("Polonia");Country oregon = new Country("Oregon");Country etiopia = new Country("Etiopia");Country chile = new Country("Chile");Country australia = new Country("Australia");Country kamtchatka = new Country("Kamtchatka");Country egipto = new Country("Egipto");
         Country turquia = new Country("Turquia");Country nuevaYork = new Country("Nueva York");Country terranova = new Country("Terranova");Country iran = new Country("Iran");Country madagascar = new Country("Madagascar");Country argentina = new Country("Argentina");
@@ -207,7 +207,7 @@ public class GameTests {
     @Test
     public void secondPlacementRoundRaisesExceptionWithMoraThanThreeArmiesToAdd() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
         Integer numberOfPlayers = 2;
-        Game game = new Game(numberOfPlayers);
+        MockGame game = new MockGame(numberOfPlayers);
 
         Country francia = new Country("Francia");Country granBretania = new Country("Gran Bretania");Country tartaria = new Country("Tartaria");Country mongolia = new Country("Mongolia");Country zaire = new Country("Zaire");Country polonia = new Country("Polonia");Country oregon = new Country("Oregon");Country etiopia = new Country("Etiopia");Country chile = new Country("Chile");Country australia = new Country("Australia");Country kamtchatka = new Country("Kamtchatka");Country egipto = new Country("Egipto");
         Country turquia = new Country("Turquia");Country nuevaYork = new Country("Nueva York");Country terranova = new Country("Terranova");Country iran = new Country("Iran");Country madagascar = new Country("Madagascar");Country argentina = new Country("Argentina");
@@ -243,7 +243,7 @@ public class GameTests {
     @Test
     public void attackRoundWithTwoPlayersPlayerOneDominatesACountryOfPlayerTwo() throws InvalidNumberOfPlayers, IOException, NonExistentCountry, EmptyCountryParameterException, NonExistentPlayer, InvalidAttack {
         Integer numberOfPlayers = 2;
-        Game game = new Game(numberOfPlayers);
+        MockGame game = new MockGame(numberOfPlayers);
 
         Country francia = new Country("Francia");Country granBretania = new Country("Gran Bretania");Country tartaria = new Country("Tartaria");Country mongolia = new Country("Mongolia");Country zaire = new Country("Zaire");Country polonia = new Country("Polonia");Country oregon = new Country("Oregon");Country etiopia = new Country("Etiopia");Country chile = new Country("Chile");Country australia = new Country("Australia");Country kamtchatka = new Country("Kamtchatka");Country egipto = new Country("Egipto");
         Country turquia = new Country("Turquia");Country nuevaYork = new Country("Nueva York");Country terranova = new Country("Terranova");Country iran = new Country("Iran");Country madagascar = new Country("Madagascar");Country argentina = new Country("Argentina");
@@ -278,7 +278,7 @@ public class GameTests {
     @Test
     public void attackRoundWithTwoPlayersPlayerOneDominatesTwoCountriesOfPlayerTwo() throws InvalidNumberOfPlayers, IOException, NonExistentCountry, EmptyCountryParameterException, NonExistentPlayer, InvalidAttack {
         Integer numberOfPlayers = 2;
-        Game game = new Game(numberOfPlayers);
+        MockGame game = new MockGame(numberOfPlayers);
 
         Country francia = new Country("Francia");Country granBretania = new Country("Gran Bretania");Country tartaria = new Country("Tartaria");Country mongolia = new Country("Mongolia");Country zaire = new Country("Zaire");Country polonia = new Country("Polonia");Country oregon = new Country("Oregon");Country etiopia = new Country("Etiopia");Country chile = new Country("Chile");Country australia = new Country("Australia");Country kamtchatka = new Country("Kamtchatka");Country egipto = new Country("Egipto");
         Country turquia = new Country("Turquia");Country nuevaYork = new Country("Nueva York");Country terranova = new Country("Terranova");Country iran = new Country("Iran");Country madagascar = new Country("Madagascar");Country argentina = new Country("Argentina");
@@ -320,7 +320,7 @@ public class GameTests {
     @Test
     public void playerTriesToAttackWithoutEnoughArmiesInAttackerCountry() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
         Integer numberOfPlayers = 2;
-        Game game = new Game(numberOfPlayers);
+        MockGame game = new MockGame(numberOfPlayers);
 
         Country francia = new Country("Francia");Country granBretania = new Country("Gran Bretania");Country tartaria = new Country("Tartaria");Country mongolia = new Country("Mongolia");Country zaire = new Country("Zaire");Country polonia = new Country("Polonia");Country oregon = new Country("Oregon");Country etiopia = new Country("Etiopia");Country chile = new Country("Chile");Country australia = new Country("Australia");Country kamtchatka = new Country("Kamtchatka");Country egipto = new Country("Egipto");
         Country turquia = new Country("Turquia");Country nuevaYork = new Country("Nueva York");Country terranova = new Country("Terranova");Country iran = new Country("Iran");Country madagascar = new Country("Madagascar");Country argentina = new Country("Argentina");
@@ -347,39 +347,9 @@ public class GameTests {
     }
 
     @Test
-    public void playerTriesToAttackWithoutEnoughArmiesInDefenderCountry() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
-        Integer numberOfPlayers = 2;
-        Game game = new Game(numberOfPlayers);
-
-        Country francia = new Country("Francia");Country granBretania = new Country("Gran Bretania");Country tartaria = new Country("Tartaria");Country mongolia = new Country("Mongolia");Country zaire = new Country("Zaire");Country polonia = new Country("Polonia");Country oregon = new Country("Oregon");Country etiopia = new Country("Etiopia");Country chile = new Country("Chile");Country australia = new Country("Australia");Country kamtchatka = new Country("Kamtchatka");Country egipto = new Country("Egipto");
-        Country turquia = new Country("Turquia");Country nuevaYork = new Country("Nueva York");Country terranova = new Country("Terranova");Country iran = new Country("Iran");Country madagascar = new Country("Madagascar");Country argentina = new Country("Argentina");
-        Country israel = new Country("Israel");Country rusia = new Country("Rusia");Country borneo = new Country("Borneo");Country california = new Country("California");Country taymir = new Country("Taymir");Country aral = new Country("Aral");Country siberia = new Country("Siberia");Country canada = new Country("Canada");
-        Country sahara = new Country("Sahara");Country yukon = new Country("Yukon");Country uruguay = new Country("Uruguay");Country groenlandia  = new Country("Groenlandia");Country japon = new Country("Japon");Country sumatra = new Country("Sumatra");
-        Country alaska = new Country("Alaska");Country brasil = new Country("Brasil");Country gobi = new Country("Gobi");Country italia = new Country("Italia");Country espania = new Country("Espania");Country colombia = new Country("Colombia");
-        Country suecia = new Country("Suecia");Country sudafrica = new Country("Sudafrica");Country arabia = new Country("Arabia");Country india = new Country("India");Country java = new Country("Java");Country mexico = new Country("Mexico");
-        Country peru = new Country("Peru");Country alemania = new Country("Alemania");Country china = new Country("China");Country labrador = new Country("Labrador");Country islandia = new Country("Islandia");Country malasia = new Country("Malasia");
-
-        ArrayList<Country> allCountries = new ArrayList<>()
-        {{ add(francia); add(granBretania); add(tartaria);add(mongolia);add(zaire);add(polonia);add(oregon);add(etiopia);add(chile);add(australia);add(kamtchatka);
-            add(egipto);add(turquia);add(nuevaYork);add(iran);add(madagascar);add(argentina);add(israel);add(rusia);add(borneo);add(california);add(taymir);add(aral);add(siberia);add(canada);
-            add(sahara);add(yukon);add(uruguay);add(groenlandia);add(japon);add(sumatra);add(alaska);add(brasil);add(gobi);add(italia);
-            add(espania);add(colombia);add(suecia);add(sudafrica);add(arabia);add(india);add(java);add(mexico);add(peru);add(alemania);add(china);add(labrador);add(islandia);add(malasia);add(terranova); }};
-
-        for(int i = 0 ; i < (allCountries.size()/2); i++){
-            game.addCountryToPlayer(allCountries.get(i), firstPlayerNumber);
-        }
-        for(int i = (allCountries.size()/2) ; i < (allCountries.size()); i++){
-            game.addCountryToPlayer(allCountries.get(i), secondPlayerNumber);
-        }
-        game.playerSetArmies(firstPlayerNumber,5,francia);
-
-        assertThrows(InvalidAttack.class, () -> game.attack(firstPlayerNumber,francia,alemania,1));
-    }
-
-    @Test
     public void playerTriesToAttackANonBorderingCoutry() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
         Integer numberOfPlayers = 2;
-        Game game = new Game(numberOfPlayers);
+        MockGame game = new MockGame(numberOfPlayers);
 
         Country francia = new Country("Francia");Country granBretania = new Country("Gran Bretania");Country tartaria = new Country("Tartaria");Country mongolia = new Country("Mongolia");Country zaire = new Country("Zaire");Country polonia = new Country("Polonia");Country oregon = new Country("Oregon");Country etiopia = new Country("Etiopia");Country chile = new Country("Chile");Country australia = new Country("Australia");Country kamtchatka = new Country("Kamtchatka");Country egipto = new Country("Egipto");
         Country turquia = new Country("Turquia");Country nuevaYork = new Country("Nueva York");Country terranova = new Country("Terranova");Country iran = new Country("Iran");Country madagascar = new Country("Madagascar");Country argentina = new Country("Argentina");
@@ -410,7 +380,7 @@ public class GameTests {
     @Test
     public void playerTriesToAttackWithAWrongAmountOfDices() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
         Integer numberOfPlayers = 2;
-        Game game = new Game(numberOfPlayers);
+        MockGame game = new MockGame(numberOfPlayers);
 
         Country francia = new Country("Francia");Country granBretania = new Country("Gran Bretania");Country tartaria = new Country("Tartaria");Country mongolia = new Country("Mongolia");Country zaire = new Country("Zaire");Country polonia = new Country("Polonia");Country oregon = new Country("Oregon");Country etiopia = new Country("Etiopia");Country chile = new Country("Chile");Country australia = new Country("Australia");Country kamtchatka = new Country("Kamtchatka");Country egipto = new Country("Egipto");
         Country turquia = new Country("Turquia");Country nuevaYork = new Country("Nueva York");Country terranova = new Country("Terranova");Country iran = new Country("Iran");Country madagascar = new Country("Madagascar");Country argentina = new Country("Argentina");
@@ -446,7 +416,7 @@ public class GameTests {
         Integer armyToRegroup = 1;
         Integer expectedAmountTartaria= 2;
         Integer expectedAmountSiberia = 2;
-        Game game = new Game(numberOfPlayers);
+        MockGame game = new MockGame(numberOfPlayers);
 
         Country francia = new Country("Francia");Country granBretania = new Country("Gran Bretania");Country tartaria = new Country("Tartaria");Country mongolia = new Country("Mongolia");Country zaire = new Country("Zaire");Country polonia = new Country("Polonia");Country oregon = new Country("Oregon");Country etiopia = new Country("Etiopia");Country chile = new Country("Chile");Country australia = new Country("Australia");Country kamtchatka = new Country("Kamtchatka");Country egipto = new Country("Egipto");
         Country turquia = new Country("Turquia");Country nuevaYork = new Country("Nueva York");Country terranova = new Country("Terranova");Country iran = new Country("Iran");Country madagascar = new Country("Madagascar");Country argentina = new Country("Argentina");
@@ -484,7 +454,7 @@ public class GameTests {
     public void playerTriesToRegroupNonBorderingCountries() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException{
         Integer numberOfPlayers = 2;
         Integer armyToRegroup = 1;
-        Game game = new Game(numberOfPlayers);
+        MockGame game = new MockGame(numberOfPlayers);
 
         Country francia = new Country("Francia");Country granBretania = new Country("Gran Bretania");Country tartaria = new Country("Tartaria");Country mongolia = new Country("Mongolia");Country zaire = new Country("Zaire");Country polonia = new Country("Polonia");Country oregon = new Country("Oregon");Country etiopia = new Country("Etiopia");Country chile = new Country("Chile");Country australia = new Country("Australia");Country kamtchatka = new Country("Kamtchatka");Country egipto = new Country("Egipto");
         Country turquia = new Country("Turquia");Country nuevaYork = new Country("Nueva York");Country terranova = new Country("Terranova");Country iran = new Country("Iran");Country madagascar = new Country("Madagascar");Country argentina = new Country("Argentina");
@@ -515,7 +485,7 @@ public class GameTests {
     public void playerTriesToRegroupMoreArmiesThanTheAmountOfTheCountry() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException {
         Integer numberOfPlayers = 2;
         Integer armyToRegroup = 2;
-        Game game = new Game(numberOfPlayers);
+        MockGame game = new MockGame(numberOfPlayers);
 
         Country francia = new Country("Francia");Country granBretania = new Country("Gran Bretania");Country tartaria = new Country("Tartaria");Country mongolia = new Country("Mongolia");Country zaire = new Country("Zaire");Country polonia = new Country("Polonia");Country oregon = new Country("Oregon");Country etiopia = new Country("Etiopia");Country chile = new Country("Chile");Country australia = new Country("Australia");Country kamtchatka = new Country("Kamtchatka");Country egipto = new Country("Egipto");
         Country turquia = new Country("Turquia");Country nuevaYork = new Country("Nueva York");Country terranova = new Country("Terranova");Country iran = new Country("Iran");Country madagascar = new Country("Madagascar");Country argentina = new Country("Argentina");
@@ -546,7 +516,7 @@ public class GameTests {
 
         Integer armyToRegroup = 2;
 
-        Game game = new Game(numberOfPlayers);
+        MockGame game = new MockGame(numberOfPlayers);
 
         Country francia = new Country("Francia");Country granBretania = new Country("Gran Bretania");Country tartaria = new Country("Tartaria");Country mongolia = new Country("Mongolia");Country zaire = new Country("Zaire");Country polonia = new Country("Polonia");Country oregon = new Country("Oregon");Country etiopia = new Country("Etiopia");Country chile = new Country("Chile");Country australia = new Country("Australia");Country kamtchatka = new Country("Kamtchatka");Country egipto = new Country("Egipto");
         Country turquia = new Country("Turquia");Country nuevaYork = new Country("Nueva York");Country terranova = new Country("Terranova");Country iran = new Country("Iran");Country madagascar = new Country("Madagascar");Country argentina = new Country("Argentina");
@@ -574,7 +544,7 @@ public class GameTests {
     @Test
     public void playerDominatesAContinentAndAddsArmyToIt() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException, InvalidAttack, InvalidPlacement {
         Integer numberOfPlayers = 2;
-        Game game = new Game(numberOfPlayers);
+        MockGame game = new MockGame(numberOfPlayers);
 
         Country francia = new Country("Francia");Country granBretania = new Country("Gran Bretania");Country tartaria = new Country("Tartaria");Country mongolia = new Country("Mongolia");Country zaire = new Country("Zaire");Country polonia = new Country("Polonia");Country oregon = new Country("Oregon");Country etiopia = new Country("Etiopia");Country chile = new Country("Chile");Country australia = new Country("Australia");Country kamtchatka = new Country("Kamtchatka");Country egipto = new Country("Egipto");
         Country turquia = new Country("Turquia");Country nuevaYork = new Country("Nueva York");Country terranova = new Country("Terranova");Country iran = new Country("Iran");Country madagascar = new Country("Madagascar");Country argentina = new Country("Argentina");
@@ -617,7 +587,7 @@ public class GameTests {
     @Test
     public void onlyFirstPlayerAttacksAndWinsGame() throws InvalidNumberOfPlayers, IOException, NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException, InvalidAttack {
         Integer numberOfPlayers = 2;
-        Game game = new Game(numberOfPlayers);
+        MockGame game = new MockGame(numberOfPlayers);
 
         Country francia = new Country("Francia");Country granBretania = new Country("Gran Bretania");Country tartaria = new Country("Tartaria");Country mongolia = new Country("Mongolia");Country zaire = new Country("Zaire");Country polonia = new Country("Polonia");Country oregon = new Country("Oregon");Country etiopia = new Country("Etiopia");Country chile = new Country("Chile");Country australia = new Country("Australia");Country kamtchatka = new Country("Kamtchatka");Country egipto = new Country("Egipto");
         Country turquia = new Country("Turquia");Country nuevaYork = new Country("Nueva York");Country terranova = new Country("Terranova");Country iran = new Country("Iran");Country madagascar = new Country("Madagascar");Country argentina = new Country("Argentina");
@@ -666,7 +636,7 @@ public class GameTests {
     public void playerAddsArmiesInRegroupRound() throws NonExistentPlayer, NonExistentCountry, EmptyCountryParameterException, InvalidNumberOfPlayers, IOException, InvalidRegroup {
         Integer numberOfPlayers = 2;
         Integer expectedAmount = 36;
-        Game game = new Game(numberOfPlayers);
+        MockGame game = new MockGame(numberOfPlayers);
 
         Country francia = new Country("Francia");Country granBretania = new Country("Gran Bretania");Country tartaria = new Country("Tartaria");Country mongolia = new Country("Mongolia");Country zaire = new Country("Zaire");Country polonia = new Country("Polonia");Country oregon = new Country("Oregon");Country etiopia = new Country("Etiopia");Country chile = new Country("Chile");Country australia = new Country("Australia");Country kamtchatka = new Country("Kamtchatka");Country egipto = new Country("Egipto");
         Country turquia = new Country("Turquia");Country nuevaYork = new Country("Nueva York");Country terranova = new Country("Terranova");Country iran = new Country("Iran");Country madagascar = new Country("Madagascar");Country argentina = new Country("Argentina");

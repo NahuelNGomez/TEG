@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class AttackRoundTests {
     int numberOfPlayers = 2;
-    Game game = new Game(numberOfPlayers);
+    MockGame game = new MockGame(numberOfPlayers);
 
     AttackRound attackRound = new AttackRound(game.getPlayers(), game.getMap(), game.getCountryCards());
 
