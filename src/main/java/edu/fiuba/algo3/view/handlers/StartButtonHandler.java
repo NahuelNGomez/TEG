@@ -21,17 +21,9 @@ public class StartButtonHandler implements EventHandler<ActionEvent> {
     }
 
 
-
     @Override
     public void handle(ActionEvent actionEvent) {
 
-        ArrayList<Player> players = game.getPlayers();
-/*
-        for (Player player: players ){
-            firstStage.setScene(newScene);
-
-        }
-*/
         firstStage.setScene(newScene);
 
     }

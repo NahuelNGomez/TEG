@@ -41,7 +41,7 @@ public class Main extends Application {
 
         Text name = new Text();
         Font font = new Font("verdana", 25);
-        name.setText("Marque la cantidad de jugadores");
+        name.setText("T.    E.     G.");
         name.setFont(font);
 
         mainBox.getChildren().addAll(name);

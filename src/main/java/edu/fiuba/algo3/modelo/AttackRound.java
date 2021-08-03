@@ -95,6 +95,7 @@ public class AttackRound{
             throw new InvalidAttack();
         }
         Integer[] result = battlefield.battle(amountDice, mapDefendingCountry);
+        System.out.println("El atacante perdió " + result[1] +" ejercito, y el defensor " + result[0] + " ejercito" );
 
         if(attackerPlayer.removeArmy(result[1], mapAttackingCountry)) {
             this.invade(defenderPlayer, mapAttackingCountry, mapDefendingCountry);

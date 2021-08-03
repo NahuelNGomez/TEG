@@ -45,6 +45,10 @@ public class AttackButtonHandler implements EventHandler {
     @Override
     public void handle(Event event) {
         try {
+            System.out.println("jugador " + actualPlayer + " atacó");
+            System.out.println("cantidad de jugadores: " + game.amountOfPlayers());
+            System.out.println("de " + countries.getValue() + " hacia: " + borderingCountries.getValue() + " con " + (Integer)amountDice.getValue() +" dado");
+
             Country firstCountry = selectedCountryInComboBox(countries.getValue(),game.getCountries());
             Country secondCountry = selectedCountryInComboBox(borderingCountries.getValue(),game.getCountries());
              game.attack(actualPlayer,firstCountry,secondCountry,(Integer)amountDice.getValue());
@@ -59,9 +63,6 @@ public class AttackButtonHandler implements EventHandler {
         } catch (NonExistentPlayer | InvalidAttack | NonExistentCountry | EmptyCountryParameterException | FileNotFoundException | NonExistentContinent nonExistentPlayer) {
             nonExistentPlayer.printStackTrace();
         }
-        System.out.println("jugador " + actualPlayer + " atacó");
-        System.out.println("cantidad de jugadores: " + game.amountOfPlayers());
-        System.out.println("de " + countries.getValue() + " hacia: " + borderingCountries.getValue() + " con " + (Integer)amountDice.getValue() +" dado");
 
         if(actualPlayer < game.amountOfPlayers()){
             actualPlayer = actualPlayer + 1;
@@ -131,7 +132,7 @@ public class AttackButtonHandler implements EventHandler {
 
         Text information = new Text();
 
-        information.setText("Posee "+ game.getPlayer(actualPlayer).amountOfDominatedCountries()+" paises - * Datos del jugador nro. " + actualPlayer);
+        information.setText("Posee "+ game.getPlayer(actualPlayer).amountOfDominatedCountries());
         information.setFont(font);
         dataBox.getChildren().add(information);
         dataBox.setPrefSize(860,50);
@@ -235,7 +236,7 @@ public class AttackButtonHandler implements EventHandler {
 
         Text name = new Text();
 
-        Font font = new Font("verdana", 15);
+        Font font = new Font("verdana", 25);
         name.setText("Jugador n° " + actualPlayer);
         name.setFont(font);
 
@@ -249,7 +250,7 @@ public class AttackButtonHandler implements EventHandler {
 
         Text information = new Text();
 
-        information.setText("Posee "+ game.getPlayer(actualPlayer).amountOfDominatedCountries()+" paises - * Datos del jugador nro. " + actualPlayer);
+        information.setText("Posee "+ game.getPlayer(actualPlayer).amountOfDominatedCountries()+" paises" );
         information.setFont(font);
         dataBox.getChildren().add(information);
         dataBox.setPrefSize(860,50);
@@ -264,8 +265,9 @@ public class AttackButtonHandler implements EventHandler {
         firstHBox.setMaxHeight(100);
         firstHBox.setAlignment(Pos.TOP_RIGHT);
         firstHBox.getChildren().addAll(nameBox,dataBox);
+        Font dataFont = new Font("verdana", 15);
 
-        VBox dataTurn = viewRegroupData(font);
+        VBox dataTurn = viewRegroupData(dataFont);
 
         HBox map = viewMap();
 
@@ -378,7 +380,7 @@ public class AttackButtonHandler implements EventHandler {
 
         Text information = new Text();
 
-        information.setText("Posee "+ game.getPlayer(actualPlayer).amountOfDominatedCountries()+" paises - * Datos del jugador nro. " + actualPlayer);
+        information.setText("Posee "+ game.getPlayer(actualPlayer).amountOfDominatedCountries()+" paises");
         information.setFont(font);
         dataBox.getChildren().add(information);
         dataBox.setPrefSize(860,50);

@@ -96,7 +96,7 @@ public class RegroupButtonHandler implements EventHandler {
 
         Text name = new Text();
 
-        Font font = new Font("verdana", 15);
+        Font font = new Font("verdana", 25);
         name.setText("Jugador n° " + actualPlayer);
         name.setFont(font);
 
@@ -110,7 +110,7 @@ public class RegroupButtonHandler implements EventHandler {
 
         Text information = new Text();
 
-        information.setText("Posee "+ game.getPlayer(actualPlayer).amountOfDominatedCountries()+" paises - * Datos del jugador nro. " + actualPlayer);
+        information.setText("Posee "+ game.getPlayer(actualPlayer).amountOfDominatedCountries() + " paises");
         information.setFont(font);
         dataBox.getChildren().add(information);
         dataBox.setPrefSize(860,50);
@@ -125,8 +125,8 @@ public class RegroupButtonHandler implements EventHandler {
         firstHBox.setMaxHeight(100);
         firstHBox.setAlignment(Pos.TOP_RIGHT);
         firstHBox.getChildren().addAll(nameBox,dataBox);
-
-        VBox dataTurn = viewRegroupData(font);
+        Font dataFont = new Font("verdana", 15);
+        VBox dataTurn = viewRegroupData(dataFont);
 
         HBox map = viewMap();
 
@@ -194,7 +194,7 @@ public class RegroupButtonHandler implements EventHandler {
         RegroupButtonHandler regroupButtonHandler = new RegroupButtonHandler(num,initialAmount,countries,armies,textAmount,game,actualPlayer,primaryStage,scene);
         regroupButton.setOnAction(regroupButtonHandler);
 
-        dataTurn.getChildren().addAll(textAmount,textAttack,countries,armies,armyamount,regroupButton,ownedCountries);
+        dataTurn.getChildren().addAll(textAmount,textAttack,countries,armyamount,armies,regroupButton,ownedCountries);
         dataTurn.setStyle("-fx-border-style: solid inside;"
                 + "-fx-border-width: 2;" + "-fx-border-insets: 5;"
                 + "-fx-border-radius: 5;" + "-fx-border-color: darkred;");
@@ -245,7 +245,7 @@ public class RegroupButtonHandler implements EventHandler {
 
         Text information = new Text();
 
-        information.setText("Posee "+ game.getPlayer(actualPlayer).amountOfDominatedCountries()+" paises - * Datos del jugador nro. " + actualPlayer);
+        information.setText("Posee "+ game.getPlayer(actualPlayer).amountOfDominatedCountries()+" paises");
         information.setFont(font);
         dataBox.getChildren().add(information);
         dataBox.setPrefSize(860,50);

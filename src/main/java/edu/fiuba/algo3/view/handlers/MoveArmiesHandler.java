@@ -99,7 +99,7 @@ public class MoveArmiesHandler implements EventHandler {
 
         Text information = new Text();
 
-        information.setText("Posee "+ game.getPlayer(actualPlayer).amountOfDominatedCountries()+" paises - * Datos del jugador nro. " + actualPlayer);
+        information.setText("Posee "+ game.getPlayer(actualPlayer).amountOfDominatedCountries() + " paises");
         information.setFont(font);
         dataBox.getChildren().add(information);
         dataBox.setPrefSize(860,50);

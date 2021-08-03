@@ -243,7 +243,7 @@ public class PlacementButtonHandler implements EventHandler<ActionEvent> {
 
         Text information = new Text();
 
-        information.setText("Posee "+ game.getPlayer(player).amountOfDominatedCountries()+" paises - * Datos del jugador nro. " + player);
+        information.setText("Posee "+ game.getPlayer(player).amountOfDominatedCountries() + " paises");
         information.setFont(font);
         dataBox.getChildren().add(information);
         dataBox.setPrefSize(860,50);
