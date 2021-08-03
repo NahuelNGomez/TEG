@@ -9,12 +9,9 @@ Trabajo Práctico número 2 de la materia Algoritmos y Programación III de FIUB
 * **Camila Stahl** - [CammSt](https://github.com/CammSt)
 * **Nahuel Gomez** - [NahuelNGomez](https://github.com/NahuelNGomez)
 * **Lucia Liceri Martinez** - [lucialiceri](https://github.com/lucialiceri)
-<<<<<<< HEAD
-=======
-* **Integrante 4** - [integrante4](https://github.com/integrante4)
->>>>>>> documentation
 
-Corrector: **Pablo Rodríguez Massuh**
+
+Corrector: **Pablo Rodríguez Massuh - Maia**
 
 ## Aplicación
 
@@ -31,5 +28,9 @@ Aquellos que deseen colaborar con el proyecto pueden consultar la [guía de desa
 ## Licencia
 
 Este repositorio se encuentra bajo la Licencia MIT.
+
+## Informe
+
+Aquí se encuentra el [Informe completo](https://docs.google.com/document/d/1SOcCtpq_DSmVcWveW8zBCKuSeYLbQA4muTAY_L0-8GM/edit?usp=sharing) del trabajo.
 
 
