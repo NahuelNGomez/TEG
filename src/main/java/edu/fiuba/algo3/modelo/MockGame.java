@@ -140,17 +140,9 @@ public class MockGame {
         return winner;
     }
 
-    public Continent continentDominatedByPlayer(Integer playerNumber) throws EmptyCountryParameterException, NonExistentPlayer {
-        return map.continentDominatedByPlayer(getPlayer(playerNumber));
-    }
-
     public boolean playerDominatedCountry(Integer playerNumber, Country country) throws NonExistentPlayer, EmptyCountryParameterException, NonExistentCountry {
         Country mapCountry = map.searchKeyCountryInMap(country);
         return getPlayer(playerNumber).dominatedCountry(mapCountry);
-    }
-
-    public boolean correctAmountOfCountries(Integer playerNumber, Integer expectedAmount ) throws NonExistentPlayer {
-        return getPlayer(playerNumber).correctAmountOfCountries(expectedAmount);
     }
 
     public boolean correctAmountOfArmy(Integer firstPlayerNumber, Integer expectedAmount) throws NonExistentPlayer {

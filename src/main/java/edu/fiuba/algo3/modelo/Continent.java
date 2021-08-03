@@ -33,19 +33,4 @@ public class Continent {
         return amountOfArmyWhenDominated;
     }
 
-    public boolean correctAmountOfArmyInContinentCountries(Integer numberOfArmy) {
-        Integer total = 0;
-        for(Country country : countriesInContinent){
-            total = total + country.getArmyAmount();
-        }
-        return (total == numberOfArmy);
-    }
-
-    public Integer amountOfArmy() {
-        Integer total = 0;
-        for(Country country : countriesInContinent){
-            total = total + country.getArmyAmount();
-        }
-        return total;
-    }
 }

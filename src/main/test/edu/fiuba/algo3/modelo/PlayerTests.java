@@ -44,4 +44,12 @@ public class PlayerTests {
     public void emptyCountryRaisesException(){
         assertThrows(EmptyCountryParameterException.class, () -> player.addArmyInCountry(1,null));
     }
+
+    @Test
+    public void aCountryIsAddedCorrectly() throws EmptyCountryParameterException {
+        player.addCountry(granBretaña);
+        assertEquals(true, player.containsCountry(granBretaña));
+    }
+
+
 }

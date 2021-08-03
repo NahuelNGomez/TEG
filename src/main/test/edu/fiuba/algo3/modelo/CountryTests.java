@@ -28,4 +28,13 @@ public class CountryTests {
         assertEquals(false, francia.canInvade(3));
     }
 
+    @Test
+    public void havingMoreThanThreeArmiesReturnsThreeDices(){
+        Country france = new Country("Francia");
+        int addArmyAmount = 5;
+        int diceAmountExpected = 3;
+        france.addArmy(addArmyAmount);
+        assertEquals(diceAmountExpected, france.diceAmount());
+    }
+
 }

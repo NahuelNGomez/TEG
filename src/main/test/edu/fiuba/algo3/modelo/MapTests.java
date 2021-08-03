@@ -48,4 +48,11 @@ public class MapTests {
         assertThrows(NonExistentContinent.class, () -> map.sameAmountOfCountries(continent, expectedAmount));
     }
 
+    @Test
+    public void anExpectedAmountOfCountriesInANullContinentThrowException() throws EmptyContinentParameterException, IOException, NonExistentContinent {
+        int expectedAmount = 4;
+        assertThrows(EmptyContinentParameterException.class, () -> map.sameAmountOfCountries(null, expectedAmount));
+
+    }
+
 }

@@ -667,5 +667,10 @@ public class GameTests {
         game.addArmiesInRegroupRound(firstPlayerNumber,armiesToAdd);
         assertTrue(game.correctAmountOfArmy(firstPlayerNumber, expectedAmount));
     }
+    @Test
+    public void creatingAGameWithInvalidNumberOfPlayersThrowsException(){
+        int invalidAmount = 10;
+        assertThrows(InvalidNumberOfPlayers.class, ()-> new Game(invalidAmount));
+    }
 
 }
