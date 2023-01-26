@@ -50,17 +50,6 @@ public class Main extends Application {
                 + "-fx-border-width: 2;" + "-fx-border-insets: 5;"
                 + "-fx-border-radius: 5;" + "-fx-border-color: darkred;");
 
-        /*ComboBox players = new ComboBox();
-
-        //Set text of the ComboBox
-        Text numberOfPlayers = new Text();
-        //numberOfPlayers.setFont(font);
-
-        for(Integer i = 2; i <= 6 ; i ++){
-            players.getItems().add(i);
-        }
-        mainBox.getChildren().add(players);*/
-
         Button button = new Button("Jugar");
         try {
             game = new Game(2);
@@ -203,19 +192,6 @@ public class Main extends Application {
 
         return map;
     }
-
-
-    private Country selectedCountryInComboBox(Object country, ArrayList<Country> list){
-        Country selectedCountry = null;
-        for(Country aCountry : list){
-            if(aCountry.getName().equals(country)){
-                selectedCountry = aCountry;
-            }
-        }
-        return selectedCountry;
-    }
-
-
 
     public static void main(String[] args) {
         launch(args);
